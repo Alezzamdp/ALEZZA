@@ -1,0 +1,1342 @@
+<!DOCTYPE html>
+<html lang="es-AR" dir="ltr">
+<head>
+<!-- ─── META BASE ─────────────────────────────────────── -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>ALEZZA — Estética Técnica Automotriz · Mar del Plata</title>
+<meta name="description" content="Recuperamos el valor percibido de tu vehículo. Intervención técnica en pintura, motor e interiores para particulares y agencias en Mar del Plata.">
+<meta name="keywords" content="pulido auto mar del plata, detailing mdp, estética automotriz, puesta en valor vehículos, alezza">
+<meta name="robots" content="index, follow">
+<meta name="author" content="Alezza">
+
+<!-- ─── PWA ──────────────────────────────────────────── -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: light)">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="ALEZZA">
+<meta name="application-name" content="ALEZZA">
+<meta name="msapplication-TileColor" content="#000000">
+<meta name="msapplication-tap-highlight" content="no">
+<meta name="format-detection" content="telephone=no">
+
+<!-- ─── OPEN GRAPH ────────────────────────────────────── -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://alezzamdp.com/">
+<meta property="og:title" content="ALEZZA — Tu auto vale más cuando se ve.">
+<meta property="og:description" content="Estética técnica automotriz en Mar del Plata. Para particulares que quieren vender mejor y agencias que necesitan rotar stock.">
+<meta property="og:image" content="https://alezzamdp.com/og-image.jpg">
+<meta property="og:locale" content="es_AR">
+<meta property="og:site_name" content="ALEZZA">
+
+<!-- ─── TWITTER CARD ─────────────────────────────────── -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="ALEZZA — Tu auto vale más cuando se ve.">
+<meta name="twitter:description" content="Estética técnica automotriz en Mar del Plata.">
+<meta name="twitter:image" content="https://alezzamdp.com/og-image.jpg">
+
+<!-- ─── ICONS ─────────────────────────────────────────── -->
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='4' height='14' x='4' y='18' fill='%23d4a017'/%3E%3Crect width='4' height='22' x='14' y='10' fill='%23d4a017'/%3E%3Crect width='4' height='10' x='24' y='22' fill='%23d4a017'/%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+
+<!-- ─── FONTS — preconnect + preload ─────────────────── -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500&family=Unbounded:wght@300;400;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500&family=Unbounded:wght@300;400;700&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500&family=Unbounded:wght@300;400;700&display=swap"></noscript>
+
+<!-- ─── CANONICAL ─────────────────────────────────────── -->
+<link rel="canonical" href="https://alezzamdp.com/">
+
+<style>
+/* ═══════════════════════════════════════════════════════
+   DESIGN TOKENS
+═══════════════════════════════════════════════════════ */
+:root {
+  --bg:   #000;
+  --s1:   #0c0c0c;
+  --s2:   #111;
+  --ln:   #1c1c1c;
+  --ln2:  #2a2a2a;
+  --w:    #f2f2f2;
+  --wd:   #888;
+  --wm:   #454545;
+  --y:    #d4a017;
+  --yb:   #e8b820;
+
+  /* safe area — iOS notch / Android gesture bar */
+  --sat: env(safe-area-inset-top,    0px);
+  --sar: env(safe-area-inset-right,  0px);
+  --sab: env(safe-area-inset-bottom, 0px);
+  --sal: env(safe-area-inset-left,   0px);
+
+  /* spacing rhythm */
+  --sp-xs: 8px;
+  --sp-sm: 16px;
+  --sp-md: 24px;
+  --sp-lg: 40px;
+  --sp-xl: 64px;
+  --sp-2x: 96px;
+
+  /* touch minimum */
+  --touch: 44px;
+}
+
+/* ═══════════════════════════════════════════════════════
+   RESET + BASE
+═══════════════════════════════════════════════════════ */
+*, *::before, *::after {
+  margin: 0; padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+html {
+  scroll-behavior: smooth;
+  text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  height: -webkit-fill-available;
+}
+body {
+  background: var(--bg);
+  color: var(--w);
+  font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
+  font-weight: 300;
+  line-height: 1.5;
+  overflow-x: hidden;
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* GPU compositing */
+  transform: translateZ(0);
+}
+
+/* ═══════════════════════════════════════════════════════
+   CUSTOM CURSOR (desktop only)
+═══════════════════════════════════════════════════════ */
+.cdot, .ccross { display: none; }
+
+@media (hover: hover) and (pointer: fine) {
+  body { cursor: none; }
+  .cdot {
+    display: block;
+    position: fixed;
+    width: 6px; height: 6px;
+    background: var(--yb);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 9999;
+    will-change: left, top;
+    transition: width .12s, height .12s;
+  }
+  .ccross {
+    display: block;
+    position: fixed;
+    width: 26px; height: 26px;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 9998;
+    will-change: left, top;
+    transition: opacity .2s;
+  }
+  .ccross::before, .ccross::after {
+    content: '';
+    position: absolute;
+    background: rgba(255,255,255,.28);
+  }
+  .ccross::before { width: 1px; height: 100%; left: 50%; top: 0; }
+  .ccross::after  { height: 1px; width: 100%; top: 50%; left: 0; }
+  a:hover ~ .cdot, button:hover ~ .cdot { width: 10px; height: 10px; }
+}
+
+/* ═══════════════════════════════════════════════════════
+   NAV
+═══════════════════════════════════════════════════════ */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 200;
+  height: calc(60px + var(--sat));
+  padding-top: var(--sat);
+  padding-left: calc(var(--sp-lg) + var(--sal));
+  padding-right: calc(var(--sp-lg) + var(--sar));
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid transparent;
+  transition: background .4s ease, border-color .4s ease;
+  will-change: background;
+}
+nav.stuck {
+  background: rgba(0,0,0,.95);
+  backdrop-filter: saturate(180%) blur(12px);
+  -webkit-backdrop-filter: saturate(180%) blur(12px);
+  border-color: var(--ln);
+}
+
+/* LOGO */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-xs);
+  text-decoration: none;
+  min-height: var(--touch);
+  align-items: center;
+}
+.lm { display: flex; gap: 3px; align-items: flex-end; }
+.lm b { display: block; width: 3px; background: var(--y); border-radius: 0; }
+.lm b:nth-child(1) { height: 13px; }
+.lm b:nth-child(2) { height: 20px; }
+.lm b:nth-child(3) { height: 9px;  }
+.lw {
+  font-family: 'Unbounded', sans-serif;
+  font-weight: 300;
+  font-size: 14px;
+  letter-spacing: .22em;
+  color: var(--w);
+  text-transform: uppercase;
+}
+.lw em { font-style: normal; color: var(--y); }
+
+/* NAV BUTTON */
+.nav-btn {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--wd);
+  text-decoration: none;
+  padding: 0 var(--sp-md);
+  height: var(--touch);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--ln2);
+  transition: color .2s, border-color .2s;
+  touch-action: manipulation;
+  white-space: nowrap;
+}
+.nav-btn:hover, .nav-btn:focus-visible { color: var(--y); border-color: var(--y); }
+.nav-btn:active { opacity: .7; }
+.nav-btn svg { width: 18px; height: 18px; fill: currentColor; flex-shrink: 0; }
+/* On small screens: hide text, keep icon only */
+@media (max-width: 480px) {
+  nav { padding-left: calc(20px + var(--sal)); padding-right: calc(20px + var(--sar)); }
+  .lw { font-size: 12px; letter-spacing: .14em; }
+  .nav-btn { padding: 0 12px; border-color: transparent; }
+  .nav-btn-label { display: none; }
+}
+
+/* ═══════════════════════════════════════════════════════
+   HERO
+═══════════════════════════════════════════════════════ */
+.hero {
+  min-height: 100svh;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  padding: calc(80px + var(--sat)) calc(var(--sp-lg) + var(--sar)) calc(var(--sp-xl) + var(--sab)) calc(var(--sp-lg) + var(--sal));
+  position: relative;
+  overflow: hidden;
+  contain: layout;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(
+      -55deg,
+      transparent, transparent 70px,
+      rgba(255,255,255,.009) 70px, rgba(255,255,255,.009) 71px
+    );
+  pointer-events: none;
+}
+
+.hero-inner {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--sp-md);
+  position: relative;
+  z-index: 1;
+  max-width: 840px;
+}
+.htag {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 10px;
+  letter-spacing: .35em;
+  text-transform: uppercase;
+  color: var(--y);
+  font-weight: 400;
+}
+.htag::before {
+  content: '';
+  display: block;
+  width: 24px; height: 1px;
+  background: var(--y);
+  flex-shrink: 0;
+}
+.hh1 {
+  font-family: 'Unbounded', sans-serif;
+  font-weight: 700;
+  font-size: clamp(42px, 10vw, 108px);
+  line-height: .9;
+  letter-spacing: -.01em;
+}
+.hh1 .yl { color: var(--y); }
+.hh1 .dm { color: var(--wm); font-weight: 300; }
+
+.hsub {
+  font-size: clamp(14px, 2vw, 16px);
+  line-height: 1.78;
+  color: var(--wd);
+  max-width: 480px;
+}
+.hbtns {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-sm);
+  flex-wrap: wrap;
+  margin-top: var(--sp-xs);
+}
+
+/* BUTTONS */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  text-decoration: none;
+  min-height: var(--touch);
+  padding: 0 var(--sp-lg);
+  border: none;
+  outline: none;
+  cursor: pointer;
+  transition: background .18s, color .18s, border-color .18s, transform .12s;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  white-space: nowrap;
+}
+.btn:active { transform: scale(.97); }
+.btn:focus-visible { outline: 2px solid var(--y); outline-offset: 3px; }
+
+.bg  { background: var(--y);  color: #000; border: 1px solid var(--y); }
+.bg:hover { background: var(--yb); border-color: var(--yb); }
+
+.bk  { background: transparent; color: var(--wd); border: 1px solid var(--ln2); }
+.bk:hover { color: var(--y); border-color: var(--y); }
+
+.bd  { background: #000; color: var(--y); border: 1px solid #000; }
+.bd:hover { background: #111; }
+
+/* HERO STATS */
+.hstats {
+  display: flex;
+  gap: clamp(20px, 5vw, 44px);
+  padding-top: var(--sp-lg);
+  border-top: 1px solid var(--ln);
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 1;
+}
+.stn {
+  font-family: 'Unbounded', sans-serif;
+  font-size: clamp(20px, 3vw, 26px);
+  font-weight: 700;
+  color: var(--y);
+  letter-spacing: -.02em;
+  line-height: 1;
+}
+.stl {
+  font-size: 10px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--wm);
+  margin-top: 4px;
+}
+
+@media (max-width: 500px) {
+  .hero { padding-left: calc(var(--sp-md) + var(--sal)); padding-right: calc(var(--sp-md) + var(--sar)); }
+  .hstats { gap: 20px; }
+}
+
+/* ═══════════════════════════════════════════════════════
+   SECTION UTILS
+═══════════════════════════════════════════════════════ */
+.sec {
+  padding: var(--sp-2x) calc(var(--sp-lg) + var(--sar)) var(--sp-2x) calc(var(--sp-lg) + var(--sal));
+  border-top: 1px solid var(--ln);
+  content-visibility: auto;
+  contain-intrinsic-size: 0 600px;
+}
+@media (max-width: 500px) {
+  .sec {
+    padding-left: calc(var(--sp-md) + var(--sal));
+    padding-right: calc(var(--sp-md) + var(--sar));
+    padding-top: var(--sp-xl);
+    padding-bottom: var(--sp-xl);
+  }
+}
+
+.eye {
+  font-size: 10px;
+  letter-spacing: .35em;
+  text-transform: uppercase;
+  color: var(--y);
+  font-weight: 400;
+  margin-bottom: var(--sp-lg);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.eye::before {
+  content: '';
+  display: block;
+  width: 22px; height: 1px;
+  background: var(--y);
+  flex-shrink: 0;
+}
+.sh {
+  font-family: 'Unbounded', sans-serif;
+  font-weight: 700;
+  font-size: clamp(26px, 4.5vw, 50px);
+  line-height: 1.05;
+  letter-spacing: -.01em;
+  margin-bottom: 14px;
+}
+.sh .yl { color: var(--y); }
+.sl {
+  font-size: clamp(14px, 1.8vw, 15px);
+  line-height: 1.8;
+  color: var(--wd);
+  max-width: 500px;
+  margin-bottom: var(--sp-xl);
+}
+
+/* ═══════════════════════════════════════════════════════
+   SERVICIOS
+═══════════════════════════════════════════════════════ */
+.sgrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--ln);
+}
+@media (max-width: 860px) {
+  .sgrid { grid-template-columns: 1fr; }
+}
+.svc {
+  background: var(--bg);
+  padding: var(--sp-xl) var(--sp-lg);
+  position: relative;
+  overflow: hidden;
+  transition: background .22s;
+}
+.svc::after {
+  content: '';
+  position: absolute;
+  left: 0; top: 0;
+  width: 2px; height: 0;
+  background: var(--y);
+  transition: height .32s ease;
+}
+@media (hover: hover) {
+  .svc:hover { background: #080808; }
+  .svc:hover::after { height: 100%; }
+}
+.snum {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 10px;
+  color: var(--y);
+  letter-spacing: .15em;
+  margin-bottom: var(--sp-md);
+  opacity: .65;
+}
+.sname {
+  font-family: 'Unbounded', sans-serif;
+  font-size: clamp(15px, 2vw, 17px);
+  font-weight: 400;
+  line-height: 1.3;
+  margin-bottom: var(--sp-sm);
+  color: var(--w);
+}
+.sbody { font-size: 13px; line-height: 1.82; color: var(--wd); }
+.sbody b { color: var(--w); font-weight: 400; }
+
+@media (max-width: 500px) { .svc { padding: var(--sp-lg) var(--sp-md); } }
+
+/* ═══════════════════════════════════════════════════════
+   AUDIENCIAS B2C / B2B
+═══════════════════════════════════════════════════════ */
+.agrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--ln);
+}
+@media (max-width: 680px) { .agrid { grid-template-columns: 1fr; } }
+
+.aud {
+  background: var(--s1);
+  padding: var(--sp-xl) var(--sp-xl);
+}
+.aud.dark { background: var(--s2); }
+
+.atag {
+  font-size: 10px;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  color: var(--y);
+  font-weight: 400;
+  margin-bottom: var(--sp-md);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.atag span { width: 18px; height: 1px; background: var(--y); display: block; flex-shrink: 0; }
+.atitle {
+  font-family: 'Unbounded', sans-serif;
+  font-size: clamp(22px, 3vw, 32px);
+  font-weight: 700;
+  line-height: 1.1;
+  margin-bottom: var(--sp-md);
+}
+.adesc { font-size: 14px; line-height: 1.8; color: var(--wd); margin-bottom: var(--sp-md); }
+.alist {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: var(--sp-lg);
+}
+.alist li {
+  font-size: 13px;
+  color: var(--wd);
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  line-height: 1.6;
+}
+.alist li::before {
+  content: '—';
+  color: var(--y);
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.aud .btn { align-self: flex-start; }
+
+@media (max-width: 500px) { .aud { padding: var(--sp-lg) var(--sp-md); } }
+
+/* ═══════════════════════════════════════════════════════
+   PRECIOS
+═══════════════════════════════════════════════════════ */
+.pgrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--ln);
+}
+@media (max-width: 860px) { .pgrid { grid-template-columns: 1fr; } }
+
+.plan {
+  background: var(--s1);
+  padding: var(--sp-xl) var(--sp-lg);
+  display: flex;
+  flex-direction: column;
+}
+.plan.feat {
+  background: var(--s2);
+  border-top: 2px solid var(--y);
+}
+.pbadge {
+  font-size: 9px;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  color: var(--y);
+  font-weight: 400;
+  margin-bottom: var(--sp-md);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.pbadge::before { content: ''; display: block; width: 14px; height: 1px; background: var(--y); }
+.pname { font-family: 'Unbounded', sans-serif; font-size: 15px; font-weight: 400; color: var(--w); margin-bottom: 6px; }
+.pdesc { font-size: 12px; color: var(--wm); margin-bottom: var(--sp-md); line-height: 1.6; }
+.pprice {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: var(--sp-md);
+  padding-bottom: var(--sp-md);
+  border-bottom: 1px solid var(--ln);
+}
+.pfrom  { font-size: 10px; letter-spacing: .15em; text-transform: uppercase; color: var(--wm); }
+.pamount {
+  font-family: 'Unbounded', sans-serif;
+  font-size: clamp(22px, 3vw, 30px);
+  font-weight: 700;
+  color: var(--y);
+  line-height: 1;
+}
+.pcur   { font-size: 11px; color: var(--wm); }
+.plist  {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  flex: 1;
+  margin-bottom: var(--sp-lg);
+}
+.plist li {
+  font-size: 13px;
+  color: var(--wd);
+  display: flex;
+  gap: 9px;
+  align-items: flex-start;
+  line-height: 1.55;
+}
+.plist li::before { content: '✓'; color: var(--y); font-size: 11px; flex-shrink: 0; margin-top: 2px; }
+.plan .btn { width: 100%; }
+
+@media (max-width: 500px) { .plan { padding: var(--sp-lg) var(--sp-md); } }
+
+/* ═══════════════════════════════════════════════════════
+   PROCESO
+═══════════════════════════════════════════════════════ */
+.prow {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--ln);
+  margin-top: var(--sp-lg);
+}
+@media (max-width: 860px) { .prow { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 400px)  { .prow { grid-template-columns: 1fr 1fr; } }
+
+.step {
+  background: var(--s1);
+  padding: var(--sp-lg) var(--sp-md);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.stepn { font-family: 'Unbounded', sans-serif; font-size: 10px; letter-spacing: .2em; color: var(--y); opacity: .6; }
+.stept { font-size: 14px; font-weight: 500; color: var(--w); line-height: 1.3; }
+.stepb { font-size: 12px; color: var(--wm); line-height: 1.65; }
+
+/* ═══════════════════════════════════════════════════════
+   CTA STRIP
+═══════════════════════════════════════════════════════ */
+.strip {
+  background: var(--y);
+  padding: var(--sp-xl) calc(var(--sp-lg) + var(--sar)) var(--sp-xl) calc(var(--sp-lg) + var(--sal));
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-md);
+  flex-wrap: wrap;
+}
+.strip h3 {
+  font-family: 'Unbounded', sans-serif;
+  font-size: clamp(20px, 4vw, 38px);
+  font-weight: 700;
+  color: #000;
+  line-height: 1.1;
+  margin-bottom: 6px;
+}
+.strip p { font-size: 14px; color: rgba(0,0,0,.6); }
+@media (max-width: 600px) {
+  .strip {
+    padding: var(--sp-xl) calc(var(--sp-md) + var(--sar)) var(--sp-xl) calc(var(--sp-md) + var(--sal));
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .strip .bd { width: 100%; }
+}
+
+/* ═══════════════════════════════════════════════════════
+   CONTACTO — sección dedicada
+═══════════════════════════════════════════════════════ */
+.contacto {
+  border-top: 1px solid var(--ln);
+  background: var(--s1);
+  padding: var(--sp-2x) calc(var(--sp-lg) + var(--sar)) var(--sp-2x) calc(var(--sp-lg) + var(--sal));
+}
+@media (max-width: 500px) {
+  .contacto {
+    padding: var(--sp-xl) calc(var(--sp-md) + var(--sar)) var(--sp-xl) calc(var(--sp-md) + var(--sal));
+  }
+}
+
+/* Cards de contacto: stack vertical, cada una es una fila completa */
+.contact-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  background: var(--ln);
+  margin-top: var(--sp-xl);
+}
+
+.contact-card {
+  background: var(--s1);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-md);
+  padding: 28px var(--sp-lg);
+  text-decoration: none;
+  transition: background .2s;
+  min-height: 80px;
+  position: relative;
+  overflow: hidden;
+}
+.contact-card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 2px;
+  background: var(--y);
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: transform .28s ease;
+}
+@media (hover: hover) {
+  .contact-card:hover { background: #0e0e0e; }
+  .contact-card:hover::before { transform: scaleY(1); }
+}
+.contact-card:active { background: #0e0e0e; }
+.contact-card:active::before { transform: scaleY(1); }
+
+.cc-left {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-md);
+  flex: 1;
+  min-width: 0;
+}
+.cc-icon {
+  width: 44px; height: 44px;
+  border: 1px solid var(--ln2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: border-color .2s;
+}
+.contact-card:hover .cc-icon,
+.contact-card:active .cc-icon { border-color: var(--y); }
+.cc-icon svg { width: 20px; height: 20px; fill: var(--wd); }
+
+.cc-info { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.cc-label {
+  font-size: 10px;
+  letter-spacing: .25em;
+  text-transform: uppercase;
+  color: var(--wm);
+  font-weight: 400;
+}
+.cc-value {
+  font-family: 'Unbounded', sans-serif;
+  font-size: clamp(14px, 3vw, 20px);
+  font-weight: 300;
+  color: var(--w);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color .2s;
+}
+.contact-card:hover .cc-value,
+.contact-card:active .cc-value { color: var(--y); }
+
+.cc-arrow {
+  font-size: 20px;
+  color: var(--wm);
+  flex-shrink: 0;
+  transition: transform .2s, color .2s;
+  line-height: 1;
+}
+.contact-card:hover .cc-arrow,
+.contact-card:active .cc-arrow { transform: translate(4px, -4px); color: var(--y); }
+
+@media (max-width: 500px) {
+  .contact-card { padding: 22px var(--sp-md); min-height: 72px; }
+  .cc-icon { width: 40px; height: 40px; }
+}
+
+/* ═══════════════════════════════════════════════════════
+   FOOTER — solo marca y copyright
+═══════════════════════════════════════════════════════ */
+footer {
+  background: var(--bg);
+  border-top: 1px solid var(--ln);
+  padding: var(--sp-lg) calc(var(--sp-lg) + var(--sar)) calc(var(--sp-md) + var(--sab)) calc(var(--sp-lg) + var(--sal));
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--sp-sm);
+}
+@media (max-width: 500px) {
+  footer {
+    padding: var(--sp-md) calc(var(--sp-md) + var(--sar)) calc(var(--sp-sm) + var(--sab)) calc(var(--sp-md) + var(--sal));
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+}
+.fcopy { font-size: 11px; color: var(--wm); letter-spacing: .06em; }
+.floc {
+  font-size: 11px;
+  color: var(--wm);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.floc::before { content: '◈'; color: var(--y); font-size: 9px; }
+
+/* ═══════════════════════════════════════════════════════
+   WA FLOAT — con safe area
+═══════════════════════════════════════════════════════ */
+.wa {
+  position: fixed;
+  bottom: calc(24px + var(--sab));
+  right: calc(24px + var(--sar));
+  z-index: 300;
+  width: 52px;
+  height: 52px;
+  background: #25D366;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  border-radius: 0;
+  box-shadow: 0 4px 24px rgba(37,211,102,.28);
+  transition: transform .2s, box-shadow .2s;
+  touch-action: manipulation;
+}
+.wa:hover, .wa:focus-visible { transform: scale(1.06); box-shadow: 0 6px 32px rgba(37,211,102,.42); }
+.wa:active { transform: scale(.96); }
+.wa svg { width: 26px; height: 26px; fill: #fff; pointer-events: none; }
+
+/* ═══════════════════════════════════════════════════════
+   INSTALL BANNER (PWA) — bottom-center, sin colisiones
+═══════════════════════════════════════════════════════ */
+.install-banner {
+  position: fixed;
+  bottom: calc(20px + var(--sab));
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  z-index: 299;
+  background: var(--s2);
+  border: 1px solid var(--ln2);
+  padding: 16px 20px;
+  display: none;
+  flex-direction: column;
+  gap: 10px;
+  width: min(320px, calc(100vw - 40px));
+  box-shadow: 0 8px 40px rgba(0,0,0,.7);
+  opacity: 0;
+  transition: transform .3s ease, opacity .3s ease;
+}
+.install-banner.show {
+  display: flex;
+  animation: slideUp .35s ease forwards;
+}
+/* left-anchor en mobile para no centrar sobre WA float */
+@media (max-width: 480px) {
+  .install-banner {
+    left: 16px;
+    right: 80px; /* evita el WA float */
+    transform: translateY(20px);
+    width: auto;
+  }
+}
+.ib-title { font-size: 13px; font-weight: 500; color: var(--w); }
+.ib-sub   { font-size: 11px; color: var(--wd); line-height: 1.5; }
+.ib-btns  { display: flex; gap: 8px; }
+.ib-ok, .ib-close {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  border: none;
+  cursor: pointer;
+  padding: 8px 14px;
+  transition: opacity .15s;
+  touch-action: manipulation;
+}
+.ib-ok    { background: var(--y); color: #000; flex: 1; }
+.ib-close { background: var(--ln2); color: var(--wd); }
+.ib-ok:hover, .ib-close:hover { opacity: .85; }
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to   { transform: none; opacity: 1; }
+}
+
+/* ═══════════════════════════════════════════════════════
+   SCROLL REVEAL
+═══════════════════════════════════════════════════════ */
+.r {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity .6s ease, transform .6s ease;
+}
+.r.d1 { transition-delay: .07s; }
+.r.d2 { transition-delay: .14s; }
+.r.d3 { transition-delay: .21s; }
+.r.d4 { transition-delay: .28s; }
+.r.on { opacity: 1; transform: none; }
+
+/* ═══════════════════════════════════════════════════════
+   FOCUS VISIBLE (accesibilidad)
+═══════════════════════════════════════════════════════ */
+:focus-visible {
+  outline: 2px solid var(--y);
+  outline-offset: 3px;
+}
+:focus:not(:focus-visible) { outline: none; }
+
+/* ═══════════════════════════════════════════════════════
+   REDUCED MOTION
+═══════════════════════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .r { opacity: 1; transform: none; }
+}
+
+/* ═══════════════════════════════════════════════════════
+   PRINT
+═══════════════════════════════════════════════════════ */
+@media print {
+  nav, .wa, .install-banner, .cdot, .ccross { display: none !important; }
+  body { background: #fff; color: #000; }
+  .hh1, .sh { color: #000; }
+  .hh1 .yl, .sh .yl { color: #b8860b; }
+}
+</style>
+</head>
+<body>
+
+<!-- Cursor (desktop) -->
+<div class="cdot" id="dot"   aria-hidden="true"></div>
+<div class="ccross" id="cross" aria-hidden="true"></div>
+
+<!-- WA Float -->
+<a href="https://wa.me/542234212621" target="_blank" rel="noopener noreferrer"
+   class="wa" aria-label="Escribir por WhatsApp">
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+  </svg>
+</a>
+
+<!-- PWA Install Banner -->
+<div class="install-banner" id="installBanner" role="dialog" aria-label="Instalar ALEZZA">
+  <div class="ib-title">Instalar ALEZZA</div>
+  <div class="ib-sub">Agregá el sitio a tu pantalla de inicio para acceso rápido.</div>
+  <div class="ib-btns">
+    <button class="ib-ok" id="installBtn">Instalar</button>
+    <button class="ib-close" id="dismissBtn">Ahora no</button>
+  </div>
+</div>
+
+<!-- ═══ NAV ═══════════════════════════════════════════ -->
+<nav id="nav" role="navigation" aria-label="Navegación principal">
+  <a href="#" class="logo" aria-label="ALEZZA inicio">
+    <div class="lm" aria-hidden="true"><b></b><b></b><b></b></div>
+    <div class="lw">ALEZ<em>Z</em>A</div>
+  </a>
+  <a href="https://wa.me/542234212621" target="_blank" rel="noopener noreferrer"
+     class="nav-btn" aria-label="Consultar por WhatsApp">
+    <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    <span class="nav-btn-label">Consultar</span>
+  </a>
+</nav>
+
+<!-- ═══ HERO ══════════════════════════════════════════ -->
+<main>
+<section class="hero" aria-labelledby="hero-heading">
+  <div class="hero-inner">
+    <div class="htag r" aria-hidden="true">Estética Técnica Automotriz · Mar del Plata</div>
+    <h1 class="hh1 r d1" id="hero-heading">
+      TU AUTO<br>
+      <span class="yl">VALE MÁS</span><br>
+      <span class="dm">cuando se ve.</span>
+    </h1>
+    <p class="hsub r d2">
+      Recuperamos el valor percibido de tu vehículo. Intervención técnica en pintura, motor e interiores — para particulares que quieren vender mejor y agencias que necesitan rotar stock rápido.
+    </p>
+    <div class="hbtns r d3">
+      <a href="https://wa.me/542234212621" target="_blank" rel="noopener noreferrer"
+         class="btn bg" aria-label="Pedir turno por WhatsApp">
+        Pedir turno
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+          <path d="M1 7h12M8 2l5 5-5 5" stroke="#000" stroke-width="1.5" stroke-linecap="square"/>
+        </svg>
+      </a>
+      <a href="#servicios" class="btn bk">Ver servicios</a>
+    </div>
+  </div>
+  <div class="hstats r d4" role="list" aria-label="Estadísticas">
+    <div role="listitem"><div class="stn">3</div><div class="stl">Etapas de proceso</div></div>
+    <div role="listitem"><div class="stn">B2B</div><div class="stl">Agencias y flotas</div></div>
+    <div role="listitem"><div class="stn">B2C</div><div class="stl">Particulares</div></div>
+    <div role="listitem"><div class="stn">MDP</div><div class="stl">Mar del Plata</div></div>
+  </div>
+</section>
+
+<!-- ═══ SERVICIOS ════════════════════════════════════ -->
+<section class="sec" id="servicios" aria-labelledby="servicios-heading">
+  <div class="eye r" aria-hidden="true">Intervención técnica</div>
+  <h2 class="sh r d1" id="servicios-heading">Lo que hacemos<br><span class="yl">por tu unidad.</span></h2>
+  <p class="sl r d2">Tres etapas diseñadas para eliminar objeciones y maximizar el precio de venta.</p>
+  <div class="sgrid">
+    <article class="svc r d1">
+      <div class="snum">01 — Exterior</div>
+      <h3 class="sname">Abrillantado<br>de Barniz</h3>
+      <p class="sbody"><b>Recuperamos la profundidad del color.</b> Eliminamos la opacidad que envejece el vehículo y lo preparamos para destacar en salón y fotos de marketplace. No es detailing cosmético: es corrección técnica.</p>
+    </article>
+    <article class="svc r d2">
+      <div class="snum">02 — Motor</div>
+      <h3 class="sname">Acondicionado<br>de Vano Motor</h3>
+      <p class="sbody"><b>Proyectamos honestidad mecánica.</b> Un motor limpio transmite confianza antes de la prueba de ruta. Desactiva objeciones, justifica el precio y acorta el proceso de decisión.</p>
+    </article>
+    <article class="svc r d3">
+      <div class="snum">03 — Interior</div>
+      <h3 class="sname">Saneamiento<br>de Habitáculo</h3>
+      <p class="sbody"><b>Borramos la sensación de uso.</b> Recuperamos plásticos y textiles a acabado mate original. El comprador percibe una unidad sin historia — esa percepción vale plata.</p>
+    </article>
+  </div>
+</section>
+
+<!-- ═══ AUDIENCIAS ════════════════════════════════════ -->
+<section class="sec" id="para-quien" aria-labelledby="audiencias-heading">
+  <div class="eye r" aria-hidden="true">¿Para quién?</div>
+  <h2 class="sh r d1" id="audiencias-heading">Particulares<br><span class="yl">y agencias.</span></h2>
+  <p class="sl r d2">Trabajamos con los dos extremos del mercado automotriz.</p>
+  <div class="agrid r d3">
+    <div class="aud">
+      <div class="atag"><span></span>Particulares</div>
+      <h3 class="atitle">Vendé tu auto<br>más caro.</h3>
+      <p class="adesc">Tenés un auto para vender y no querés rematar el precio. Con ALEZZA lo presentás en su mejor versión posible.</p>
+      <ul class="alist" aria-label="Beneficios para particulares">
+        <li>Más ofertas en MercadoAutos y OLX</li>
+        <li>Fotos que generan clicks reales</li>
+        <li>Compradores que no regatean el aspecto</li>
+        <li>Vendés más rápido, con menos visitas</li>
+      </ul>
+      <a href="https://wa.me/542234212621" target="_blank" rel="noopener noreferrer" class="btn bg">Consultar precio</a>
+    </div>
+    <div class="aud dark">
+      <div class="atag"><span></span>Agencias y flotas</div>
+      <h3 class="atitle">Rotá stock<br>sin descuentos.</h3>
+      <p class="adesc">Manejás un stock de unidades y cada día que pasa cuesta dinero. ALEZZA estandariza la presentación de toda tu flota.</p>
+      <ul class="alist" aria-label="Beneficios para agencias">
+        <li>Stock estandarizado bajo mismo nivel</li>
+        <li>Unidades listas para foto de marketplace</li>
+        <li>Eliminamos los puntos de regateo estético</li>
+        <li>Precio por volumen para flotas</li>
+      </ul>
+      <a href="https://wa.me/542234212621" target="_blank" rel="noopener noreferrer" class="btn bg">Hablar con nosotros</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PRECIOS ════════════════════════════════════════ -->
+<section class="sec" id="precios" aria-labelledby="precios-heading">
+  <div class="eye r" aria-hidden="true">Precios</div>
+  <h2 class="sh r d1" id="precios-heading">Inversión que<br><span class="yl">se recupera.</span></h2>
+  <p class="sl r d2">El costo de ALEZZA es mínimo frente a lo que ganás en el precio de venta. Valores en pesos argentinos.</p>
+  <div class="pgrid r d3">
+    <article class="plan">
+      <div class="pbadge">Básico</div>
+      <h3 class="pname">Lavado Técnico</h3>
+      <p class="pdesc">Para presentar la unidad rápido sin intervención profunda.</p>
+      <div class="pprice">
+        <span class="pfrom">desde</span>
+        <span class="pamount">$100.000</span>
+        <span class="pcur">ARS</span>
+      </div>
+      <ul class="plist" aria-label="Incluye">
+        <li>Lavado exterior profesional</li>
+        <li>Limpieza de habitáculo</li>
+        <li>Acondicionado de tablero y plásticos</li>
+        <li>Apto para fotos de clasificados</li>
+      </ul>
+      <a href="https://wa.me/542234212621" target="_blank" rel="noopener noreferrer" class="btn bk">Consultar</a>
+    </article>
+    <article class="plan feat">
+      <div class="pbadge">Recomendado</div>
+      <h3 class="pname">Puesta en Valor</h3>
+      <p class="pdesc">Las tres etapas completas para maximizar el precio de venta.</p>
+      <div class="pprice">
+        <span class="pfrom">desde</span>
+        <span class="pamount">$250.000</span>
+        <span class="pcur">ARS</span>
+      </div>
+      <ul class="plist" aria-label="Incluye">
+        <li>Corrección y abrillantado de barniz</li>
+        <li>Acondicionado de vano motor</li>
+        <li>Saneamiento completo de habitáculo</li>
+        <li>Plásticos recuperados a acabado mate</li>
+        <li>Unidad lista para salón y fotos</li>
+      </ul>
+      <a href="https://wa.me/542234212621" target="_blank" rel="noopener noreferrer" class="btn bg">Pedir turno</a>
+    </article>
+    <article class="plan">
+      <div class="pbadge">Flotas</div>
+      <h3 class="pname">Plan Agencia</h3>
+      <p class="pdesc">Precio por volumen para revendedores con stock permanente.</p>
+      <div class="pprice">
+        <span class="pfrom">precio</span>
+        <span class="pamount" style="font-size:clamp(16px,2.2vw,22px)">A convenir</span>
+      </div>
+      <ul class="plist" aria-label="Incluye">
+        <li>Tarifa diferencial por unidad</li>
+        <li>Coordinación de turnos por lote</li>
+        <li>Estándar de calidad unificado</li>
+        <li>Prioridad de agenda</li>
+        <li>Seguimiento por WhatsApp</li>
+      </ul>
+      <a href="https://wa.me/542234212621" target="_blank" rel="noopener noreferrer" class="btn bk">Hablar con nosotros</a>
+    </article>
+  </div>
+</section>
+
+<!-- ═══ PROCESO ════════════════════════════════════════ -->
+<section class="sec" id="proceso" aria-labelledby="proceso-heading">
+  <div class="eye r" aria-hidden="true">Cómo trabajamos</div>
+  <h2 class="sh r d1" id="proceso-heading">Simple.<br><span class="yl">Sin vueltas.</span></h2>
+  <div class="prow r d2" role="list" aria-label="Pasos del proceso">
+    <div class="step" role="listitem">
+      <div class="stepn" aria-hidden="true">01</div>
+      <h3 class="stept">Contacto por WhatsApp</h3>
+      <p class="stepb">Nos mandás un mensaje, describís la unidad y coordinamos el presupuesto.</p>
+    </div>
+    <div class="step" role="listitem">
+      <div class="stepn" aria-hidden="true">02</div>
+      <h3 class="stept">Evaluación de la unidad</h3>
+      <p class="stepb">Revisamos el estado del vehículo y definimos qué etapas necesita.</p>
+    </div>
+    <div class="step" role="listitem">
+      <div class="stepn" aria-hidden="true">03</div>
+      <h3 class="stept">Intervención técnica</h3>
+      <p class="stepb">Ejecutamos el proceso en nuestro taller en Mar del Plata. <a href="https://google.com/maps/place/ALEZZA+DETAIL/@-37.9980399,-57.5419537,12455m/data=!3m1!1e3!4m6!3m5!1s0x9584df0051c1e4ff:0x4421b9b16f425b5f!8m2!3d-38.0581289!4d-57.5981737!16s%2Fg%2F11xdw603st?entry=ttu&g_ep=EgoyMDI2MDUwMi4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener noreferrer" style="color:var(--y);text-decoration:none;">Ver ubicación ↗</a></p>
+    </div>
+    <div class="step" role="listitem">
+      <div class="stepn" aria-hidden="true">04</div>
+      <h3 class="stept">Unidad lista</h3>
+      <p class="stepb">Retirás el auto en su mejor versión, listo para foto, salón o entrega.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CTA STRIP ═══════════════════════════════════════ -->
+<div class="strip r">
+  <div>
+    <h3>¿Listo para vender<br>al mejor precio?</h3>
+    <p>Escribinos hoy. Sin compromiso.</p>
+  </div>
+  <a href="https://wa.me/542234212621" target="_blank" rel="noopener noreferrer"
+     class="btn bd" aria-label="Escribir por WhatsApp">
+    Escribir por WhatsApp
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+      <path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/>
+    </svg>
+  </a>
+</div>
+</main>
+
+<!-- ═══ CONTACTO ══════════════════════════════════════ -->
+<section class="contacto" id="contacto" aria-labelledby="contacto-heading">
+  <div class="eye r" aria-hidden="true">Contacto</div>
+  <h2 class="sh r d1" id="contacto-heading">Estamos en<br><span class="yl">Mar del Plata.</span></h2>
+  <p class="sl r d2" style="margin-bottom:0">Escribinos por cualquier canal. Respondemos rápido.</p>
+
+  <div class="contact-cards r d3">
+
+    <!-- WhatsApp -->
+    <a href="https://wa.me/542234212621" target="_blank" rel="noopener noreferrer"
+       class="contact-card" aria-label="Escribir por WhatsApp al 223 421-2621">
+      <div class="cc-left">
+        <div class="cc-icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        </div>
+        <div class="cc-info">
+          <span class="cc-label">WhatsApp</span>
+          <span class="cc-value">223 421-2621</span>
+        </div>
+      </div>
+      <span class="cc-arrow" aria-hidden="true">↗</span>
+    </a>
+
+    <!-- Instagram -->
+    <a href="https://instagram.com/alezzamdp" target="_blank" rel="noopener noreferrer"
+       class="contact-card" aria-label="Ver Instagram @alezzamdp">
+      <div class="cc-left">
+        <div class="cc-icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+        </div>
+        <div class="cc-info">
+          <span class="cc-label">Instagram</span>
+          <span class="cc-value">@alezzamdp</span>
+        </div>
+      </div>
+      <span class="cc-arrow" aria-hidden="true">↗</span>
+    </a>
+
+    <!-- Google Maps -->
+    <a href="https://google.com/maps/place/ALEZZA+DETAIL/@-37.9980399,-57.5419537,12455m/data=!3m1!1e3!4m6!3m5!1s0x9584df0051c1e4ff:0x4421b9b16f425b5f!8m2!3d-38.0581289!4d-57.5981737!16s%2Fg%2F11xdw603st?entry=ttu&g_ep=EgoyMDI2MDUwMi4wIKXMDSoASAFQAw%3D%3D"
+       target="_blank" rel="noopener noreferrer"
+       class="contact-card" aria-label="Ver ubicación en Google Maps">
+      <div class="cc-left">
+        <div class="cc-icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+        </div>
+        <div class="cc-info">
+          <span class="cc-label">Ubicación</span>
+          <span class="cc-value">Mar del Plata</span>
+        </div>
+      </div>
+      <span class="cc-arrow" aria-hidden="true">↗</span>
+    </a>
+
+  </div>
+</section>
+
+<!-- ═══ FOOTER ════════════════════════════════════════ -->
+<footer role="contentinfo">
+  <a href="#" class="logo" aria-label="ALEZZA inicio">
+    <div class="lm" aria-hidden="true"><b></b><b></b><b></b></div>
+    <div class="lw">ALEZ<em>Z</em>A</div>
+  </a>
+  <span class="fcopy">© 2026 Alezza</span>
+  <span class="floc">Mar del Plata, Argentina</span>
+</footer>
+
+<!-- ═══ SCRIPTS ════════════════════════════════════════ -->
+<script>
+/* ── SERVICE WORKER ───────────────────────────────── */
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js', { scope: '/' })
+      .then(reg => console.log('[SW] Registered:', reg.scope))
+      .catch(err => console.warn('[SW] Error:', err));
+  });
+}
+
+/* ── PWA INSTALL PROMPT ───────────────────────────── */
+let deferredPrompt = null;
+const banner      = document.getElementById('installBanner');
+const installBtn  = document.getElementById('installBtn');
+const dismissBtn  = document.getElementById('dismissBtn');
+
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredPrompt = e;
+  // Mostrar solo si el usuario no lo descartó antes
+  if (!sessionStorage.getItem('alezza-install-dismissed')) {
+    setTimeout(() => banner.classList.add('show'), 4000);
+  }
+});
+
+installBtn?.addEventListener('click', async () => {
+  banner.classList.remove('show');
+  if (!deferredPrompt) return;
+  deferredPrompt.prompt();
+  const { outcome } = await deferredPrompt.userChoice;
+  deferredPrompt = null;
+  console.log('[PWA] Install outcome:', outcome);
+});
+
+dismissBtn?.addEventListener('click', () => {
+  banner.classList.remove('show');
+  sessionStorage.setItem('alezza-install-dismissed', '1');
+});
+
+window.addEventListener('appinstalled', () => {
+  banner.classList.remove('show');
+  deferredPrompt = null;
+  console.log('[PWA] App installed');
+});
+
+/* ── CUSTOM CURSOR ────────────────────────────────── */
+const dot   = document.getElementById('dot');
+const cross = document.getElementById('cross');
+let mx=0, my=0, cx=0, cy=0;
+
+if (dot && window.matchMedia('(hover:hover) and (pointer:fine)').matches) {
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    dot.style.left = mx + 'px';
+    dot.style.top  = my + 'px';
+  }, { passive: true });
+
+  (function loop() {
+    cx += (mx - cx) * .12;
+    cy += (my - cy) * .12;
+    cross.style.left = cx + 'px';
+    cross.style.top  = cy + 'px';
+    requestAnimationFrame(loop);
+  })();
+
+  document.querySelectorAll('a, button').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      dot.style.width = '10px'; dot.style.height = '10px';
+      cross.style.opacity = '.18';
+    });
+    el.addEventListener('mouseleave', () => {
+      dot.style.width = '6px'; dot.style.height = '6px';
+      cross.style.opacity = '1';
+    });
+  });
+}
+
+/* ── NAV STUCK ────────────────────────────────────── */
+const nav = document.getElementById('nav');
+const onScroll = () => nav.classList.toggle('stuck', scrollY > 48);
+window.addEventListener('scroll', onScroll, { passive: true });
+
+/* ── SCROLL REVEAL ────────────────────────────────── */
+const revealObs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('on'); });
+}, { threshold: 0.07, rootMargin: '0px 0px -24px 0px' });
+
+document.querySelectorAll('.r').forEach(el => revealObs.observe(el));
+
+/* ── SMOOTH SCROLL para links internos ────────────── */
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const target = document.querySelector(a.getAttribute('href'));
+    if (!target) return;
+    e.preventDefault();
+    const navH = nav.offsetHeight;
+    const top  = target.getBoundingClientRect().top + scrollY - navH - 16;
+    window.scrollTo({ top, behavior: 'smooth' });
+  });
+});
+</script>
+</body>
+</html>
