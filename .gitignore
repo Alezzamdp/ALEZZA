@@ -39,3 +39,13 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+
+
+.private/
+
+# Backups locales
+*.backup-*
+
+# Archivos de respaldo
+*.backup
