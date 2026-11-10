@@ -1,9 +1,15 @@
-﻿import {
+﻿
+import {
   createCipheriv,
   createDecipheriv,
   randomBytes,
 } from "node:crypto";
-import { mkdir, readFile, writeFile, rename } from "node:fs/promises";
+import {
+  mkdir,
+  readFile,
+  writeFile,
+  rename,
+} from "node:fs/promises";
 import path from "node:path";
 import os from "node:os";
 
@@ -13,6 +19,17 @@ type MercadoLibreTokens = {
   user_id: number;
   expires_at: number;
 };
+
+type MercadoLibreTokenResponse = {
+  access_token?: unknown;
+  refresh_token?: unknown;
+  user_id?: unknown;
+  expires_in?: unknown;
+  error?: unknown;
+  error_description?: unknown;
+};
+
+let refreshInProgress: Promise<string> | null = null;
 
 function getEncryptionKey(): Buffer {
   const value = process.env.MERCADOLIBRE_ENCRYPTION_KEY;
@@ -35,9 +52,38 @@ function getTokenPath(): string {
   );
 }
 
+function validateTokens(value: unknown): MercadoLibreTokens {
+  if (!value || typeof value !== "object") {
+    throw new Error("Los datos de Mercado Libre no son válidos.");
+  }
+
+  const tokens = value as Record<string, unknown>;
+
+  if (
+    typeof tokens.access_token !== "string" ||
+    !tokens.access_token ||
+    typeof tokens.refresh_token !== "string" ||
+    !tokens.refresh_token ||
+    typeof tokens.user_id !== "number" ||
+    !Number.isFinite(tokens.user_id) ||
+    typeof tokens.expires_at !== "number" ||
+    !Number.isFinite(tokens.expires_at)
+  ) {
+    throw new Error("Los tokens de Mercado Libre están incompletos.");
+  }
+
+  return {
+    access_token: tokens.access_token,
+    refresh_token: tokens.refresh_token,
+    user_id: tokens.user_id,
+    expires_at: tokens.expires_at,
+  };
+}
+
 export async function saveMercadoLibreTokens(
-  tokens: MercadoLibreTokens
+  value: MercadoLibreTokens
 ): Promise<void> {
+  const tokens = validateTokens(value);
   const key = getEncryptionKey();
   const iv = randomBytes(12);
   const cipher = createCipheriv("aes-256-gcm", key, iv);
@@ -55,51 +101,116 @@ export async function saveMercadoLibreTokens(
 
   const filePath = getTokenPath();
   const directory = path.dirname(filePath);
+  const temporaryPath = `${filePath}.${randomBytes(8).toString("hex")}.tmp`;
 
   await mkdir(directory, { recursive: true });
 
-  const temporaryPath = `${filePath}.tmp`;
+  try {
+    await writeFile(temporaryPath, JSON.stringify(payload), {
+      encoding: "utf8",
+      mode: 0o600,
+    });
 
-  await writeFile(temporaryPath, JSON.stringify(payload), {
-    encoding: "utf8",
-    mode: 0o600,
-  });
-
-  await rename(temporaryPath, filePath);
+    await rename(temporaryPath, filePath);
+  } catch (error) {
+    const { unlink } = await import("node:fs/promises");
+    await unlink(temporaryPath).catch(() => undefined);
+    throw error;
+  }
 }
 
 async function readStoredTokens(): Promise<MercadoLibreTokens | null> {
+  let raw: string;
+
   try {
-    const filePath = getTokenPath();
-    const raw = await readFile(filePath, "utf8");
-    const payload = JSON.parse(raw);
+    raw = await readFile(getTokenPath(), "utf8");
+  } catch (error) {
+    if (
+      error &&
+      typeof error === "object" &&
+      "code" in error &&
+      error.code === "ENOENT"
+    ) {
+      return null;
+    }
+
+    throw new Error("No se pudo leer el archivo de tokens de Mercado Libre.");
+  }
+
+  try {
+    const payload: unknown = JSON.parse(raw);
+
+    if (!payload || typeof payload !== "object") {
+      throw new Error("Formato inválido.");
+    }
+
+    const encrypted = payload as Record<string, unknown>;
+
+    if (
+      typeof encrypted.iv !== "string" ||
+      !/^[a-f0-9]{24}$/i.test(encrypted.iv) ||
+      typeof encrypted.tag !== "string" ||
+      !/^[a-f0-9]{32}$/i.test(encrypted.tag) ||
+      typeof encrypted.data !== "string" ||
+      !/^(?:[a-f0-9]{2})+$/i.test(encrypted.data)
+    ) {
+      throw new Error("Contenido cifrado inválido.");
+    }
 
     const decipher = createDecipheriv(
       "aes-256-gcm",
       getEncryptionKey(),
-      Buffer.from(payload.iv, "hex")
+      Buffer.from(encrypted.iv, "hex")
     );
 
-    decipher.setAuthTag(Buffer.from(payload.tag, "hex"));
+    decipher.setAuthTag(Buffer.from(encrypted.tag, "hex"));
 
     const decrypted = Buffer.concat([
-      decipher.update(Buffer.from(payload.data, "hex")),
+      decipher.update(Buffer.from(encrypted.data, "hex")),
       decipher.final(),
     ]);
 
-    return JSON.parse(decrypted.toString("utf8"));
+    return validateTokens(JSON.parse(decrypted.toString("utf8")));
   } catch {
-    return null;
+    throw new Error(
+      "No se pudieron validar o descifrar los tokens de Mercado Libre."
+    );
   }
 }
 
-export async function getMercadoLibreAccessToken(): Promise<string> {
+function validateRefreshResponse(
+  value: MercadoLibreTokenResponse
+): MercadoLibreTokens {
+  if (
+    typeof value.access_token !== "string" ||
+    !value.access_token ||
+    typeof value.refresh_token !== "string" ||
+    !value.refresh_token ||
+    typeof value.user_id !== "number" ||
+    !Number.isFinite(value.user_id) ||
+    typeof value.expires_in !== "number" ||
+    !Number.isFinite(value.expires_in) ||
+    value.expires_in <= 0
+  ) {
+    throw new Error("Mercado Libre devolvió una renovación inválida.");
+  }
+
+  return {
+    access_token: value.access_token,
+    refresh_token: value.refresh_token,
+    user_id: value.user_id,
+    expires_at: Date.now() + value.expires_in * 1000,
+  };
+}
+
+async function refreshMercadoLibreAccessToken(): Promise<string> {
   const tokens = await readStoredTokens();
 
   if (!tokens) {
     throw new Error("Mercado Libre todavía no está conectado.");
   }
 
+  // Otra solicitud pudo haber renovado los tokens mientras esperábamos.
   if (tokens.expires_at > Date.now() + 60_000) {
     return tokens.access_token;
   }
@@ -118,27 +229,51 @@ export async function getMercadoLibreAccessToken(): Promise<string> {
     refresh_token: tokens.refresh_token,
   });
 
-  const response = await fetch("https://api.mercadolibre.com/oauth/token", {
-    method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body,
-    cache: "no-store",
-  });
-
-  const refreshed = await response.json();
+  const response = await fetch(
+    "https://api.mercadolibre.com/oauth/token",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body,
+      cache: "no-store",
+    }
+  );
 
   if (!response.ok) {
-    throw new Error("No se pudo renovar el acceso a Mercado Libre.");
+    throw new Error(
+      `No se pudo renovar el acceso a Mercado Libre (HTTP ${response.status}).`
+    );
   }
 
-  const updatedTokens: MercadoLibreTokens = {
-    access_token: refreshed.access_token,
-    refresh_token: refreshed.refresh_token,
-    user_id: refreshed.user_id,
-    expires_at: Date.now() + refreshed.expires_in * 1000,
-  };
+  const refreshed: unknown = await response.json();
+
+  const updatedTokens = validateRefreshResponse(
+    refreshed as MercadoLibreTokenResponse
+  );
 
   await saveMercadoLibreTokens(updatedTokens);
 
   return updatedTokens.access_token;
+}
+
+export async function getMercadoLibreAccessToken(): Promise<string> {
+  const tokens = await readStoredTokens();
+
+  if (!tokens) {
+    throw new Error("Mercado Libre todavía no está conectado.");
+  }
+
+  if (tokens.expires_at > Date.now() + 60_000) {
+    return tokens.access_token;
+  }
+
+  if (!refreshInProgress) {
+    refreshInProgress = refreshMercadoLibreAccessToken().finally(() => {
+      refreshInProgress = null;
+    });
+  }
+
+  return refreshInProgress;
 }

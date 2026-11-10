@@ -1,10 +1,12 @@
-﻿import { NextRequest, NextResponse } from "next/server";
+﻿
+import { NextRequest, NextResponse } from "next/server";
 import { saveMercadoLibreTokens } from "@/lib/mercadolibre-token";
 
 export const runtime = "nodejs";
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
+
   const code = searchParams.get("code");
   const returnedState = searchParams.get("state");
   const savedState = request.cookies.get("ml_oauth_state")?.value;
@@ -17,7 +19,12 @@ export async function GET(request: NextRequest) {
     );
   }
 
-  if (!code || !returnedState || !savedState || returnedState !== savedState) {
+  if (
+    !code ||
+    !returnedState ||
+    !savedState ||
+    returnedState !== savedState
+  ) {
     return NextResponse.json(
       { error: "Autorización incompleta o estado inválido." },
       { status: 400 }
@@ -48,7 +55,9 @@ export async function GET(request: NextRequest) {
       "https://api.mercadolibre.com/oauth/token",
       {
         method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
         body,
         cache: "no-store",
       }
@@ -62,7 +71,16 @@ export async function GET(request: NextRequest) {
       !tokenData.refresh_token ||
       !tokenData.expires_in
     ) {
-      console.error("Error al intercambiar el código de Mercado Libre.");
+      console.error(
+        "Error al intercambiar el código de Mercado Libre.",
+        {
+          httpStatus: tokenResponse.status,
+          error: tokenData.error ?? "desconocido",
+          error_description:
+            tokenData.error_description ?? "Sin descripción",
+        }
+      );
+
       return NextResponse.json(
         { error: "No se pudo obtener un token válido de Mercado Libre." },
         { status: 502 }
@@ -83,6 +101,7 @@ export async function GET(request: NextRequest) {
     });
 
     response.cookies.delete("ml_oauth_state");
+
     return response;
   } catch (error) {
     console.error(
