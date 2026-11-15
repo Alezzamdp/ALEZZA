@@ -20,3 +20,4 @@ Asesoría automotor integral (no solo lavadero ni agencia): simulador de permuta
 
 ## Despliegue
 - Producción en Vercel (repo Alezzamdp/Alezza05, rama master). Los Quick Tunnels de Cloudflare ya no se usan.
+- 2026-11-15: dominio oficial `alezza.com.ar`, con el apex como principal y `www` redirigiendo con 308. DNS en Cloudflare en modo DNS only, con SSL emitido por Vercel. Detalle y registros en `docs/infraestructura.md`.

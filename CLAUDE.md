@@ -42,4 +42,5 @@ Primero funcionalidad y seguridad; rediseño después. Celular y escritorio. Fot
 - docs/tasacion-financiacion.md — reglas de mercado, /api/tasacion, CreditCar.
 - docs/mercadolibre.md — OAuth ML, token cifrado, estado de la API.
 - docs/bot-marketplace.md — /admin/bot, /api/bot/*, extensión messenger-ai-agent.
+- docs/infraestructura.md — dominio alezza.com.ar, DNS Cloudflare/NIC.ar, SSL, entornos, arquitectura del sitio público.
 - README.md — rutas actuales.
