@@ -137,7 +137,7 @@ export default function BrunoOS() {
       <div id="app" className="app" />
       <nav id="nav" className="nav" aria-label="Secciones" />
       <div id="sheet-root" />
-      <Script src="/os/app.js?v=14" strategy="afterInteractive" />
+      <Script src="/os/app.js?v=15" strategy="afterInteractive" />
     </>
   );
 }

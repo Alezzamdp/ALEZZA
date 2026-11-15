@@ -363,7 +363,7 @@
     const vencidas = pend.filter((t) => t.fecha && t.fecha < h).length;
     const instrumento = (etq, n, clase) => '<div class="instrumento' + (clase ? ' ' + clase : '') + '"><span class="etq">' + etq + '</span><span class="valor">' + n + '</span></div>';
     return '<header class="hero">' +
-        '<div><p class="etiqueta">' + saludo + ' · ' + indicadorNube() + '</p><h1>' + cap(diaLargo(h)) + '</h1></div>' +
+        '<div><p class="etiqueta">' + saludo + ' · ' + indicadorNube() + '</p><h1>' + cap(diaLargo(h)) + '</h1><p id="dolar" class="dolar">' + dolarTexto() + '</p></div>' +
         '<div class="hero-der"><span id="reloj" class="reloj">' + reloj() + '</span><span class="acciones"><button type="button" data-ir="buscar">Buscar</button><button type="button" data-ir="ajustes">Ajustes</button></span></div>' +
       '</header>' +
       '<div class="instrumentos">' +
@@ -627,10 +627,26 @@
     if (ev.key === 'Enter' && ev.target.matches('.caja input[name=texto]')) { ev.preventDefault(); ev.target.form.requestSubmit(); }
   });
 
+  // Dólar de hoy (/api/dolar → dolarapi.com). Se actualiza cada 10 minutos sin re-dibujar la pantalla.
+  let dolarHoy = null;
+  function dolarTexto() {
+    if (!dolarHoy) return 'Dólar: cargando…';
+    const m = (d) => d ? '$' + Math.round(d.venta).toLocaleString('es-AR') : 'sin dato';
+    const f = dolarHoy.blue || dolarHoy.oficial;
+    const hora = f && f.fecha ? ' · act. ' + new Date(f.fecha).toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' }) : '';
+    return 'Dólar blue ' + m(dolarHoy.blue) + ' · Oficial ' + m(dolarHoy.oficial) + hora;
+  }
+  async function cargarDolar() {
+    try { dolarHoy = await (await fetch('/api/dolar')).json(); } catch { /* queda el último dato */ }
+    const d = $('#dolar'); if (d) d.textContent = dolarHoy ? dolarTexto() : 'Dólar: sin conexión';
+  }
+
   // ---------- Arranque ----------
   leerLocal();
   render();
   sincronizar();
+  cargarDolar();
+  setInterval(cargarDolar, 600000);
   setInterval(() => { const r = $('#reloj'); if (r) r.textContent = reloj(); }, 15000);
   // Al volver a la pestaña o recuperar conexión, trae lo cargado desde otro equipo.
   document.addEventListener('visibilitychange', () => { if (!document.hidden) sincronizar(); });

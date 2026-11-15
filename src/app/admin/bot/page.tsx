@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import AdminGate, { ui } from "@/components/AdminGate";
 import { supabase } from "@/lib/supabase";
@@ -124,7 +123,6 @@ function Clientes() {
       <section className="grid content-start gap-3">
         <div className="flex items-baseline justify-between">
           <p className={ui.etiqueta}>Oportunidades de la web · {web.length}</p>
-          <Link href="/admin" className="text-sm underline">Ver todas</Link>
         </div>
         {web.length === 0 && <p className="text-sm text-[var(--n500)]">No hay oportunidades abiertas del simulador.</p>}
         {web.map((o) => (

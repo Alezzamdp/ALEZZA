@@ -10,7 +10,7 @@ export default function Logo({ alto = 28, className = "" }: { alto?: number; cla
       height={69}
       priority
       style={{ height: alto, width: "auto" }}
-      className={`logo-alezza ${className}`}
+      className={`logo-alezza shrink-0 object-contain object-left ${className}`}
     />
   );
 }

@@ -21,16 +21,28 @@ export default function PortalBar() {
 
   if (ruta.startsWith("/os") || (!ruta.startsWith("/admin") && !sesion)) return null;
 
+  // El portal que contiene la página abierta muestra sus páginas como pestañas.
+  const abierto = PORTALES.find((p) => p.sub && (p.u === ruta || p.sub.some((s) => s.u === ruta)));
+
   return (
-    <nav className="barra-os" aria-label="Portales">
-      <Link href="/os" className="marca-os">BRUNO<b>OS</b></Link>
-      {PORTALES.map((p, i) => (
-        <Fragment key={p.u}>
-          {i > 0 && p.grupo !== PORTALES[i - 1].grupo && <span className="sep" aria-hidden />}
-          <Link href={p.u} aria-current={p.u === ruta ? "page" : undefined}>{p.t}</Link>
-        </Fragment>
-      ))}
-      <button type="button" className="tema" onClick={cambiarTema} aria-label="Cambiar entre modo claro y oscuro">◐ Claro / Oscuro</button>
-    </nav>
+    <>
+      <nav className="barra-os" aria-label="Portales">
+        <Link href="/os" className="marca-os">BRUNO<b>OS</b></Link>
+        {PORTALES.map((p, i) => (
+          <Fragment key={p.u}>
+            {i > 0 && p.grupo !== PORTALES[i - 1].grupo && <span className="sep" aria-hidden />}
+            <Link href={p.u} aria-current={p === abierto || p.u === ruta ? "page" : undefined}>{p.t}</Link>
+          </Fragment>
+        ))}
+        <button type="button" className="tema" onClick={cambiarTema} aria-label="Cambiar entre modo claro y oscuro">◐ Claro / Oscuro</button>
+      </nav>
+      {abierto && (
+        <nav className="pestanas" aria-label={abierto.t}>
+          {[{ t: abierto.t, u: abierto.u }, ...abierto.sub!].map((s) => (
+            <Link key={s.u} href={s.u} aria-current={s.u === ruta ? "page" : undefined}>{s.t}</Link>
+          ))}
+        </nav>
+      )}
+    </>
   );
 }
