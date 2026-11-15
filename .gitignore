@@ -40,16 +40,8 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-
-
 .private/
 
 # Backups locales
-*.backup-*
-
-# Archivos de respaldo
-*.backup
-
-# copias viejas de archivos
 *.backup
 *.backup-*
