@@ -10,7 +10,8 @@ Desde el SQL Editor del proyecto Supabase, ejecutar en este orden:
 1. `schema.sql`
 2. `storage.sql`
 
-`schema.sql` deja creadas las tablas, RLS y políticas en su estado actual.
+`schema.sql` es la base inicial, no el estado actual: después de aplicarlo,
+ejecutar todas las migraciones de la sección "Base existente".
 `storage.sql` crea los buckets y las políticas para fotografías.
 
 ## Primer acceso administrador
@@ -61,6 +62,11 @@ Ejecutar cada archivo de `migrations/` en orden numérico, sin saltear ninguno:
 12. `202611140001_bruno_os_items.sql`
 13. `storage.sql`
 14. `202611140002_drop_legacy_policies.sql` (después de `storage.sql`)
+15. `202611150001_turnos_taller.sql`
+16. `202611150002_turnos_seguimiento.sql`
+17. `202611150003_tasacion_financiacion.sql`
+18. `202611160001_bot_marketplace.sql`
+19. `202611160002_mercado_historial.sql`
 
 Para inspeccionar una base existente antes de decidir qué aplicar, ejecutar
 [`audit_schema.sql`](audit_schema.sql) en el SQL Editor de Supabase. La consulta

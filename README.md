@@ -24,6 +24,7 @@ Comandos disponibles:
 - `npm.cmd run dev`: servidor de desarrollo.
 - `npm.cmd run build`: compilación de producción.
 - `npm.cmd run lint`: revisión estática con ESLint.
+- `npm.cmd test`: pruebas de `src/lib`.
 
 ## Configuración de Supabase
 
@@ -33,15 +34,19 @@ base, las migraciones existentes y la configuración de Storage.
 
 ## Rutas principales
 
-- `/`: catálogo público.
-- `/consultar?vehicle_id=...`: consulta registrada sobre una unidad del catálogo.
-- `/simulador`: solicitud de evaluación y permuta.
+Portales (fuente: `src/app/os/portales.ts`):
+
+- Público: `/`, `/vehiculos`, `/simulador`, `/financiacion`, `/servicios`, `/turnos`.
+- Gestión: `/admin/taller`, `/admin/turnos`, `/admin/vehiculos`,
+  `/admin/financiacion`, `/admin/consultas`, `/admin/bot`.
+- Sistema: `/admin/configuracion`, `/admin/actividad`.
+
+Otras rutas:
+
+- `/os`: BRUNO OS (agenda, tareas, ideas y apps; solo administrador).
 - `/admin`: oportunidades comerciales y seguimiento.
-- `/admin/consultas`: consultas de compradores por vehículos publicados.
-- `/admin/vehiculos`: catálogo de vehículos.
-- `/admin/referencias`: referencias ingresadas manualmente.
-- `/admin/configuracion`: datos públicos de contacto.
-- `/admin/actividad`: registro de cambios administrativos.
+- `/consultar?vehicle_id=...`: consulta registrada sobre una unidad del catálogo.
+- `/turnos/[token]` y `/seguimiento/[token]`: estado del turno y de la orden para el cliente.
 
 Las tasaciones actuales son internas y manuales. La verificación con
 publicaciones reales se incorporará después; no se deben presentar precios
