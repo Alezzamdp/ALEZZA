@@ -5,6 +5,8 @@ import { useCallback, useEffect, useMemo, useState, type FormEvent } from "react
 import { supabase } from "@/lib/supabase";
 import { getWhatsAppUrl } from "@/lib/whatsapp";
 import { logAdminActivity } from "@/lib/audit-log";
+import Logo from "@/components/Logo";
+import Cargando from "@/components/Cargando";
 
 type InquiryStatus = "new" | "contacted" | "closed" | "discarded";
 
@@ -397,7 +399,7 @@ export default function AdminVehicleInquiriesPage() {
   }, [items, search, statusFilter, followupFilter, todayDateKey]);
 
   if (loading) {
-    return <main className="grid min-h-screen place-items-center bg-slate-950 text-white">Verificando acceso...</main>;
+    return <main className="min-h-screen bg-slate-950"><Cargando frase="Leyendo las consultas…" /></main>;
   }
 
   return (
@@ -405,17 +407,12 @@ export default function AdminVehicleInquiriesPage() {
       <div className="mx-auto max-w-7xl">
         <header className="mb-8 flex flex-wrap items-center justify-between gap-4 border-b border-white/10 pb-6">
           <div>
-            <p className="text-sm font-semibold tracking-[0.3em] text-sky-400">ALEZZA</p>
+            <Logo alto={20} />
             <h1 className="mt-2 text-2xl font-semibold">Consultas por vehÃ­culos</h1>
             {authorized && <p className="mt-1 text-sm text-slate-400">{email}</p>}
           </div>
           {authorized && (
             <nav aria-label="AdministraciÃ³n" className="flex flex-wrap gap-2">
-              <Link href="/admin" className="rounded-lg border border-white/15 px-4 py-2 text-sm hover:bg-white/10">Oportunidades</Link>
-              <Link href="/admin/vehiculos" className="rounded-lg border border-white/15 px-4 py-2 text-sm hover:bg-white/10">VehÃ­culos</Link>
-              <Link href="/admin/consultas" className="rounded-lg border border-sky-400/40 px-4 py-2 text-sm text-sky-300 hover:bg-sky-400/10">Consultas</Link>
-              <Link href="/admin/referencias" className="rounded-lg border border-white/15 px-4 py-2 text-sm hover:bg-white/10">Referencias</Link>
-              <Link href="/admin/actividad" className="rounded-lg border border-white/15 px-4 py-2 text-sm hover:bg-white/10">Actividad</Link>
               <button onClick={logout} className="rounded-lg border border-white/15 px-4 py-2 text-sm hover:bg-white/10">Cerrar sesiÃ³n</button>
             </nav>
           )}

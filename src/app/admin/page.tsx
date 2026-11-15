@@ -1,9 +1,12 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState, type FormEvent } from "react";
+import MarketSummary from "@/components/MarketSummary";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import { getWhatsAppUrl } from "@/lib/whatsapp";
+import Logo from "@/components/Logo";
+import Cargando from "@/components/Cargando";
 
 type Followup = {
   id: string;
@@ -245,7 +248,12 @@ export default function AdminPage() {
   const selected = opportunities.find((item) => item.id === selectedId);
   const selectedPhotoPaths = selected?.trade_vehicle?.photos;
   const selectedWhatsAppUrl = selected?.phone
-    ? getWhatsAppUrl(selected.phone)
+    ? getWhatsAppUrl(
+        selected.phone,
+        `Hola${selected.customer_name ? " " + selected.customer_name.split(" ")[0] : ""}, te escribimos de ALEZZA por tu consulta de permuta${
+          selected.trade_vehicle?.brand ? ` de tu ${[selected.trade_vehicle.brand, selected.trade_vehicle.model, selected.trade_vehicle.year].filter(Boolean).join(" ")}` : ""
+        }${selected.desired_vehicle ? ` por el ${selected.desired_vehicle.brand} ${selected.desired_vehicle.model} ${selected.desired_vehicle.year}` : ""}.`
+      )
     : null;
 
   useEffect(() => {
@@ -1009,9 +1017,7 @@ export default function AdminPage() {
 
   if (loading) {
     return (
-      <main className="min-h-screen grid place-items-center bg-slate-950 text-white">
-        Verificando acceso...
-      </main>
+      <main className="min-h-screen bg-slate-950"><Cargando frase="Cargando oportunidades…" /></main>
     );
   }
 
@@ -1020,45 +1026,13 @@ export default function AdminPage() {
       <div className="mx-auto max-w-7xl">
         <header className="mb-8 flex flex-wrap items-center justify-between gap-4 border-b border-white/10 pb-6">
           <div>
-            <p className="text-sm font-semibold tracking-[0.3em] text-sky-400">
-              ALEZZA
-            </p>
+            <Logo alto={20} />
             <h1 className="mt-2 text-2xl font-semibold">
               Panel de administración
             </h1>
           </div>
           {isAdmin && (
             <div className="flex items-center gap-4">
-              <a
-                href="/admin/vehiculos"
-                className="rounded-lg border border-sky-400/30 px-4 py-2 text-sm text-sky-300 hover:bg-sky-400/10"
-              >
-                Catálogo de vehículos
-              </a>
-              <a
-                href="/admin/consultas"
-                className="rounded-lg border border-sky-400/30 px-4 py-2 text-sm text-sky-300 hover:bg-sky-400/10"
-              >
-                Consultas de vehículos
-              </a>
-              <a
-                href="/admin/referencias"
-                className="rounded-lg border border-sky-400/30 px-4 py-2 text-sm text-sky-300 hover:bg-sky-400/10"
-              >
-                Referencias de mercado
-              </a>
-              <a
-                href="/admin/actividad"
-                className="rounded-lg border border-sky-400/30 px-4 py-2 text-sm text-sky-300 hover:bg-sky-400/10"
-              >
-                Actividad
-              </a>
-              <a
-                href="/admin/configuracion"
-                className="rounded-lg border border-sky-400/30 px-4 py-2 text-sm text-sky-300 hover:bg-sky-400/10"
-              >
-                Configuración
-              </a>
               <span className="text-sm text-slate-400">{userEmail}</span>
               <button
                 onClick={handleLogout}
@@ -1616,15 +1590,18 @@ export default function AdminPage() {
                                     <p className="text-xs font-semibold text-slate-300">
                                       Referencias manuales ({entryComparables.length})
                                     </p>
-                                    {entryComparables.length === 0 && (
-                                      <a
-                                        href={`/admin/referencias?appraisal_id=${encodeURIComponent(entry.id)}`}
-                                        className="text-xs text-sky-300 hover:underline"
-                                      >
-                                        Vincular referencias
-                                      </a>
-                                    )}
+                                    <a
+                                      href={`/admin/referencias?appraisal_id=${encodeURIComponent(entry.id)}`}
+                                      className="text-xs text-sky-300 hover:underline"
+                                    >
+                                      {entryComparables.length === 0 ? "Vincular referencias" : "Agregar referencia"}
+                                    </a>
                                   </div>
+                                  {entryComparables.length > 0 && (
+                                    <div className="mt-3">
+                                      <MarketSummary items={entryComparables} />
+                                    </div>
+                                  )}
                                   {entryComparables.length === 0 ? (
                                     <p className="mt-2 text-xs text-slate-500">
                                       No hay referencias vinculadas a esta versión.

@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useState, type FormEvent } from "react";
-import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import { logAdminActivity } from "@/lib/audit-log";
+import Logo from "@/components/Logo";
+import Cargando from "@/components/Cargando";
 
 type Vehicle = {
   id: string;
@@ -541,9 +542,7 @@ export default function AdminVehiclesPage() {
 
   if (loading) {
     return (
-      <main className="min-h-screen grid place-items-center bg-slate-950 text-white">
-        Verificando acceso...
-      </main>
+      <main className="min-h-screen bg-slate-950"><Cargando frase="Puliendo el catálogo…" /></main>
     );
   }
 
@@ -552,9 +551,7 @@ export default function AdminVehiclesPage() {
       <div className="mx-auto max-w-7xl">
         <header className="mb-8 flex flex-wrap items-center justify-between gap-4 border-b border-white/10 pb-6">
           <div>
-            <p className="text-sm font-semibold tracking-[0.3em] text-sky-400">
-              ALEZZA
-            </p>
+            <Logo alto={20} />
             <h1 className="mt-2 text-2xl font-semibold">
               Administración de vehículos
             </h1>
@@ -565,30 +562,6 @@ export default function AdminVehiclesPage() {
 
           {authorized && (
             <div className="flex flex-wrap gap-2">
-              <Link
-                href="/admin"
-                className="rounded-lg border border-white/15 px-4 py-2 text-sm hover:bg-white/10"
-              >
-                Oportunidades
-              </Link>
-              <Link
-                href="/admin/referencias"
-                className="rounded-lg border border-white/15 px-4 py-2 text-sm hover:bg-white/10"
-              >
-                Referencias de mercado
-              </Link>
-              <Link
-                href="/admin/actividad"
-                className="rounded-lg border border-white/15 px-4 py-2 text-sm hover:bg-white/10"
-              >
-                Actividad
-              </Link>
-              <Link
-                href="/admin/configuracion"
-                className="rounded-lg border border-white/15 px-4 py-2 text-sm hover:bg-white/10"
-              >
-                Configuración
-              </Link>
               <button
                 onClick={logout}
                 className="rounded-lg border border-white/15 px-4 py-2 text-sm hover:bg-white/10"

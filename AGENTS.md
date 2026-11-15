@@ -97,21 +97,19 @@ IMPORTANTE:
 - No debilitar la seguridad de las cookies ni la validación state.
 - No devolver tokens al navegador.
 
-Estado del diagnóstico al 7/11/2026:
-- PKCE está desactivado en el DevCenter.
-- El usuario utiliza su cuenta personal propietaria de la aplicación.
-- La ruta /api/mercadolibre/auth responde HTTP 307.
-- El servidor de autorización utilizado es auth.mercadolibre.com.ar.
-- Se comprobó que client_id está presente.
-- El redirect_uri enviado es:
-  https://engagement-possibilities-wit-find.trycloudflare.com/api/mercadolibre/callback
-- La aplicación de Mercado Libre devuelve:
-  "Lo sentimos, la aplicación no puede conectarse a tu cuenta".
+Estado verificado al 13/11/2026:
+- OAuth completado (tokens guardados el 9/11). Renovación con refresh_token probada OK; /users/me responde 200.
+- /sites/MLA/search y /items/{id} responden 403: Mercado Libre no habilitó a la app para leer publicaciones de terceros. Se gestiona aparte con ML; mientras tanto los comparables se cargan de forma asistida en /admin/referencias.
+- No hacer scraping del sitio público de Mercado Libre.
+- /api/mercadolibre/auth es POST y exige administrador (JWT de Supabase + admin_users, ver src/lib/server-admin.ts). Se inicia desde /admin/configuracion.
+- /api/mercadolibre/status (admin) informa el estado sin exponer tokens; ?check=1 prueba la API.
+- La renovación usa un lockfile (<token>.lock) para evitar renovaciones simultáneas entre procesos.
 
-La causa todavía NO está identificada.
-Falta comparar el APP ID y el redirect_uri con los datos registrados en el DevCenter y revisar el estado de habilitación de la aplicación.
-
-No asumir que OAuth está resuelto porque la ruta devuelve 307.
+Importación de publicaciones (14/11/2026, en /admin/referencias):
+- POST /api/mercadolibre/item (admin): lee un aviso por enlace con /items/{id} y completa la referencia (src/lib/mercadolibre-items.ts). Si ML responde 401/403, avisa y se carga a mano.
+- GET /api/mercadolibre/search?q= (admin): busca en MLA1744. Hoy ML responde 403; devuelve el enlace de la búsqueda pública para abrirla a mano. Cuando ML habilite el permiso, funciona sin cambios.
+- Estado probado 15/11: /sites/MLA/search 403, /items/{id} 403 y el catálogo de autos (domain MLA-CARS_AND_VANS) vacío: la app no tiene acceso a publicaciones de autos; hay que pedirlo a Mercado Libre. Estado probado 14/11: /users/me 200; /sites/MLA/search 403; /items/{id} ya no da 403 de entrada (inexistente → 404), falta confirmar con un aviso real.
+- Todo lo importado se revisa antes de guardar: son precios publicados, no de cierre.
 
 ## 6. Cloudflare
 Se utilizaron Quick Tunnels de trycloudflare.com.
@@ -149,6 +147,7 @@ Diferenciar siempre:
 - Valor de toma de ALEZZA.
 
 No aplicar descuentos o márgenes arbitrarios.
+Margen de toma definido por el dueño (15/11/2026): valor de toma sugerido = mediana de comparables − 15 % (MARGEN_TOMA en src/lib/market.ts). Es una sugerencia; la toma final la aprueba una persona.
 
 ## 8. Supabase y seguridad
 Tablas existentes:
@@ -160,6 +159,9 @@ Tablas existentes:
 - comparables
 - audit_logs
 - app_settings
+- bruno_items (BRUNO OS; solo admin y dueño, migración 202611140001)
+- turnos y ordenes (migraciones 202611150001 y 202611150002; buckets privados turno-comprobantes y orden-fotos)
+- financiaciones (solicitudes con DNI; migración 202611150003, solo admin)
 
 La tabla comparables contiene referencias, precios, fuente, URL, ubicación y fechas.
 La tabla appraisals contiene rangos de mercado, valor de toma, confianza y aprobación.
@@ -171,6 +173,52 @@ NO debilitar RLS.
 NO publicar datos internos de comparables.
 NO solicitar ni inventar una clave service_role.
 Respetar las políticas y buckets privados existentes.
+
+## 8b. BRUNO OS (sistema central)
+Todas las apps de ALEZZA viven en este proyecto y se abren desde BRUNO OS (/os).
+- /os: agenda, tareas, ideas y Apps. Login de administrador (admin_users).
+- src/app/os/BrunoOS.tsx: login y puente con Supabase (window.BRUNO_NUBE). Valida con src/lib/bruno.ts.
+- public/os/app.js: la interfaz (JS sin dependencias). Copia local + cola de cambios sin subir.
+- Portal nuevo: una línea en src/app/os/portales.ts (aparece en el Inicio de BRUNO OS y en la barra común).
+- Barra común de portales: src/components/PortalBar.tsx (en el layout raíz; en páginas públicas solo con sesión). Incluye el botón Claro / Oscuro.
+- Tema único (papel, tinta, mostaza; Unbounded, DM Sans, IBM Plex Mono): src/app/globals.css remapea los colores de Tailwind a las escalas --n* (neutros) y --m* (mostaza); /admin las usa al revés con .tema-admin.
+- Claro / oscuro: <html data-tema>, lo fija SCRIPT_TEMA (src/lib/tema.ts) antes de pintar; sin elección guardada sigue al sistema. Para colores nuevos usar var(--tinta), var(--papel), var(--n*), var(--m*), no hex fijos.
+- Logo: src/components/Logo.tsx con public/logo-alezza.png (el original, negro sin fondo; en oscuro se invierte).
+- Dictado: botón de micrófono en la caja para anotar (tecla M). Reconocimiento de voz del navegador (Edge/Chrome), continuo, corta tras 2,5 s de silencio; pasa números en palabras a cifras ("a las cinco y media de la tarde" → 17:30) y NO guarda solo: queda para revisar y se anota con Enter. Chequeo: node scripts/test-dictado.js. Permissions-Policy permite microphone=(self).
+- /vehiculos: portal del stock (src/components/StockVehiculos.tsx, también lo usa el Inicio). "Ver autos en stock" apunta acá.
+- /servicios: página de estética (src/app/servicios/page.tsx), resumida; usa el mismo tema y logo.
+- Diseño: primero escritorio (menú lateral, tablero en columnas); en el teléfono, una columna.
+
+## 8c. Turnos y Taller
+- /turnos (público): servicio, día con cupo, datos y patente → función pedir_turno → /turnos/<token> (enlace privado del cliente: estado y pago de la seña).
+- El público nunca toca las tablas: usa funciones security definer (turnos_disponibles, pedir_turno, turno_publico, informar_pago). Comprobantes en turno-comprobantes/<token>/.
+- Seña: transferencia + comprobante (confirma el admin) o Mercado Pago (src/lib/mercadopago.ts), que se habilita con MERCADOPAGO_ACCESS_TOKEN. El pago se confirma solo después de leerlo en la API de Mercado Pago (vuelta del cliente o /api/mercadopago/webhook) con confirmar_pago_mp, que solo puede llamar service_role. El webhook necesita una dirección https pública (NEXT_PUBLIC_SITE_URL).
+- Configuración de turnos (días, cupo, seña, alias/CBU): app_settings 'turnos', desde /admin/configuracion.
+- /admin/turnos: avisos (no vistos, aviso del navegador), verificar comprobante, confirmar turno → se anota en bruno_items (agenda de BRUNO OS), mensajes de WhatsApp con un toque.
+- /admin/taller: órdenes de trabajo (cliente, vehículo, trabajos, fotos antes/después achicadas en el navegador, estado, historial). Mensajes rápidos por wa.me (src/lib/turnos.ts, PLANTILLAS). Se abre desde un turno con ?turno=<id>.
+
+- Seña: porcentaje_sena (50 %) del precio del servicio (precios en app_settings 'turnos'); si algo está a cotizar, la seña fija de respaldo. La base calcula el precio (private.precio_turno), no el navegador.
+- "Otro / a definir": el cliente elige extras (interiores, motor, butacas, pulido2, pulido1).
+- Seguimiento en vivo: /seguimiento/<token de la orden> y la página del turno muestran etapa y checklist (orden_publica / turno_publico, sin precios). Tildar un trabajo en el Taller guarda al instante.
+- Catálogo antes/después en /servicios: órdenes con publicar=true (trabajos_publicos; las fotos publicadas se leen con URL firmada).
+- WhatsApp hacia ALEZZA: waAlezza() en src/lib/turnos.ts arma el mensaje con el contexto (servicio, fecha, patente, enlace).
+- Pantallas de carga: src/components/Cargando.tsx (logo + barra mostaza; con progreso real o deslizante mientras llegan datos, frase por página).
+
+## 8d. Tasación, financiación y extras (15/11/2026)
+- Tasación al cliente: después de enviar el simulador, src/components/AsesorCompra.tsx pide primero /api/tasacion (Mercado Libre en vivo: marca+modelo, año ±1, ARS, mín. 3 avisos; solo devuelve el agregado). Si ML responde 403 o hay pocos avisos, usa estimar_mercado (agregado de comparables ARS, mín. 3, sin exponerlos) − 15 % y recomienda autos del stock con el plan de financiación.
+- Financiación CreditCar: condiciones de su gráfica en src/lib/financiacion.ts (no hay integración con su API: no tenemos acuerdo). /financiacion pide DNI + WhatsApp con consentimiento (Ley 25.326); /admin/financiacion lleva el embudo hasta "vendida" y estima la comisión.
+- No llamar a la API interna de CreditCar sin autorización escrita de ellos.
+- Mapa del taller: src/components/MapaTaller.tsx (Leaflet + mapas públicos de Esri; CARTO pide clave).
+- Notas para el cliente: historial tipo "nota" de la orden, visibles en el seguimiento.
+- Mensajes de WhatsApp: siempre estructurados (saludo, datos en renglones, firma): PLANTILLAS y mensajeAlezza en src/lib/turnos.ts.
+- Pantalla de entrada (src/components/Arranque.tsx): avanza con la carga real (imágenes, fuentes, documento) y se va al terminar; tope 8 s.
+
+## 8e. Bot de Marketplace (extensión D:Alezzamessenger-ai-agent)
+- Portal /admin/bot: "Lo que sabe de ALEZZA", "Cómo escribo yo" (mensajes reales de Bruno), clave del bot y actividad.
+- Datos en archivos privados de la PC: LOCALAPPDATA/ALEZZA/bot/config.json (clave solo como sha256) y actividad.jsonl (src/lib/bot-store.ts). Si el portal se publica en un servidor, pasarlo a una tabla con RLS.
+- API: GET /api/bot/config y POST /api/bot/actividad con cabecera X-Bot-Key; GET /api/bot/actividad y /api/bot/admin (GET/PUT/POST nueva clave) solo administrador.
+- El stock y los precios del bot salen de vehicles (mismo dato que /vehiculos). La permuta del cliente se tasa con /api/tasacion (ML o referencias − 15 %).
+- La extensión llama a http://localhost:3000 (host_permissions); la clave la pega el usuario en el popup.
 
 ## 9. Próxima tarea de Codex
 Primero realizar una auditoría de estado, sin cambiar archivos:

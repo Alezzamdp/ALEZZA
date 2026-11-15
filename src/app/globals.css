@@ -1,26 +1,180 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
+/* Tema único de ALEZZA / BRUNO OS: papel, tinta y mostaza, en claro y oscuro.
+   Las páginas usan clases de Tailwind (gray, slate, blue, sky…); acá se remapean a una
+   escala neutra --n* y una mostaza --m*. El modo oscuro solo invierte esas escalas.
+   <html data-tema="claro|oscuro"> lo fija el script del layout (preferencia guardada o la del sistema). */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--f-body);
+  --font-mono: var(--f-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+:root {
+  color-scheme: light;
+  --n0: #fbf8f1;  --n50: #f3efe6; --n100: #ebe5d8; --n200: #dcd4c3; --n300: #c9bfa9; --n400: #a39a87;
+  --n500: #6f6857; --n600: #5c5547; --n700: #423d32; --n800: #2a2720; --n900: #1f1c16; --n950: #17150f;
+  --m50: #faf1d6; --m100: #f5e6b8; --m200: #ecd283; --m300: #e0bb4a; --m400: #d4a017;
+  --m600: #b8890f; --m700: #8a6608; --m800: #6b4f06; --m900: #4d3904;
+  --papel: var(--n50);
+  --tinta: var(--n950);
+  --mostaza: #d4a017;
+}
+:root[data-tema="oscuro"] {
+  color-scheme: dark;
+  --n0: #1c1a15;  --n50: #14130f; --n100: #24211b; --n200: #343027; --n300: #4a4538; --n400: #6f6857;
+  --n500: #9a917d; --n600: #b3aa96; --n700: #cfc7b5; --n800: #e2dccd; --n900: #ece7db; --n950: #f3efe6;
+  --m50: #2a2208; --m100: #3a2f0b; --m200: #5c4810; --m300: #8a6a12; --m400: #d4a017;
+  --m600: #dcae2e; --m700: #e8c25a; --m800: #f0d283; --m900: #f5e2ad;
+}
+
+/* Páginas públicas, BRUNO OS y Servicios (diseñadas en claro). */
+:root {
+  --color-white: var(--n0);
+  --color-black: #0b0a08;
+  --color-gray-50: var(--n50);   --color-slate-50: var(--n50);
+  --color-gray-100: var(--n100); --color-slate-100: var(--n100);
+  --color-gray-200: var(--n200); --color-slate-200: var(--n200);
+  --color-gray-300: var(--n300); --color-slate-300: var(--n300);
+  --color-gray-400: var(--n400); --color-slate-400: var(--n400);
+  --color-gray-500: var(--n500); --color-slate-500: var(--n500);
+  --color-gray-600: var(--n600); --color-slate-600: var(--n600);
+  --color-gray-700: var(--n700); --color-slate-700: var(--n700);
+  --color-gray-800: var(--n800); --color-slate-800: var(--n800);
+  --color-gray-900: var(--n900); --color-slate-900: var(--n900);
+  --color-gray-950: var(--n950); --color-slate-950: var(--n950);
+  --color-blue-50: var(--m50);   --color-sky-50: var(--m50);
+  --color-blue-100: var(--m100); --color-sky-100: var(--m100);
+  --color-blue-200: var(--m200); --color-sky-200: var(--m200);
+  --color-blue-300: var(--m300); --color-sky-300: var(--m300);
+  --color-blue-400: var(--m400); --color-sky-400: var(--m400);
+  --color-blue-500: var(--m400); --color-sky-500: var(--m400);
+  --color-blue-600: var(--m600); --color-sky-600: var(--m600);
+  --color-blue-700: var(--m700); --color-sky-700: var(--m700);
+  --color-blue-800: var(--m800); --color-sky-800: var(--m800);
+  --color-blue-900: var(--m900); --color-sky-900: var(--m900);
+}
+/* En oscuro, los avisos de color pensados para fondo claro (bg-*-50 + text-*-800) se dan vuelta. */
+:root[data-tema="oscuro"] {
+  --color-red-50: #2a1212;     --color-red-100: #3a1717;    --color-red-200: #5c2020;
+  --color-red-700: #ff8a80;    --color-red-800: #ffb4ab;    --color-red-900: #ffd2cc;
+  --color-amber-50: #2a2008;   --color-amber-100: #3a2c0b;  --color-amber-200: #5c4512;
+  --color-amber-700: #f5c35a;  --color-amber-800: #f8d27f;  --color-amber-900: #fbe2ad;
+  --color-emerald-50: #0e2a1f; --color-emerald-100: #123526; --color-emerald-200: #1d5039;
+  --color-emerald-700: #6fdcaa; --color-emerald-800: #9ce8c4;
+  --color-green-50: #0e2a1f;   --color-green-700: #6fdcaa;  --color-green-800: #9ce8c4;
+}
+
+/* Gestión (/admin) se diseñó en oscuro: usa la escala al revés. */
+.tema-admin {
+  --color-white: var(--n950);
+  --color-slate-950: var(--n50);
+  --color-slate-900: var(--n0);
+  --color-slate-800: var(--n100);
+  --color-slate-700: var(--n200);
+  --color-slate-600: var(--n400);
+  --color-slate-500: var(--n500);
+  --color-slate-400: var(--n600);
+  --color-slate-300: var(--n700);
+  --color-slate-200: var(--n800);
+  --color-slate-100: var(--n900);
+  --color-slate-50: var(--n950);
+  --color-sky-100: var(--m900);
+  --color-sky-200: var(--m800);
+  --color-sky-300: var(--m700);
+  --color-sky-400: var(--m600);
+  --color-sky-500: var(--n950); /* botones principales: tinta con letra papel */
+}
+/* Sus colores de estado (pensados sobre negro) se oscurecen solo en claro. */
+:root:not([data-tema="oscuro"]) .tema-admin {
+  --color-red-200: #9f0712;
+  --color-red-300: #c10007;
+  --color-red-400: #e7000b;
+  --color-emerald-200: #006045;
+  --color-emerald-300: #007a55;
+  --color-emerald-400: #009966;
+  --color-amber-100: #7b3306;
+  --color-amber-200: #973c00;
+  --color-amber-300: #bb4d00;
+  --color-amber-400: #e17100;
+  --color-yellow-300: #a65f00;
+  --color-yellow-400: #d08700;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  background: var(--papel);
+  color: var(--tinta);
+  font-family: var(--f-body), system-ui, sans-serif;
 }
+
+/* La cuadrícula de papel técnico del Inicio de BRUNO OS, en todas las pantallas. */
+main.min-h-screen {
+  background-image:
+    linear-gradient(color-mix(in srgb, var(--tinta) 5%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--tinta) 5%, transparent) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+main h1, main h2 { font-family: var(--f-display), var(--f-body), sans-serif; letter-spacing: -0.01em; }
+
+/* Logo ALEZZA (src/components/Logo.tsx): PNG negro sin fondo; en oscuro se invierte. */
+[data-tema="oscuro"] .logo-alezza { filter: invert(1); }
+
+/* Barra común de portales (src/components/PortalBar.tsx). Siempre tinta clásica, en los dos modos. */
+.barra-os {
+  display: flex; align-items: center; gap: 4px; overflow-x: auto;
+  padding: 0 16px; min-height: 42px; background: #17150f; color: #f3efe6;
+  font-family: var(--f-mono), monospace; font-size: 12px; white-space: nowrap;
+}
+.barra-os a, .barra-os button { padding: 12px 10px; color: rgb(243 239 230 / .72); text-decoration: none; border-bottom: 2px solid transparent; }
+.barra-os a:hover, .barra-os button:hover { color: #f3efe6; }
+.barra-os a[aria-current="page"] { color: #f3efe6; border-bottom-color: var(--mostaza); }
+.barra-os .marca-os { font-family: var(--f-display), sans-serif; font-weight: 800; font-size: 13px; letter-spacing: .02em; color: #f3efe6; margin-right: 10px; }
+.barra-os .marca-os b { color: var(--mostaza); margin-left: .12em; }
+.barra-os .sep { width: 1px; height: 16px; background: rgb(243 239 230 / .25); margin: 0 6px; }
+.barra-os .tema { margin-left: auto; font: inherit; background: none; border-top: 0; border-left: 0; border-right: 0; cursor: pointer; }
+
+/* Pantalla de carga (src/components/Cargando.tsx): logo + barra mostaza (real o deslizante). */
+.carga { display: grid; justify-items: center; gap: 14px; padding: 32px 16px; color: var(--tinta); }
+.carga-pantalla { min-height: 60vh; align-content: center; }
+.carga-logo { margin-bottom: 6px; }
+.carga-barra { position: relative; width: min(280px, 75vw); height: 3px; border-radius: 3px; overflow: hidden; background: color-mix(in srgb, var(--tinta) 12%, transparent); }
+.carga-relleno { position: absolute; inset: 0 auto 0 0; background: var(--mostaza); border-radius: inherit; transition: width .25s ease-out; }
+.carga-desliza { position: absolute; inset: 0 auto 0 0; width: 35%; background: var(--mostaza); border-radius: inherit; animation: desliza 1.2s ease-in-out infinite; }
+@keyframes desliza { 0% { transform: translateX(-100%); } 100% { transform: translateX(290%); } }
+.carga-pie { display: flex; gap: 14px; align-items: baseline; width: min(280px, 75vw); justify-content: space-between; }
+.carga-pantalla .carga-pie:not(:has(.carga-pct)), .carga:not(.carga-pantalla) .carga-pie { justify-content: center; }
+.carga-frase { font-family: var(--f-body), sans-serif; font-size: 13px; color: color-mix(in srgb, var(--tinta) 70%, transparent); animation: frase .35s ease-out both; }
+.carga-pct { font-family: var(--f-mono), monospace; font-size: 12px; font-variant-numeric: tabular-nums; color: var(--tinta); }
+@keyframes frase { from { opacity: 0; transform: translateY(4px); } }
+@media (prefers-reduced-motion: reduce) { .carga-desliza { animation-duration: 2.4s; } }
+
+/* Pantalla de entrada (src/components/Arranque.tsx). */
+.arranque-os { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; background: var(--papel);
+  background-image: linear-gradient(color-mix(in srgb, var(--tinta) 5%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--tinta) 5%, transparent) 1px, transparent 1px);
+  background-size: 28px 28px; transition: opacity .45s ease, visibility .45s; }
+.arranque-os.saliendo { opacity: 0; visibility: hidden; }
+
+/* Pasos del pedido de turno: aparecen al completar el anterior. */
+.paso-aparece { animation: paso-aparece .35s ease-out both; }
+@keyframes paso-aparece { from { opacity: 0; transform: translateY(8px); } }
+@media (prefers-reduced-motion: reduce) { .paso-aparece { animation: none; } }
+
+/* Pin del taller en el mapa (src/components/MapaTaller.tsx). */
+.pin-alezza span { display: block; width: 28px; height: 28px; border-radius: 50% 50% 50% 0; transform: rotate(-45deg);
+  background: #d4a017; border: 3px solid #17150f; box-shadow: 0 4px 12px rgb(0 0 0 / .35); animation: pin .6s cubic-bezier(.3, 1.6, .5, 1) both; }
+@keyframes pin { from { transform: rotate(-45deg) translate(6px, -14px); opacity: 0; } }
+.leaflet-container { font-family: var(--f-body), sans-serif; background: #1c1a15; }
+
+/* Carrusel deslizable (src/components/Carrusel.tsx): sin barra visible. */
+.carrusel { scrollbar-width: none; overscroll-behavior-x: contain; }
+.carrusel::-webkit-scrollbar { display: none; }
+
+/* iPhone / celular */
+html { -webkit-text-size-adjust: 100%; }
+body { padding-bottom: env(safe-area-inset-bottom, 0px); -webkit-tap-highlight-color: transparent; }
+/* Instalada como app (pantalla completa): la barra no queda debajo del notch. */
+@media (display-mode: standalone) { .barra-os { padding-top: env(safe-area-inset-top, 0px); } }
+/* Safari hace zoom al tocar campos con letra menor a 16px: en el celular se fija en 16px. */
+@media (max-width: 640px) { input, select, textarea { font-size: 16px !important; } }
+.barra-os { -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+.barra-os::-webkit-scrollbar { display: none; }

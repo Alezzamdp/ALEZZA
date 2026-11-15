@@ -20,7 +20,7 @@ type PublicProfile = {
 };
 
 const inputClass =
-  "mt-2 w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-base text-gray-900 outline-none focus:border-[#347EAF] focus:ring-2 focus:ring-[#347EAF]/20";
+  "mt-2 w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-base text-gray-900 outline-none focus:border-[var(--m700)] focus:ring-2 focus:ring-[var(--m700)]/20";
 
 function getEmailUrl(email: string, subject: string, body: string) {
   const recipient = encodeURIComponent(email).replace(/%40/i, "@");
@@ -150,52 +150,52 @@ export default function VehicleInquiryPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#F5F8FB] px-4 py-10 text-gray-900 sm:px-6">
+    <main className="min-h-screen bg-[var(--papel)] px-4 py-10 text-gray-900 sm:px-6">
       <div className="mx-auto max-w-2xl">
-        <Link href="/#catalogo" className="text-sm font-semibold text-[#173B68] hover:underline">
+        <Link href="/vehiculos" className="text-sm font-semibold text-[var(--tinta)] hover:underline">
           ← Volver al catálogo
         </Link>
 
         <section className="mt-6 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm sm:p-9">
-          <p className="text-sm font-bold tracking-[0.2em] text-[#347EAF]">CONSULTA DE VEHÍCULO</p>
+          <p className="text-sm font-bold tracking-[0.2em] text-[var(--m700)]">CONSULTA DE VEHÍCULO</p>
 
           {loadingVehicle ? (
             <p role="status" className="mt-5 text-gray-600">Cargando la unidad...</p>
           ) : !vehicle ? (
             <>
-              <h1 className="mt-3 text-2xl font-bold text-[#173B68]">No encontramos esta unidad</h1>
+              <h1 className="mt-3 text-2xl font-bold text-[var(--tinta)]">No encontramos esta unidad</h1>
               <p className="mt-3 leading-7 text-gray-600">
                 Puede haberse pausado o vendido. Volvé al catálogo para ver las unidades publicadas.
               </p>
-              <Link href="/#catalogo" className="mt-6 inline-flex rounded-lg bg-[#173B68] px-5 py-3 font-semibold text-white hover:bg-[#24558B]">
+              <Link href="/vehiculos" className="mt-6 inline-flex rounded-lg bg-[var(--tinta)] px-5 py-3 font-semibold text-white hover:bg-[var(--n800)]">
                 Ir al catálogo
               </Link>
             </>
           ) : submitted ? (
             <>
-              <h1 className="mt-3 text-2xl font-bold text-[#173B68]">Consulta registrada</h1>
+              <h1 className="mt-3 text-2xl font-bold text-[var(--tinta)]">Consulta registrada</h1>
               <p className="mt-3 leading-7 text-gray-600">
                 Recibimos tu consulta por el {vehicleName}. ALEZZA va a revisar la solicitud y ponerse en contacto.
               </p>
               <div className="mt-6 flex flex-wrap gap-3">
                 {whatsappHref && (
-                  <a href={whatsappHref} target="_blank" rel="noreferrer" className="rounded-lg bg-[#173B68] px-5 py-3 font-semibold text-white hover:bg-[#24558B]">
+                  <a href={whatsappHref} target="_blank" rel="noreferrer" className="rounded-lg bg-[var(--tinta)] px-5 py-3 font-semibold text-white hover:bg-[var(--n800)]">
                     Continuar por WhatsApp
                   </a>
                 )}
                 {emailHref && (
-                  <a href={emailHref} className="rounded-lg border border-[#173B68] px-5 py-3 font-semibold text-[#173B68] hover:bg-[#F5F8FB]">
+                  <a href={emailHref} className="rounded-lg border border-[var(--tinta)] px-5 py-3 font-semibold text-[var(--tinta)] hover:bg-[var(--papel)]">
                     Continuar por correo
                   </a>
                 )}
-                <Link href="/#catalogo" className="rounded-lg border border-gray-200 px-5 py-3 font-semibold text-gray-700 hover:bg-gray-50">
+                <Link href="/vehiculos" className="rounded-lg border border-gray-200 px-5 py-3 font-semibold text-gray-700 hover:bg-gray-50">
                   Volver al catálogo
                 </Link>
               </div>
             </>
           ) : (
             <>
-              <h1 className="mt-3 text-2xl font-bold text-[#173B68]">Consultar por {vehicleName}</h1>
+              <h1 className="mt-3 text-2xl font-bold text-[var(--tinta)]">Consultar por {vehicleName}</h1>
               <p className="mt-3 leading-7 text-gray-600">
                 Dejanos tus datos y tu consulta. No implica reserva ni compromiso de compra.
               </p>
@@ -237,7 +237,7 @@ export default function VehicleInquiryPage() {
                     </div>
                   </div>
                 )}
-                <button type="submit" disabled={busy} className="w-full rounded-lg bg-[#173B68] px-5 py-4 font-semibold text-white transition hover:bg-[#24558B] disabled:cursor-not-allowed disabled:opacity-60">
+                <button type="submit" disabled={busy} className="w-full rounded-lg bg-[var(--tinta)] px-5 py-4 font-semibold text-white transition hover:bg-[var(--n800)] disabled:cursor-not-allowed disabled:opacity-60">
                   {busy ? "Enviando consulta..." : "Enviar consulta"}
                 </button>
               </form>

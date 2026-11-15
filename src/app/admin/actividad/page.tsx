@@ -1,8 +1,9 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useMemo, useState, type FormEvent } from "react";
 import { supabase } from "@/lib/supabase";
+import Logo from "@/components/Logo";
+import Cargando from "@/components/Cargando";
 
 type ActivityItem = {
   id: string;
@@ -164,9 +165,7 @@ export default function AdminActivityPage() {
 
   if (loading) {
     return (
-      <main className="grid min-h-screen place-items-center bg-slate-950 text-white">
-        Verificando acceso...
-      </main>
+      <main className="min-h-screen bg-slate-950"><Cargando frase="Repasando la bitácora…" /></main>
     );
   }
 
@@ -175,17 +174,13 @@ export default function AdminActivityPage() {
       <div className="mx-auto max-w-7xl">
         <header className="mb-8 flex flex-wrap items-center justify-between gap-4 border-b border-white/10 pb-6">
           <div>
-            <p className="text-sm font-semibold tracking-[0.3em] text-sky-400">ALEZZA</p>
+            <Logo alto={20} />
             <h1 className="mt-2 text-2xl font-semibold">Actividad</h1>
             {authorized && <p className="mt-1 text-sm text-slate-400">{email}</p>}
           </div>
 
           {authorized && (
             <nav aria-label="Administración" className="flex flex-wrap gap-2">
-              <Link href="/admin" className="rounded-lg border border-white/15 px-4 py-2 text-sm hover:bg-white/10">Oportunidades</Link>
-              <Link href="/admin/vehiculos" className="rounded-lg border border-white/15 px-4 py-2 text-sm hover:bg-white/10">Vehículos</Link>
-              <Link href="/admin/referencias" className="rounded-lg border border-white/15 px-4 py-2 text-sm hover:bg-white/10">Referencias</Link>
-              <Link href="/admin/configuracion" className="rounded-lg border border-white/15 px-4 py-2 text-sm hover:bg-white/10">Configuración</Link>
               <button onClick={logout} className="rounded-lg border border-white/15 px-4 py-2 text-sm hover:bg-white/10">Cerrar sesión</button>
             </nav>
           )}

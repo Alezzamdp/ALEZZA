@@ -1,9 +1,15 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState, type FormEvent } from "react";
-import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import { logAdminActivity } from "@/lib/audit-log";
+import { parseListingUrl } from "@/lib/market";
+import type { ListingData } from "@/lib/mercadolibre-items";
+import Logo from "@/components/Logo";
+import Cargando from "@/components/Cargando";
+
+type MlSearch = { items?: ListingData[]; blocked?: boolean; webUrl?: string; error?: string };
+import MarketSummary from "@/components/MarketSummary";
 
 type Comparable = {
   id: string;
@@ -135,6 +141,9 @@ export default function AdminReferencesPage() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [showForm, setShowForm] = useState(false);
   const [search, setSearch] = useState("");
+  const [mlQuery, setMlQuery] = useState("");
+  const [mlSearch, setMlSearch] = useState<MlSearch | null>(null);
+  const [mlBusy, setMlBusy] = useState(false);
   const requestedAppraisalToLink = useRef<string | null>(null);
 
   function updateField<K extends keyof ComparableForm>(
@@ -142,6 +151,94 @@ export default function AdminReferencesPage() {
     value: ComparableForm[K]
   ) {
     setForm((current) => ({ ...current, [key]: value }));
+  }
+
+  // Carga asistida: limpia el enlace y sugiere fuente, marca, modelo y versión
+  // sólo en los campos vacíos. Si es de Mercado Libre, pide el resto a la API oficial.
+  function applyListingUrl(raw: string) {
+    const info = parseListingUrl(raw);
+    if (!info) {
+      updateField("listing_url", raw);
+      return;
+    }
+
+    setForm((current) => ({
+      ...current,
+      listing_url: info.url,
+      source: current.source || info.source || "",
+      brand: current.brand || info.brand,
+      model: current.model || info.model,
+      version: current.version || info.version,
+    }));
+
+    if (info.externalId) void fetchMlItem(info.url);
+  }
+
+  async function mlHeaders(): Promise<HeadersInit> {
+    const { data } = await supabase.auth.getSession();
+    return { Authorization: `Bearer ${data.session?.access_token ?? ""}`, "Content-Type": "application/json" };
+  }
+
+  // Completa sólo los campos vacíos: lo que el usuario ya escribió manda.
+  function fillFromMl(d: ListingData, overwrite: boolean) {
+    const pick = (current: string, value: string | number | null) =>
+      overwrite || !current ? (value == null ? current : String(value)) : current;
+    setForm((current) => ({
+      ...current,
+      listing_url: d.url,
+      source: "Mercado Libre",
+      brand: pick(current.brand, d.brand),
+      model: pick(current.model, d.model),
+      version: pick(current.version, d.version),
+      year: pick(current.year, d.year),
+      kilometers: pick(current.kilometers, d.kilometers),
+      location: overwrite || current.location === emptyForm.location ? d.location || current.location : current.location,
+      published_price: pick(current.published_price, d.price),
+      currency: d.currency && (overwrite || !current.published_price) ? d.currency : current.currency,
+      published_at: pick(current.published_at, d.publishedAt),
+      listing_status: d.status,
+    }));
+  }
+
+  async function fetchMlItem(url: string) {
+    setMlBusy(true);
+    try {
+      const res = await fetch("/api/mercadolibre/item", { method: "POST", headers: await mlHeaders(), body: JSON.stringify({ url }) });
+      const body = await res.json();
+      if (body.item) {
+        fillFromMl(body.item as ListingData, false);
+        setMessage("Datos traídos de Mercado Libre. Revisalos antes de guardar.");
+      } else if (body.blocked) {
+        setMessage("Mercado Libre todavía no habilita a la app para leer avisos de terceros. Completá precio, año y kilometraje mirando el aviso.");
+      } else if (body.error) {
+        setMessage(body.error);
+      }
+    } catch {
+      setMessage("No se pudo consultar Mercado Libre. Completá los datos mirando el aviso.");
+    }
+    setMlBusy(false);
+  }
+
+  async function searchMl(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setMlBusy(true);
+    setMlSearch(null);
+    try {
+      const res = await fetch(`/api/mercadolibre/search?q=${encodeURIComponent(mlQuery)}`, { headers: await mlHeaders() });
+      setMlSearch(await res.json());
+    } catch {
+      setMlSearch({ error: "No se pudo consultar Mercado Libre." });
+    }
+    setMlBusy(false);
+  }
+
+  function addFromSearch(d: ListingData) {
+    setEditingId(null);
+    setForm(emptyForm);
+    fillFromMl(d, true);
+    setShowForm(true);
+    setMessage("Datos traídos de Mercado Libre. Revisalos antes de guardar.");
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
   const loadComparables = useCallback(async (appraisalIdToOpen?: string) => {
@@ -313,18 +410,15 @@ export default function AdminReferencesPage() {
     }
 
     let listingUrl: string | null = null;
+    let externalId: string | null = null;
     if (form.listing_url.trim()) {
-      try {
-        const parsedUrl = new URL(form.listing_url.trim());
-        if (parsedUrl.protocol !== "http:" && parsedUrl.protocol !== "https:") {
-          setMessage("El enlace debe usar HTTP o HTTPS.");
-          return;
-        }
-        listingUrl = parsedUrl.href;
-      } catch {
-        setMessage("El enlace de publicación no es válido.");
+      const listing = parseListingUrl(form.listing_url);
+      if (!listing) {
+        setMessage("El enlace de publicación no es válido (debe usar HTTP o HTTPS).");
         return;
       }
+      listingUrl = listing.url;
+      externalId = listing.externalId;
     }
 
     const payload = {
@@ -348,10 +442,12 @@ export default function AdminReferencesPage() {
     setMessage("");
 
     if (listingUrl) {
-      const listingQuery = supabase
-        .from("comparables")
-        .select("id")
-        .eq("listing_url", listingUrl);
+      // Con ID de Mercado Libre se detecta el mismo aviso aunque el enlace
+      // guardado tenga otros parámetros de seguimiento.
+      const baseQuery = supabase.from("comparables").select("id");
+      const listingQuery = externalId
+        ? baseQuery.ilike("listing_url", `%${externalId.slice(3)}%`)
+        : baseQuery.eq("listing_url", listingUrl);
       const appraisalScopedQuery = payload.appraisal_id
         ? listingQuery.eq("appraisal_id", payload.appraisal_id)
         : listingQuery.is("appraisal_id", null);
@@ -478,9 +574,7 @@ export default function AdminReferencesPage() {
 
   if (loading) {
     return (
-      <main className="min-h-screen grid place-items-center bg-slate-950 text-white">
-        Verificando acceso...
-      </main>
+      <main className="min-h-screen bg-slate-950"><Cargando frase="Midiendo el mercado…" /></main>
     );
   }
 
@@ -489,25 +583,13 @@ export default function AdminReferencesPage() {
       <div className="mx-auto max-w-7xl">
         <header className="mb-8 flex flex-wrap items-center justify-between gap-4 border-b border-white/10 pb-6">
           <div>
-            <p className="text-sm font-semibold tracking-[0.3em] text-sky-400">ALEZZA</p>
+            <Logo alto={20} />
             <h1 className="mt-2 text-2xl font-semibold">Referencias de mercado</h1>
             {authorized && <p className="mt-1 text-sm text-slate-400">{email}</p>}
           </div>
 
           {authorized && (
             <div className="flex flex-wrap gap-2">
-              <Link href="/admin" className="rounded-lg border border-white/15 px-4 py-2 text-sm hover:bg-white/10">
-                Oportunidades
-              </Link>
-              <Link href="/admin/vehiculos" className="rounded-lg border border-white/15 px-4 py-2 text-sm hover:bg-white/10">
-                Catálogo
-              </Link>
-              <Link href="/admin/actividad" className="rounded-lg border border-white/15 px-4 py-2 text-sm hover:bg-white/10">
-                Actividad
-              </Link>
-              <Link href="/admin/configuracion" className="rounded-lg border border-white/15 px-4 py-2 text-sm hover:bg-white/10">
-                Configuración
-              </Link>
               <button onClick={logout} className="rounded-lg border border-white/15 px-4 py-2 text-sm hover:bg-white/10">
                 Cerrar sesión
               </button>
@@ -550,6 +632,65 @@ export default function AdminReferencesPage() {
               </div>
             </section>
 
+            <section className="mb-8 rounded-2xl border border-yellow-400/25 bg-yellow-400/[0.04] p-5 md:p-6">
+              <h2 className="text-xl font-semibold">Buscar en Mercado Libre</h2>
+              <p className="mt-1 text-sm text-slate-400">
+                Marca, modelo, año y versión. Elegí los avisos comparables y revisalos antes de guardarlos.
+              </p>
+              <form onSubmit={searchMl} className="mt-4 flex flex-wrap gap-2">
+                <input
+                  value={mlQuery}
+                  onChange={(e) => setMlQuery(e.target.value)}
+                  placeholder="Ej.: Volkswagen Suran 2015 Highline"
+                  className={`${inputClass} mt-0 min-w-0 flex-1`}
+                  minLength={3}
+                  maxLength={120}
+                  required
+                />
+                <button type="submit" disabled={mlBusy} className="rounded-lg bg-yellow-400 px-5 py-3 font-semibold text-slate-950 hover:bg-yellow-300 disabled:opacity-50">
+                  {mlBusy ? "Buscando…" : "Buscar"}
+                </button>
+              </form>
+
+              {mlSearch?.error && <p className="mt-4 text-sm text-red-300">{mlSearch.error}</p>}
+
+              {mlSearch?.blocked && (
+                <div className="mt-4 rounded-lg border border-white/10 bg-slate-900 p-4 text-sm text-slate-300">
+                  <p>
+                    Mercado Libre todavía no habilitó la búsqueda para la app (responde 403). Mientras tanto:
+                    abrí la búsqueda, copiá el enlace de cada aviso comparable y pegalo en <strong>+ Agregar referencia</strong>.
+                  </p>
+                  <a href={mlSearch.webUrl} target="_blank" rel="noopener noreferrer" className="mt-3 inline-block rounded-lg border border-yellow-400/40 px-4 py-2 font-semibold text-yellow-300 hover:bg-yellow-400/10">
+                    Abrir búsqueda en Mercado Libre ↗
+                  </a>
+                </div>
+              )}
+
+              {mlSearch?.items && (
+                <div className="mt-4">
+                  <p className="mb-2 text-sm text-slate-400">
+                    {mlSearch.items.length} avisos · <a href={mlSearch.webUrl} target="_blank" rel="noopener noreferrer" className="text-yellow-300 hover:underline">ver en Mercado Libre ↗</a>
+                  </p>
+                  <ul className="divide-y divide-white/10 rounded-lg border border-white/10">
+                    {mlSearch.items.map((d) => (
+                      <li key={d.externalId} className="flex flex-wrap items-center justify-between gap-3 p-3">
+                        <div className="min-w-0 flex-1">
+                          <a href={d.url} target="_blank" rel="noopener noreferrer" className="block truncate font-medium hover:underline">{d.title}</a>
+                          <p className="text-sm text-slate-400">
+                            {[d.year, d.kilometers != null ? `${d.kilometers.toLocaleString("es-AR")} km` : null, d.location].filter(Boolean).join(" · ")}
+                          </p>
+                        </div>
+                        <span className="font-semibold">{d.price != null && d.currency ? money(d.price, d.currency) : "Sin precio"}</span>
+                        <button type="button" onClick={() => addFromSearch(d)} className="rounded-lg border border-white/15 px-3 py-2 text-sm hover:bg-white/10">
+                          Usar como referencia
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </section>
+
             <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
               <div className="min-w-0 flex-1">
                 <h2 className="text-xl font-semibold">Base de comparables</h2>
@@ -587,6 +728,26 @@ export default function AdminReferencesPage() {
                     Cancelar
                   </button>
                 </div>
+
+                <label className={`${labelClass} mb-4 block`}>Enlace del aviso
+                  <input
+                    type="url"
+                    value={form.listing_url}
+                    onChange={(e) => updateField("listing_url", e.target.value)}
+                    onBlur={(e) => applyListingUrl(e.target.value)}
+                    onPaste={(e) => {
+                      e.preventDefault();
+                      applyListingUrl(e.clipboardData.getData("text"));
+                    }}
+                    className={inputClass}
+                    placeholder="Pegá el enlace de la publicación (Mercado Libre u otro portal)"
+                  />
+                  <span className="mt-1 block text-xs font-normal text-slate-500">
+                    {mlBusy
+                      ? "Consultando Mercado Libre…"
+                      : "Al pegarlo se quita el seguimiento y se completan los datos que se puedan (de Mercado Libre, por su API). Revisalos siempre mirando el aviso."}
+                  </span>
+                </label>
 
                 <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                   <label className={labelClass}>Vincular a una tasación
@@ -656,9 +817,6 @@ export default function AdminReferencesPage() {
                       <option>Referencia propia</option>
                     </select>
                   </label>
-                  <label className={labelClass}>Enlace del aviso
-                    <input type="url" value={form.listing_url} onChange={(e) => updateField("listing_url", e.target.value)} className={inputClass} placeholder="https://..." />
-                  </label>
                 </div>
 
                 <label className={`${labelClass} mt-4 block`}>Observaciones
@@ -669,6 +827,18 @@ export default function AdminReferencesPage() {
                   {busy ? "Guardando..." : editingId ? "Guardar cambios" : "Guardar referencia"}
                 </button>
               </form>
+            )}
+
+            {search.trim() && filtered.length > 0 && (
+              <section className="mb-6">
+                <MarketSummary
+                  items={filtered}
+                  title={`Resumen de “${search.trim()}”`}
+                />
+                <p className="mt-2 text-xs text-slate-500">
+                  Filtrá por modelo, versión y año para que el resumen compare unidades equivalentes.
+                </p>
+              </section>
             )}
 
             <section className="overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03]">

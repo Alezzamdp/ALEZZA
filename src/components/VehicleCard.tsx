@@ -86,7 +86,7 @@ export default function VehicleCard({
   return (
     <>
       <article className="overflow-hidden rounded-xl border border-gray-200 bg-white transition duration-300 hover:-translate-y-1 hover:shadow-lg">
-        <div className="group relative aspect-[4/3] bg-[#E9EFF5]">
+        <div className="group relative aspect-[4/3] bg-[var(--n100)]">
           {photos.length > 0 ? (
             <button
               type="button"
@@ -108,10 +108,10 @@ export default function VehicleCard({
               className="flex h-full w-full items-center justify-center text-center"
             >
               <div>
-                <p className="text-xs font-semibold tracking-widest text-[#347EAF]">
+                <p className="text-xs font-semibold tracking-widest text-[var(--m700)]">
                   {vehicle.brand}
                 </p>
-                <p className="mt-2 text-2xl font-bold text-[#173B68]">
+                <p className="mt-2 text-2xl font-bold text-[var(--tinta)]">
                   {vehicle.model}
                 </p>
                 <p className="mt-2 text-xs text-gray-500">
@@ -167,13 +167,13 @@ export default function VehicleCard({
         </div>
 
         <div className="p-6">
-          <p className="text-xs font-semibold uppercase tracking-widest text-[#347EAF]">
+          <p className="text-xs font-semibold uppercase tracking-widest text-[var(--m700)]">
             {vehicle.year}
             {vehicle.kilometers != null &&
               ` · ${Number(vehicle.kilometers).toLocaleString("es-AR")} km`}
           </p>
 
-          <h3 className="mt-2 text-xl font-bold text-[#173B68]">
+          <h3 className="mt-2 text-xl font-bold text-[var(--tinta)]">
             {vehicle.brand} {vehicle.model}
           </h3>
 
@@ -196,14 +196,14 @@ export default function VehicleCard({
 
           <div className="mt-6 border-t border-gray-100 pt-5">
             <p className="text-xs text-gray-500">Precio</p>
-            <p className="mt-1 text-xl font-bold text-[#173B68]">
+            <p className="mt-1 text-xl font-bold text-[var(--tinta)]">
               {formatPrice(vehicle)}
             </p>
 
             <button
               type="button"
               onClick={() => setModalOpen(true)}
-              className="mt-5 w-full rounded-lg border border-[#173B68] px-5 py-3 text-sm font-semibold text-[#173B68] transition hover:bg-[#F0F5FA]"
+              className="mt-5 w-full rounded-lg border border-[var(--tinta)] px-5 py-3 text-sm font-semibold text-[var(--tinta)] transition hover:bg-[var(--papel)]"
             >
               Ver publicación
             </button>
@@ -233,7 +233,7 @@ export default function VehicleCard({
             </button>
 
             <div className="grid md:grid-cols-[1.15fr_0.85fr]">
-              <div className="relative flex min-h-[260px] items-center justify-center bg-[#E9EFF5] md:min-h-[540px]">
+              <div className="relative flex min-h-[260px] items-center justify-center bg-[var(--n100)] md:min-h-[540px]">
                 {photos.length > 0 ? (
                   <img
                     src={photos[photoIndex]}
@@ -270,11 +270,11 @@ export default function VehicleCard({
               </div>
 
               <div className="flex flex-col p-6 sm:p-8">
-                <p className="text-xs font-bold tracking-[0.2em] text-[#347EAF]">
+                <p className="text-xs font-bold tracking-[0.2em] text-[var(--m700)]">
                   CATÁLOGO ALEZZA
                 </p>
 
-                <h2 className="mt-3 text-2xl font-bold text-[#173B68] sm:text-3xl">
+                <h2 className="mt-3 text-2xl font-bold text-[var(--tinta)] sm:text-3xl">
                   {vehicle.brand} {vehicle.model}
                 </h2>
 
@@ -282,7 +282,7 @@ export default function VehicleCard({
                   <p className="mt-2 text-gray-500">{vehicle.version}</p>
                 )}
 
-                <p className="mt-5 text-3xl font-bold text-[#173B68]">
+                <p className="mt-5 text-3xl font-bold text-[var(--tinta)]">
                   {formatPrice(vehicle)}
                 </p>
 
@@ -337,7 +337,7 @@ export default function VehicleCard({
                 <div className="mt-auto pt-8">
                   <Link
                     href={`/consultar?vehicle_id=${encodeURIComponent(vehicle.id)}`}
-                    className="block rounded-lg bg-[#173B68] px-5 py-4 text-center font-semibold text-white transition hover:bg-[#24558B]"
+                    className="block rounded-lg bg-[var(--tinta)] px-5 py-4 text-center font-semibold text-white transition hover:bg-[var(--n800)]"
                   >
                     Consultar por esta unidad
                   </Link>
@@ -346,7 +346,7 @@ export default function VehicleCard({
                       href={contactHref}
                       target={contactTarget}
                       rel={contactTarget ? "noreferrer" : undefined}
-                      className="mt-3 block rounded-lg border border-[#173B68] px-5 py-3 text-center text-sm font-semibold text-[#173B68] transition hover:bg-[#F0F5FA]"
+                      className="mt-3 block rounded-lg border border-[var(--tinta)] px-5 py-3 text-center text-sm font-semibold text-[var(--tinta)] transition hover:bg-[var(--papel)]"
                     >
                       {contactLabel ?? "Contactar a ALEZZA"}
                     </a>
@@ -356,6 +356,12 @@ export default function VehicleCard({
                     className="mt-3 block rounded-lg border border-gray-200 px-5 py-3 text-center text-sm font-semibold text-gray-700 transition hover:bg-gray-50"
                   >
                     Simular permuta
+                  </a>
+                  <a
+                    href={`/financiacion?vehiculo=${encodeURIComponent(vehicle.id)}`}
+                    className="mt-3 block rounded-lg border border-gray-200 px-5 py-3 text-center text-sm font-semibold text-gray-700 transition hover:bg-gray-50"
+                  >
+                    Financiar con DNI
                   </a>
                   <button
                     type="button"
@@ -378,7 +384,7 @@ export default function VehicleCard({
                     aria-label={`Ver fotografía ${index + 1}`}
                     className={`h-16 w-24 shrink-0 overflow-hidden rounded-lg border-2 ${
                       photoIndex === index
-                        ? "border-[#173B68]"
+                        ? "border-[var(--tinta)]"
                         : "border-transparent opacity-60"
                     }`}
                   >

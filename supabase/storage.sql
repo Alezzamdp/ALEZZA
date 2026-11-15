@@ -55,7 +55,13 @@ using (
 );
 
 -- Private intake photos for trade-in opportunities.
-create or replace function storage.is_declared_trade_vehicle_photo(object_name text)
+-- Supabase no permite crear funciones en el esquema storage: va en "private",
+-- que no está expuesto por la API REST.
+create schema if not exists private;
+revoke all on schema private from public;
+grant usage on schema private to anon, authenticated;
+
+create or replace function private.is_declared_trade_vehicle_photo(object_name text)
 returns boolean
 language sql
 stable
@@ -79,8 +85,8 @@ as $$
   );
 $$;
 
-revoke all on function storage.is_declared_trade_vehicle_photo(text) from public;
-grant execute on function storage.is_declared_trade_vehicle_photo(text)
+revoke all on function private.is_declared_trade_vehicle_photo(text) from public;
+grant execute on function private.is_declared_trade_vehicle_photo(text)
   to anon, authenticated;
 
 insert into storage.buckets (
@@ -115,7 +121,7 @@ with check (
   and (storage.foldername(name))[1] = 'inbox'
   and (storage.foldername(name))[2] ~* '^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$'
   and storage.filename(name) ~* '^(front|rear|left|right|interior|dashboard)-[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}[.](jpg|png|webp)$'
-  and storage.is_declared_trade_vehicle_photo(name)
+  and private.is_declared_trade_vehicle_photo(name)
 );
 
 drop policy if exists "Admin read trade vehicle photos"

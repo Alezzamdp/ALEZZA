@@ -6,9 +6,12 @@ import {
 } from "node:crypto";
 import {
   mkdir,
+  open,
   readFile,
   writeFile,
   rename,
+  stat,
+  unlink,
 } from "node:fs/promises";
 import path from "node:path";
 import os from "node:os";
@@ -113,7 +116,6 @@ export async function saveMercadoLibreTokens(
 
     await rename(temporaryPath, filePath);
   } catch (error) {
-    const { unlink } = await import("node:fs/promises");
     await unlink(temporaryPath).catch(() => undefined);
     throw error;
   }
@@ -203,7 +205,51 @@ function validateRefreshResponse(
   };
 }
 
+// Lock entre procesos: el refresh_token de Mercado Libre es de un solo uso,
+// así que dos procesos no deben renovarlo a la vez.
+// ponytail: lockfile con vencimiento de 30 s; alcanza para un único servidor local.
+async function withRefreshLock<T>(task: () => Promise<T>): Promise<T> {
+  const lockPath = `${getTokenPath()}.lock`;
+  const deadline = Date.now() + 15_000;
+
+  await mkdir(path.dirname(lockPath), { recursive: true });
+
+  for (;;) {
+    try {
+      const handle = await open(lockPath, "wx");
+      await handle.close();
+      break;
+    } catch (error) {
+      if (!(error && typeof error === "object" && "code" in error && error.code === "EEXIST")) {
+        throw error;
+      }
+
+      const lock = await stat(lockPath).catch(() => null);
+      if (lock && Date.now() - lock.mtimeMs > 30_000) {
+        await unlink(lockPath).catch(() => undefined);
+        continue;
+      }
+
+      if (Date.now() > deadline) {
+        throw new Error("Otra renovación de Mercado Libre sigue en curso.");
+      }
+
+      await new Promise((resolve) => setTimeout(resolve, 200));
+    }
+  }
+
+  try {
+    return await task();
+  } finally {
+    await unlink(lockPath).catch(() => undefined);
+  }
+}
+
 async function refreshMercadoLibreAccessToken(): Promise<string> {
+  return withRefreshLock(refreshWhileLocked);
+}
+
+async function refreshWhileLocked(): Promise<string> {
   const tokens = await readStoredTokens();
 
   if (!tokens) {
@@ -242,6 +288,15 @@ async function refreshMercadoLibreAccessToken(): Promise<string> {
   );
 
   if (!response.ok) {
+    const failure = (await response.json().catch(() => ({}))) as MercadoLibreTokenResponse;
+
+    // Los tokens guardados no se borran: se conservan para diagnóstico.
+    if (failure.error === "invalid_grant") {
+      throw new Error(
+        "Mercado Libre rechazó el refresh token. Hay que volver a conectar la cuenta desde Configuración."
+      );
+    }
+
     throw new Error(
       `No se pudo renovar el acceso a Mercado Libre (HTTP ${response.status}).`
     );
@@ -256,6 +311,20 @@ async function refreshMercadoLibreAccessToken(): Promise<string> {
   await saveMercadoLibreTokens(updatedTokens);
 
   return updatedTokens.access_token;
+}
+
+// Estado de la conexión sin renovar ni exponer tokens.
+export async function getMercadoLibreConnectionStatus() {
+  const tokens = await readStoredTokens();
+
+  if (!tokens) return { connected: false as const };
+
+  return {
+    connected: true as const,
+    user_id: tokens.user_id,
+    access_expires_at: new Date(tokens.expires_at).toISOString(),
+    access_valid: tokens.expires_at > Date.now() + 60_000,
+  };
 }
 
 export async function getMercadoLibreAccessToken(): Promise<string> {

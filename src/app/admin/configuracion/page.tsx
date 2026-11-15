@@ -1,9 +1,12 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useState, type FormEvent } from "react";
 import { supabase } from "@/lib/supabase";
 import { getWhatsAppUrl } from "@/lib/whatsapp";
+import MercadoLibreCard from "./MercadoLibreCard";
+import TurnosCard from "./TurnosCard";
+import Logo from "@/components/Logo";
+import Cargando from "@/components/Cargando";
 
 type PublicProfile = {
   whatsapp: string;
@@ -200,9 +203,7 @@ export default function AdminSettingsPage() {
 
   if (loading) {
     return (
-      <main className="grid min-h-screen place-items-center bg-slate-950 text-white">
-        Verificando acceso...
-      </main>
+      <main className="min-h-screen bg-slate-950"><Cargando frase="Ajustando el tablero…" /></main>
     );
   }
 
@@ -211,17 +212,13 @@ export default function AdminSettingsPage() {
       <div className="mx-auto max-w-7xl">
         <header className="mb-8 flex flex-wrap items-center justify-between gap-4 border-b border-white/10 pb-6">
           <div>
-            <p className="text-sm font-semibold tracking-[0.3em] text-sky-400">ALEZZA</p>
+            <Logo alto={20} />
             <h1 className="mt-2 text-2xl font-semibold">Configuración pública</h1>
             {authorized && <p className="mt-1 text-sm text-slate-400">{email}</p>}
           </div>
 
           {authorized && (
             <nav aria-label="Administración" className="flex flex-wrap gap-2">
-              <Link href="/admin" className="rounded-lg border border-white/15 px-4 py-2 text-sm hover:bg-white/10">Oportunidades</Link>
-              <Link href="/admin/vehiculos" className="rounded-lg border border-white/15 px-4 py-2 text-sm hover:bg-white/10">Vehículos</Link>
-              <Link href="/admin/referencias" className="rounded-lg border border-white/15 px-4 py-2 text-sm hover:bg-white/10">Referencias</Link>
-              <Link href="/admin/actividad" className="rounded-lg border border-white/15 px-4 py-2 text-sm hover:bg-white/10">Actividad</Link>
               <button onClick={logout} className="rounded-lg border border-white/15 px-4 py-2 text-sm hover:bg-white/10">Cerrar sesión</button>
             </nav>
           )}
@@ -246,6 +243,7 @@ export default function AdminSettingsPage() {
             </form>
           </section>
         ) : (
+          <div className="space-y-6">
           <section className="max-w-3xl rounded-2xl border border-white/10 bg-white/[0.04] p-5 md:p-7">
             <h2 className="text-xl font-semibold">Contacto y atención</h2>
             <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-400">
@@ -286,6 +284,9 @@ export default function AdminSettingsPage() {
               </div>
             </form>
           </section>
+          <TurnosCard />
+          <MercadoLibreCard />
+          </div>
         )}
       </div>
     </main>

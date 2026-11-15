@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { getWhatsAppUrl } from "@/lib/whatsapp";
+import Logo from "@/components/Logo";
+import AsesorCompra, { type DatosTasacion } from "@/components/AsesorCompra";
 
 type PhotoKey =
   | "front"
@@ -37,6 +39,9 @@ const photoSlots: { key: PhotoKey; label: string; detail: string }[] = [
   { key: "dashboard", label: "Tablero y kilometraje", detail: "Kilómetros visibles" },
 ];
 
+// Marcas más comunes en Argentina: sugerencias para escribir igual que en las referencias de mercado.
+const MARCAS = ["Chevrolet", "Citroën", "Fiat", "Ford", "Honda", "Hyundai", "Jeep", "Kia", "Mercedes Benz", "Nissan", "Peugeot", "Renault", "Toyota", "Volkswagen", "Audi", "BMW", "Chery", "Dodge", "RAM", "Suzuki"];
+
 const initialVehicle = {
   brand: "",
   model: "",
@@ -69,6 +74,7 @@ export default function SimulatorPage() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const [tasacion, setTasacion] = useState<DatosTasacion | null>(null);
 
   useEffect(() => {
     const desiredVehicleId = new URLSearchParams(window.location.search).get(
@@ -350,6 +356,8 @@ export default function SimulatorPage() {
         });
 
       if (insertError) throw insertError;
+      // Con la solicitud registrada, el asesor muestra la tasación estimada y qué auto le entra.
+      setTasacion({ marca: vehicle.brand.trim(), modelo: vehicle.model.trim(), anio: year, km: kilometers, deseado: desiredVehicle?.id ?? null });
 
       const failedPhotoSlots = await uploadPhotoSlots(
         photoSlots.map((slot) => slot.key),
@@ -379,9 +387,7 @@ export default function SimulatorPage() {
     <main className="min-h-screen bg-slate-50 text-slate-900">
       <header className="border-b border-slate-200 bg-white">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-5 py-5">
-          <Link href="/" className="font-bold tracking-[0.22em] text-slate-950">
-            ALEZZA
-          </Link>
+          <Link href="/" aria-label="ALEZZA - Inicio"><Logo alto={22} /></Link>
           <span className="text-sm text-slate-500">Simulador de permutas</span>
         </div>
       </header>
@@ -439,9 +445,14 @@ export default function SimulatorPage() {
                   maxLength={60}
                   className={`${inputClass} mt-2`}
                   placeholder="Ej. Volkswagen"
+                  list="marcas"
+                  autoComplete="off"
                   value={vehicle.brand}
                   onChange={(e) => updateVehicle("brand", e.target.value)}
                 />
+                <datalist id="marcas">
+                  {MARCAS.map((m) => <option key={m} value={m} />)}
+                </datalist>
               </label>
 
               <label className="text-sm font-medium">
@@ -566,42 +577,48 @@ export default function SimulatorPage() {
               </p>
             </div>
 
-            <div className="grid gap-4 sm:grid-cols-2">
+            {/* Todas juntas: se reparten en orden en las vistas que faltan. Después se puede tocar cada una para cambiarla. */}
+            <label className="mb-4 flex cursor-pointer items-center justify-between gap-3 rounded-xl border-2 border-dashed border-slate-300 p-4 hover:border-[var(--tinta)]">
+              <span>
+                <span className="block font-semibold">Subir todas las fotos juntas</span>
+                <span className="text-xs text-slate-500">
+                  {Object.keys(photos).length} de {photoSlots.length} cargadas · se ordenan solas, después podés cambiar cualquiera
+                </span>
+              </span>
+              <span className="shrink-0 rounded-lg bg-[var(--tinta)] px-4 py-2 text-sm font-semibold text-[var(--papel)]">Elegir fotos</span>
+              <input
+                type="file"
+                multiple
+                accept="image/jpeg,image/png,image/webp"
+                className="sr-only"
+                onChange={(e) => {
+                  const files = Array.from(e.target.files ?? []);
+                  photoSlots.filter((s) => !photosRef.current[s.key]).forEach((s, i) => files[i] && handlePhoto(s.key, files[i]));
+                  e.target.value = "";
+                }}
+              />
+            </label>
+
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
               {photoSlots.map((slot) => (
-                <div key={slot.key} className="rounded-xl border border-slate-200 p-3">
-                  <label className="block cursor-pointer">
-                    <span className="text-sm font-semibold">{slot.label} *</span>
-                    <span className="mt-1 block text-xs text-slate-500">
-                      {slot.detail}
-                    </span>
-
-                    <div className="mt-3 flex min-h-36 items-center justify-center overflow-hidden rounded-lg bg-slate-100">
-                      {photos[slot.key]?.preview ? (
-                        <img
-                          src={photos[slot.key]?.preview}
-                          alt={`Fotografía: ${slot.label}`}
-                          className="h-44 w-full object-cover"
-                        />
-                      ) : (
-                        <div className="text-center text-slate-400">
-                          <span className="text-3xl">+</span>
-                          <p className="text-xs">Seleccionar fotografía</p>
-                        </div>
-                      )}
-                    </div>
-
-                    <input
-                      type="file"
-                      accept="image/jpeg,image/png,image/webp"
-                      capture="environment"
-                      required={!photos[slot.key]?.file}
-                      className="mt-3 block w-full text-xs text-slate-600 file:mr-3 file:rounded-lg file:border-0 file:bg-blue-50 file:px-3 file:py-2 file:font-semibold file:text-blue-700"
-                      onChange={(e) =>
-                        handlePhoto(slot.key, e.target.files?.[0])
-                      }
-                    />
-                  </label>
-                </div>
+                <label key={slot.key} className="group block cursor-pointer">
+                  <div className="relative flex aspect-[4/3] items-center justify-center overflow-hidden rounded-lg border border-slate-200 bg-slate-100 group-hover:border-[var(--tinta)]">
+                    {photos[slot.key]?.preview ? (
+                      <img src={photos[slot.key]?.preview} alt={`Fotografía: ${slot.label}`} className="h-full w-full object-cover" />
+                    ) : (
+                      <span className="text-center text-slate-400"><span className="block text-2xl">+</span><span className="text-xs">{slot.detail}</span></span>
+                    )}
+                    {photos[slot.key] && <span className="absolute right-1.5 top-1.5 rounded-full bg-[var(--mostaza)] px-2 text-xs font-bold text-[#17150f]">✓</span>}
+                  </div>
+                  <span className="mt-1.5 block text-xs font-semibold">{slot.label}</span>
+                  <input
+                    type="file"
+                    accept="image/jpeg,image/png,image/webp"
+                    capture="environment"
+                    className="sr-only"
+                    onChange={(e) => { handlePhoto(slot.key, e.target.files?.[0]); e.target.value = ""; }}
+                  />
+                </label>
               ))}
             </div>
 
@@ -672,6 +689,8 @@ export default function SimulatorPage() {
               {message}
             </div>
           )}
+
+          {tasacion && <AsesorCompra datos={tasacion} />}
 
           {pendingPhotoUpload && (
             <button

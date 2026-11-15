@@ -56,7 +56,11 @@ Ejecutar cada archivo de `migrations/` en orden numérico, sin saltear ninguno:
 7. `202611070007_crm_history_integrity.sql`
 8. `202611070008_restrict_vehicle_delete_with_leads.sql`
 9. `202611070009_vehicle_inquiries.sql`
-10. `storage.sql`
+10. `202611070010_convert_vehicle_inquiry.sql`
+11. `202611080001_whatsapp_agent.sql`
+12. `202611140001_bruno_os_items.sql`
+13. `storage.sql`
+14. `202611140002_drop_legacy_policies.sql` (después de `storage.sql`)
 
 Para inspeccionar una base existente antes de decidir qué aplicar, ejecutar
 [`audit_schema.sql`](audit_schema.sql) en el SQL Editor de Supabase. La consulta

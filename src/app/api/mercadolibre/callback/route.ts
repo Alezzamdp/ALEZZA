@@ -1,8 +1,16 @@
-﻿
-import { NextRequest, NextResponse } from "next/server";
+﻿import { NextRequest, NextResponse } from "next/server";
 import { saveMercadoLibreTokens } from "@/lib/mercadolibre-token";
 
 export const runtime = "nodejs";
+
+// Vuelve al panel de Configuración con el resultado, sin exponer datos.
+function backToSettings(result: string) {
+  const target = new URL("/admin/configuracion", process.env.MERCADOLIBRE_REDIRECT_URI);
+  target.searchParams.set("ml", result);
+  const response = NextResponse.redirect(target);
+  response.cookies.delete("ml_oauth_state");
+  return response;
+}
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
@@ -11,25 +19,6 @@ export async function GET(request: NextRequest) {
   const returnedState = searchParams.get("state");
   const savedState = request.cookies.get("ml_oauth_state")?.value;
   const error = searchParams.get("error");
-
-  if (error) {
-    return NextResponse.json(
-      { error: "Mercado Libre rechazó la autorización." },
-      { status: 400 }
-    );
-  }
-
-  if (
-    !code ||
-    !returnedState ||
-    !savedState ||
-    returnedState !== savedState
-  ) {
-    return NextResponse.json(
-      { error: "Autorización incompleta o estado inválido." },
-      { status: 400 }
-    );
-  }
 
   const clientId = process.env.MERCADOLIBRE_CLIENT_ID;
   const clientSecret = process.env.MERCADOLIBRE_CLIENT_SECRET;
@@ -40,6 +29,17 @@ export async function GET(request: NextRequest) {
       { error: "Falta configurar alguna credencial de Mercado Libre." },
       { status: 500 }
     );
+  }
+
+  if (error) return backToSettings("rechazada");
+
+  if (
+    !code ||
+    !returnedState ||
+    !savedState ||
+    returnedState !== savedState
+  ) {
+    return backToSettings("estado_invalido");
   }
 
   try {
@@ -81,10 +81,7 @@ export async function GET(request: NextRequest) {
         }
       );
 
-      return NextResponse.json(
-        { error: "No se pudo obtener un token válido de Mercado Libre." },
-        { status: 502 }
-      );
+      return backToSettings("token_invalido");
     }
 
     await saveMercadoLibreTokens({
@@ -94,24 +91,13 @@ export async function GET(request: NextRequest) {
       expires_at: Date.now() + tokenData.expires_in * 1000,
     });
 
-    const response = NextResponse.json({
-      connected: true,
-      message: "Mercado Libre conectado. Tokens guardados cifrados.",
-      user_id: tokenData.user_id,
-    });
-
-    response.cookies.delete("ml_oauth_state");
-
-    return response;
+    return backToSettings("conectado");
   } catch (error) {
     console.error(
       "Error interno al completar la conexión de Mercado Libre:",
       error instanceof Error ? error.message : "Error desconocido"
     );
 
-    return NextResponse.json(
-      { error: "No se pudo completar la conexión de Mercado Libre." },
-      { status: 500 }
-    );
+    return backToSettings("error");
   }
 }
