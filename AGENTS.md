@@ -214,11 +214,12 @@ Todas las apps de ALEZZA viven en este proyecto y se abren desde BRUNO OS (/os).
 - Pantalla de entrada (src/components/Arranque.tsx): avanza con la carga real (imágenes, fuentes, documento) y se va al terminar; tope 8 s.
 
 ## 8e. Bot de Marketplace (extensión D:Alezzamessenger-ai-agent)
-- Portal /admin/bot: "Lo que sabe de ALEZZA", "Cómo escribo yo" (mensajes reales de Bruno), clave del bot y actividad.
-- Datos en archivos privados de la PC: LOCALAPPDATA/ALEZZA/bot/config.json (clave solo como sha256) y actividad.jsonl (src/lib/bot-store.ts). Si el portal se publica en un servidor, pasarlo a una tabla con RLS.
-- API: GET /api/bot/config y POST /api/bot/actividad con cabecera X-Bot-Key; GET /api/bot/actividad y /api/bot/admin (GET/PUT/POST nueva clave) solo administrador.
-- El stock y los precios del bot salen de vehicles (mismo dato que /vehiculos). La permuta del cliente se tasa con /api/tasacion (ML o referencias − 15 %).
-- La extensión llama a http://localhost:3000 (host_permissions); la clave la pega el usuario en el popup.
+- Portal /admin/bot: Clientes (fichas de Marketplace con checklist y fotos + oportunidades de la web), Actividad y Configuración (lo que sabe, cómo escribe Bruno, clave del bot, traer datos viejos de la PC).
+- Datos en Supabase (migración 202611160001): bot_config, bot_actividad, bot_fichas, bot_fotos (bytea, privadas). RLS solo administradores.
+- La extensión no tiene sesión: usa funciones security definer bot_leer_config / bot_registrar / bot_guardar_ficha / bot_guardar_foto que validan la clave del bot contra clave_hash (sha256). Las rutas /api/bot/* reciben la clave en X-Bot-Key (src/app/api/bot/clave.ts, con límite por IP).
+- El stock y los precios del bot salen de vehicles (mismo dato que /vehiculos). La permuta se tasa con /api/tasacion (ML, referencias ARS o USD al blue del día − 15 %).
+- Mercado hoy (/admin/mercado, /api/mercado-hoy): dólar del día y stock contra el mercado; historial en mercado_historial (migración 202611160002).
+- Token de Mercado Libre: sigue en archivo local cifrado (solo funciona desde la PC). Pasarlo a Supabase cuando ML habilite la lectura de avisos; publicado sin token, la tasación usa las referencias.
 
 ## 9. Próxima tarea de Codex
 Primero realizar una auditoría de estado, sin cambiar archivos:

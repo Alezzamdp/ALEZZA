@@ -194,6 +194,16 @@ function Config() {
     catch (e) { setAviso("No se pudo guardar: " + (e as Error).message); }
   }
 
+  async function importar() {
+    setAviso("Trayendo…");
+    try {
+      const r = await api("/api/bot/admin?importar=1", { method: "POST" });
+      setAviso(`Listo: ${r.config ? "textos y clave, " : ""}${r.actividad} respuestas, ${r.fichas} fichas y ${r.fotos} fotos.`);
+      const c = await api("/api/bot/admin");
+      setNegocio(c.negocio); setEstilo(c.estilo); setConClave(c.conClave);
+    } catch (e) { setAviso("No se pudo traer: " + (e as Error).message); }
+  }
+
   async function generarClave() {
     if (conClave && !confirm("La clave actual deja de funcionar y vas a tener que pegar la nueva en la extensión. Seguimos?")) return;
     const r = await api("/api/bot/admin", { method: "POST" });
@@ -229,6 +239,11 @@ function Config() {
             </div>
           )}
           <button onClick={generarClave} className={`${ui.botonSuave} justify-self-start`}>{conClave ? "Generar clave nueva" : "Generar clave"}</button>
+        </div>
+        <div className={`${ui.tarjeta} grid gap-3 p-5`}>
+          <p className={ui.etiqueta}>Datos guardados en esta PC</p>
+          <p className="text-sm">Antes el bot guardaba todo en archivos de la PC. Traelos una vez a Supabase (textos, clave, actividad, fichas y fotos). Funciona solo desde la PC donde estaban.</p>
+          <button onClick={importar} className={`${ui.botonSuave} justify-self-start`}>Traer datos de esta PC</button>
         </div>
       </div>
     </div>
