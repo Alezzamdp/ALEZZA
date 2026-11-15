@@ -48,21 +48,25 @@ export default async function Home() {
         </div>
       </header>
 
-      <section className="lp-wrap lp-hero">
-        <p className="lp-kicker lp-in">{ubicacion}</p>
-        <h1 className="lp-in" style={{ animationDelay: "60ms" }}>Autos seleccionados.<br />Operaciones claras.</h1>
-        <p className="lp-lead lp-in" style={{ animationDelay: "120ms" }}>
-          Compra, venta y permuta con tasación real y financiación en pesos. Cada operación la acompaña una persona.
-        </p>
-        <div className="lp-acciones lp-in" style={{ animationDelay: "180ms" }}>
-          <Link href="/vehiculos" className="lp-btn">Ver catálogo</Link>
-          <Link href="/simulador" className="lp-btn lp-btn-linea">Tasar mi auto</Link>
+      <section className="lp-hero">
+        <div className="lp-wrap lp-hero-in">
+          <p className="lp-kicker lp-in" style={{ animationDelay: "100ms" }}>ALEZZA · {ubicacion}</p>
+          <h1 className="lp-in" style={{ animationDelay: "200ms" }}>Autos seleccionados.<br />Operaciones claras.</h1>
+          <p className="lp-lead lp-in" style={{ animationDelay: "360ms" }}>
+            Compra, venta y permuta con tasación real y financiación en pesos. Cada operación la acompaña una persona.
+          </p>
+          <div className="lp-acciones lp-in" style={{ animationDelay: "480ms" }}>
+            <Link href="/vehiculos" className="lp-btn">Ver catálogo</Link>
+            <Link href="/simulador" className="lp-btn lp-btn-linea">Tasar mi auto</Link>
+          </div>
         </div>
+        <span className="lp-cue lp-in" style={{ animationDelay: "900ms" }} aria-hidden />
       </section>
 
       <section className="lp-wrap lp-puertas" aria-label="Qué podés hacer">
         {puertas.map((p, i) => (
-          <Link key={p.u} href={p.u} className="lp-card lp-in" style={{ animationDelay: `${240 + i * 60}ms` }}>
+          <Link key={p.u} href={p.u} className="lp-card lp-in" style={{ animationDelay: `${600 + i * 80}ms` }}>
+            <span className="lp-num">{String(i + 1).padStart(2, "0")}</span>
             <h2>{p.t}</h2>
             <p>{p.d}</p>
             <span className="lp-card-cta">{p.cta} <span aria-hidden>→</span></span>
