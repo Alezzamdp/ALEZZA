@@ -1,32 +1,40 @@
 import Link from "next/link";
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import Logo from "@/components/Logo";
+import SitioMenu from "@/components/SitioMenu";
 import { TALLER } from "@/lib/turnos";
 import { INSTAGRAM, UBICACION, WA_CONSULTA, externo } from "@/lib/contacto";
 
-// Cabecera y pie de todos los portales públicos. Estilos .lp en globals.css.
-
-const SECCIONES = [
-  { t: "Catálogo", u: "/vehiculos" },
-  { t: "Permutas", u: "/simulador" },
-  { t: "Financiación", u: "/financiacion" },
-  { t: "Estética", u: "/servicios" },
-];
+// Cabecera, pie y titular de todos los portales públicos. Estilos .lp en globals.css.
 
 // accion: reemplaza el botón "Pedir turno" (por ejemplo, el WhatsApp con los datos del turno).
-export function SitioCabecera({ activa, accion }: { activa?: string; accion?: ReactNode }) {
+export function SitioCabecera({ accion }: { activa?: string; accion?: ReactNode }) {
   return (
     <header className="lp-header">
       <div className="lp-wrap lp-header-in">
-        <Link href="/" aria-label="ALEZZA - Inicio"><Logo alto={20} /></Link>
-        <nav className="lp-nav" aria-label="Secciones">
-          {SECCIONES.map((s) => (
-            <Link key={s.u} href={s.u} aria-current={s.u === activa ? "page" : undefined}>{s.t}</Link>
-          ))}
-        </nav>
-        {accion ?? <Link href="/turnos" className="lp-btn lp-btn-sm">Pedir turno</Link>}
+        <Link href="/" aria-label="ALEZZA - Inicio" className="lp-logo"><Logo alto={20} /></Link>
+        <div className="lp-header-der">
+          {accion ?? <Link href="/turnos" className="lp-btn lp-btn-sm">Pedir turno</Link>}
+          <SitioMenu />
+        </div>
       </div>
     </header>
+  );
+}
+
+// Titular que entra palabra por palabra. Cada elemento de `lineas` es un renglón.
+export function Titular({ lineas, desde = 0 }: { lineas: string[]; desde?: number }) {
+  let n = 0;
+  return (
+    <h1 className="lp-titular" aria-label={lineas.join(" ")}>
+      {lineas.map((linea) => (
+        <span key={linea} className="lp-linea" aria-hidden>
+          {linea.split(" ").map((palabra) => (
+            <span key={n} className="lp-pal"><span style={{ "--d": `${desde + n++ * 70}ms` } as CSSProperties}>{palabra}</span></span>
+          ))}
+        </span>
+      ))}
+    </h1>
   );
 }
 

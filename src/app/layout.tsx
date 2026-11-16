@@ -5,7 +5,7 @@ import PortalBar from "@/components/PortalBar";
 import { SCRIPT_TEMA } from "@/lib/tema";
 import "./globals.css";
 
-// Las mismas fuentes de BRUNO OS en todos los portales.
+// Fuentes compartidas por el sitio público y BRUNO OS.
 const display = Unbounded({ subsets: ["latin"], weight: ["400", "600", "800"], variable: "--f-display" });
 const body = DM_Sans({ subsets: ["latin"], weight: ["400", "500", "700"], variable: "--f-body" });
 const mono = IBM_Plex_Mono({ subsets: ["latin"], weight: ["400", "500"], variable: "--f-mono" });
@@ -13,12 +13,8 @@ const mono = IBM_Plex_Mono({ subsets: ["latin"], weight: ["400", "500"], variabl
 export const metadata: Metadata = {
   metadataBase: new URL("https://alezza.com.ar"),
   openGraph: { siteName: "ALEZZA", locale: "es_AR", type: "website" },
-  title: "ALEZZA — Asesoría automotor integral · Mar del Plata",
-  description: "Compra, venta y permuta de autos, financiación en pesos y estética automotriz para particulares, vendedores y agencias en Mar del Plata.",
-  // Instalable en el iPhone desde cualquier portal (Compartir → Agregar a inicio): abre BRUNO OS a pantalla completa.
-  manifest: "/os/manifest.json",
-  icons: { apple: "/os/icon-180.png" },
-  appleWebApp: { capable: true, title: "ALEZZA", statusBarStyle: "default" },
+  title: "ALEZZA — Estética automotriz y venta de autos · Mar del Plata",
+  description: "Preparación estética de unidades para agencias, vendedores y particulares en Mar del Plata. Catálogo de autos y financiación en pesos.",
   formatDetection: { telephone: false },
 };
 
@@ -28,8 +24,8 @@ export const viewport: Viewport = {
   initialScale: 1,
   viewportFit: "cover",
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f3efe6" },
-    { media: "(prefers-color-scheme: dark)", color: "#14130f" },
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#0a0a0a" },
   ],
 };
 

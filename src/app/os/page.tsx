@@ -7,6 +7,7 @@ export const metadata: Metadata = {
   description: "Agenda, tareas, ideas y todas las apps de ALEZZA.",
   manifest: "/os/manifest.json",
   icons: { icon: "/os/icon-192.png", apple: "/os/icon-180.png" },
+  appleWebApp: { capable: true, title: "BRUNO OS", statusBarStyle: "default" },
   robots: { index: false, follow: false },
 };
 

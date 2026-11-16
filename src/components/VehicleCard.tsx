@@ -352,12 +352,6 @@ export default function VehicleCard({
                     </a>
                   )}
                   <a
-                    href={`/simulador?desired_vehicle_id=${encodeURIComponent(vehicle.id)}`}
-                    className="mt-3 block rounded-lg border border-gray-200 px-5 py-3 text-center text-sm font-semibold text-gray-700 transition hover:bg-gray-50"
-                  >
-                    Simular permuta
-                  </a>
-                  <a
                     href={`/financiacion?vehiculo=${encodeURIComponent(vehicle.id)}`}
                     className="mt-3 block rounded-lg border border-gray-200 px-5 py-3 text-center text-sm font-semibold text-gray-700 transition hover:bg-gray-50"
                   >

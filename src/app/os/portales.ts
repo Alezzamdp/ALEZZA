@@ -5,8 +5,8 @@ export type Portal = { n: string; grupo: "Público" | "Gestión" | "Sistema"; t:
 
 export const PORTALES: Portal[] = [
   { n: "01", grupo: "Público", t: "Inicio", d: "La página de ALEZZA", u: "/" },
-  { n: "02", grupo: "Público", t: "Catálogo", d: "Unidades, permutas y financiación", u: "/vehiculos",
-    sub: [{ t: "Permutas", u: "/simulador" }, { t: "Financiación", u: "/financiacion" }] },
+  { n: "02", grupo: "Público", t: "Catálogo", d: "Unidades y financiación", u: "/vehiculos",
+    sub: [{ t: "Financiación", u: "/financiacion" }] },
   { n: "03", grupo: "Público", t: "Servicios", d: "Estética y pedido de turno", u: "/servicios",
     sub: [{ t: "Pedir turno", u: "/turnos" }] },
   { n: "04", grupo: "Gestión", t: "Taller", d: "Turnos, órdenes y avisos", u: "/admin/taller",

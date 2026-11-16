@@ -86,6 +86,7 @@ function Taller() {
         ))}
       </div>
       {aviso && <p role="status" className={`${ui.tarjeta} px-4 py-3 text-sm`}>{aviso}</p>}
+      <Publicados ordenes={ordenes} alCambiar={() => void cargar()} alAbrir={setAbierta} />
       {lista.length === 0 && !aviso && <p className="text-[var(--n500)]">No hay órdenes acá.</p>}
       <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
         {lista.map((o) => (
@@ -101,6 +102,50 @@ function Taller() {
         ))}
       </div>
     </div>
+  );
+}
+
+// Lo que hoy se ve en la web (Inicio y /servicios): se puede sacar de la web o borrar sus fotos de antes y después.
+function Publicados({ ordenes, alCambiar, alAbrir }: { ordenes: Orden[]; alCambiar: () => void; alAbrir: (o: Orden) => void }) {
+  const [ocupada, setOcupada] = useState("");
+  const [error, setError] = useState("");
+  const publicadas = ordenes.filter((o) => o.publicar);
+  if (!publicadas.length) return null;
+
+  async function cambiar(o: Orden, cambio: Partial<Orden>, fotos: string[] = []) {
+    setOcupada(o.id);
+    setError("");
+    const { error: e1 } = await supabase.from("ordenes").update(cambio).eq("id", o.id);
+    // Primero se despublica; recién después se borran los archivos, así la web nunca apunta a una foto que ya no existe.
+    const e2 = !e1 && fotos.length ? (await supabase.storage.from("orden-fotos").remove(fotos)).error : null;
+    if (e1 || e2) setError("No se pudo completar: " + (e1 ?? e2)!.message);
+    setOcupada("");
+    alCambiar();
+  }
+
+  return (
+    <section className={`${ui.tarjeta} grid gap-3 p-4`}>
+      <h2 className="font-semibold">Antes y después publicados en la web <span className="font-mono text-sm text-[var(--n500)]">{publicadas.length}</span></h2>
+      {error && <p role="alert" className="text-sm text-red-700">{error}</p>}
+      <ul className="grid gap-2">
+        {publicadas.map((o) => (
+          <li key={o.id} className="flex flex-wrap items-center justify-between gap-2 border-t border-[var(--n200)] pt-2">
+            <span className="text-sm">
+              <b>{o.titulo_publico || [o.marca, o.modelo].filter(Boolean).join(" ") || "Orden #" + o.numero}</b>
+              <span className="ml-2 font-mono text-xs text-[var(--n500)]">#{o.numero} · {o.fotos_antes.length + o.fotos_despues.length} fotos</span>
+            </span>
+            <span className="flex flex-wrap gap-2">
+              <button onClick={() => alAbrir(o)} disabled={ocupada === o.id} className={ui.botonSuave}>Abrir orden</button>
+              <button onClick={() => void cambiar(o, { publicar: false })} disabled={ocupada === o.id} className={ui.botonSuave}>Quitar de la web</button>
+              <button disabled={ocupada === o.id} className={ui.botonSuave}
+                onClick={() => { if (confirm("¿Borrar todas las fotos de antes y después de este trabajo? No se puede deshacer.")) void cambiar(o, { publicar: false, fotos_antes: [], fotos_despues: [] }, [...o.fotos_antes, ...o.fotos_despues]); }}>
+                Borrar fotos
+              </button>
+            </span>
+          </li>
+        ))}
+      </ul>
+    </section>
   );
 }
 

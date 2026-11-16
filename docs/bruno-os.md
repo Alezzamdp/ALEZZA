@@ -1,6 +1,7 @@
 # BRUNO OS (sistema central)
 
-Todas las apps de ALEZZA viven en este proyecto y se abren desde BRUNO OS (/os).
+BRUNO OS es la parte interna (admin) de ALEZZA: /os y /admin. El sitio público no lo muestra ni lo nombra:
+no usa su pantalla de entrada, sus frases de carga, su manifest ni su tema (ver "Sitio público" abajo).
 
 - /os: agenda, tareas, ideas y Apps. Login de administrador (admin_users).
 - src/app/os/BrunoOS.tsx: login y puente con Supabase (window.BRUNO_NUBE). Valida con src/lib/bruno.ts.
@@ -25,5 +26,13 @@ Todas las apps de ALEZZA viven en este proyecto y se abren desde BRUNO OS (/os).
 ## Páginas relacionadas
 - /vehiculos: stock (src/components/StockVehiculos.tsx, también en el Inicio). "Ver autos en stock" apunta acá.
 - /servicios: estética (src/app/servicios/page.tsx), mismo tema y logo.
-- Pantalla de entrada: src/components/Arranque.tsx (avanza con la carga real; tope 8 s).
-- Pantallas de carga: src/components/Cargando.tsx (logo + barra mostaza, frase por página).
+- Pantalla de entrada: src/components/Arranque.tsx (solo en /os y /admin; avanza con la carga real; tope 8 s).
+- Pantallas de carga: src/components/Cargando.tsx (las frases que rotan solo aparecen en /os y /admin).
+
+## Sitio público
+- Todos los portales que ve el cliente usan `<main className="lp">` + SitioCabecera / SitioPie (src/components/SitioMarco.tsx). Estilos .lp, .sm, .ad y .rv en globals.css: blanco y negro, sin mostaza.
+- Menú escalonado: src/components/SitioMenu.tsx (CSS, sin librerías). Portal nuevo en el menú = una línea en ITEMS.
+- Antes y después: src/components/AntesDespues.tsx; los datos los firma el servidor en src/lib/sitio.ts (trabajosPublicos). El primero publicado es la pieza central del Inicio.
+- Qué se publica se maneja en /admin/taller: panel "Antes y después publicados en la web" (quitar de la web o borrar fotos).
+- Planes y servicios individuales: textos en src/lib/turnos.ts (PLANES, DETALLE_EXTRAS); precios desde app_settings "turnos".
+- Permutas (/simulador) está fuera del sitio: redirige al Inicio desde next.config.ts. El código se conserva.

@@ -4,19 +4,13 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import Cargando from "@/components/Cargando";
 
-// Pantalla de entrada: avanza con la carga real de la página (imágenes, tipografías y documento)
+// Pantalla de entrada de BRUNO OS y Gestión (el sitio público no la muestra): avanza con la carga real de la página (imágenes, tipografías y documento)
 // y se va apenas termina. Tope de seguridad por si algún recurso nunca responde.
 const RUTAS: [string, string][] = [
   ["/os", "Encendiendo BRUNO OS…"],
   ["/admin/taller", "Abriendo el portón del taller…"],
   ["/admin/turnos", "Revisando la agenda del taller…"],
   ["/admin", "Abriendo la oficina…"],
-  ["/simulador", "Preparando la tasación…"],
-  ["/financiacion", "Sacando cuentas…"],
-  ["/vehiculos", "Lustrando el catálogo…"],
-  ["/servicios", "Pasando la franela…"],
-  ["/turnos", "Mirando la agenda del taller…"],
-  ["/seguimiento", "Mirando cómo va tu auto…"],
 ];
 const TOPE_MS = 8000;
 
@@ -47,7 +41,7 @@ export default function Arranque() {
     return () => clearInterval(t);
   }, []);
 
-  if (fase === "fuera") return null;
+  if (fase === "fuera" || !RUTAS.some(([r]) => ruta.startsWith(r))) return null;
   const frase = RUTAS.find(([r]) => ruta.startsWith(r))?.[1] ?? "Preparando ALEZZA…";
   return (
     <div className={`arranque-os ${fase === "saliendo" ? "saliendo" : ""}`} aria-hidden={fase === "saliendo"}>

@@ -1,9 +1,11 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import Logo from "@/components/Logo";
 
-// Pantalla de carga de todos los portales: logo de ALEZZA y una barra mostaza.
+// Pantalla de carga de todos los portales: logo de ALEZZA y una barra.
+// Las frases que rotan son de BRUNO OS y Gestión; en el sitio público queda fija la que se pasa.
 // Con `progreso` (0 a 100) la barra muestra el avance real; sin él, se desliza mientras esperamos datos.
 export const FRASES = [
   "Cebando un mate…",
@@ -23,12 +25,14 @@ export const FRASES = [
 type Props = { frase?: string; pantalla?: boolean; progreso?: number };
 
 export default function Cargando({ frase = "Calentando motores…", pantalla = true, progreso }: Props) {
+  const ruta = usePathname();
+  const interno = ruta.startsWith("/admin") || ruta.startsWith("/os");
   const [n, setN] = useState(0);
   useEffect(() => {
     const t = setInterval(() => setN((x) => x + 1), 1600);
     return () => clearInterval(t);
   }, []);
-  const texto = n === 0 ? frase : FRASES[(n * 5 + frase.length) % FRASES.length];
+  const texto = n === 0 || !interno ? frase : FRASES[(n * 5 + frase.length) % FRASES.length];
   const real = typeof progreso === "number";
 
   return (

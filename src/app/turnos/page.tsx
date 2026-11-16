@@ -39,6 +39,8 @@ export default function PedirTurno() {
       // Desde Inicio o Servicios se llega con el plan ya elegido (/turnos?servicio=lavado); solo se aceptan los conocidos.
       const pedido = new URLSearchParams(window.location.search).get("servicio");
       if (pedido && Object.hasOwn(SERVICIOS, pedido)) setServicio((s) => s ?? (pedido as Servicio));
+      const extra = new URLSearchParams(window.location.search).get("extra");
+      if (extra && Object.hasOwn(EXTRAS, extra)) { setServicio((s) => s ?? "otro"); setExtras((x) => (x.length ? x : [extra as Extra])); }
     });
   }, []);
 

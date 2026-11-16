@@ -50,15 +50,43 @@ export function calcularSena(c: TurnosConfig, precio: number | null) {
 
 // Planes de estética que se muestran en el Inicio y en /servicios. El precio sale de la configuración
 // (el mismo que cobra pedir_turno); sin precio cargado se muestra "A convenir".
-export const PLANES: { k: Exclude<Servicio, "otro">; para: string; d: string; items: string[] }[] = [
+// `etapas` es el detalle que se muestra en /servicios: qué se hace y para qué sirve.
+export const PLANES: { k: Exclude<Servicio, "otro">; para: string; d: string; items: string[]; detalle: string; etapas: [string, string][] }[] = [
   { k: "lavado", para: "Particulares y vendedores", d: "Lavado detallado y técnico.",
-    items: ["Lavado exterior detallado", "Interior, tablero y plásticos", "Lista para fotos de publicación"] },
+    items: ["Lavado exterior detallado", "Interior, tablero y plásticos", "Lista para fotos de publicación"],
+    detalle: "El punto de partida para publicar una unidad: limpia de verdad, por fuera y por dentro.",
+    etapas: [
+      ["Exterior", "Lavado detallado de carrocería, llantas, vidrios y marcos."],
+      ["Interior", "Aspirado y limpieza de tablero, plásticos y paneles."],
+      ["Entrega", "La unidad sale lista para las fotos de la publicación."],
+    ] },
   { k: "puesta", para: "La unidad lista para vender", d: "Barniz, motor e interior.",
-    items: ["Abrillantado de barniz", "Acondicionado de vano motor", "Saneamiento de habitáculo"] },
+    items: ["Abrillantado de barniz", "Acondicionado de vano motor", "Saneamiento de habitáculo"],
+    detalle: "Las tres etapas completas. Es lo que cambia la primera impresión de un comprador.",
+    etapas: [
+      ["Abrillantado de barniz", "Corrección técnica que devuelve la profundidad del color."],
+      ["Acondicionado de vano motor", "Un motor limpio transmite cuidado y evita objeciones antes de la prueba."],
+      ["Saneamiento de habitáculo", "Plásticos y textiles vuelven a su acabado original."],
+    ] },
   { k: "agencia", para: "Agencias y flotas", d: "Preparación de stock por volumen.",
-    items: ["Tarifa por volumen", "Turnos por lote, con prioridad", "Mismo estándar en todo el stock"] },
+    items: ["Tarifa por volumen", "Turnos por lote, con prioridad", "Mismo estándar en todo el stock"],
+    detalle: "Para agencias que necesitan rotar stock: se acuerda una tarifa y se trabaja por lote.",
+    etapas: [
+      ["Tarifa por volumen", "El precio se acuerda según la cantidad de unidades por mes."],
+      ["Turnos por lote", "Varias unidades juntas, con prioridad en la agenda del taller."],
+      ["Mismo estándar", "Todas las unidades salen con la misma terminación."],
+    ] },
 ];
-export const precioPlan = (c: TurnosConfig, k: Servicio) =>
+
+// Servicios individuales (los "extras" del pedido de turno), con su explicación para /servicios.
+export const DETALLE_EXTRAS: Record<Extra, [string, string]> = {
+  interiores: ["Interiores", "Limpieza profunda de alfombras, tapizados, techo y plásticos."],
+  butacas: ["Butacas", "Limpieza profunda de butacas: saca manchas y olores del uso."],
+  motor: ["Motor", "Limpieza y acondicionado del vano motor."],
+  pulido1: ["Pulido en 1 paso", "Devuelve el brillo en una sola pasada. Para pinturas en buen estado."],
+  pulido2: ["Pulido en 2 pasos", "Primero corrige las marcas del barniz y después devuelve el brillo. Para pinturas castigadas."],
+};
+export const precioPlan = (c: TurnosConfig, k: Servicio | Extra) =>
   Number(c.precios[k]) > 0 ? pesos(Number(c.precios[k])) : "A convenir";
 
 export type Avance = {

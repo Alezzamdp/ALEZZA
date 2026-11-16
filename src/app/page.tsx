@@ -1,24 +1,24 @@
 import Link from "next/link";
-import { SitioCabecera, SitioPie } from "@/components/SitioMarco";
-import { WA_AGENCIA, WA_CONSULTA, datosSitio, externo } from "@/lib/sitio";
+import AntesDespues from "@/components/AntesDespues";
+import { SitioCabecera, SitioPie, Titular } from "@/components/SitioMarco";
+import { WA_AGENCIA, datosSitio, externo, trabajosPublicos } from "@/lib/sitio";
 import { PLANES, SERVICIOS, precioPlan } from "@/lib/turnos";
 
 export const dynamic = "force-dynamic";
 
-// Inicio de ALEZZA: una sola pantalla en escritorio, sin scroll. Propuesta a la izquierda,
-// los cuatro servicios a la derecha y los planes de estética abajo; cada bloque con su acción.
+// Inicio de ALEZZA: una pantalla que vende sola. A la izquierda la propuesta para agencias y vendedores;
+// a la derecha un trabajo real (antes y después); abajo, los planes con precio y acción.
 // Estilos en globals.css (.lp).
 
-const servicios = [
-  { t: "Catálogo", d: "Unidades revisadas, listas para ver.", u: "/vehiculos", cta: "Ver unidades" },
-  { t: "Permutas", d: "Tasación con referencias reales de mercado.", u: "/simulador", cta: "Tasar mi auto" },
-  { t: "Financiación", d: "Cuotas en pesos, confirmadas por una persona.", u: "/financiacion", cta: "Calcular cuotas" },
-  { t: "Estética", d: "Preparación de unidades, con turno online.", u: "/servicios", cta: "Ver servicios" },
+const ARGUMENTOS = [
+  ["Turnos por lote", "Varias unidades juntas, con prioridad en la agenda."],
+  ["Mismo estándar", "Todas las unidades salen con la misma terminación."],
+  ["Seguimiento en vivo", "Cada trabajo se sigue desde un enlace, paso a paso."],
 ];
 
 export default async function Home() {
-  const { perfil, config } = await datosSitio();
-  const ubicacion = perfil.location || "Mar del Plata, Argentina";
+  const [{ perfil, config }, trabajos] = await Promise.all([datosSitio(), trabajosPublicos()]);
+  const trabajo = trabajos[0];
 
   return (
     <main className="lp lp-pantalla">
@@ -27,57 +27,56 @@ export default async function Home() {
       <div className="lp-wrap lp-main">
         <div className="lp-dos">
           <section>
-            <p className="lp-kicker lp-in">Asesoría automotor integral · Mar del Plata</p>
-            <h1 className="lp-in" style={{ animationDelay: "80ms" }}>Autos seleccionados.<br />Operaciones claras.</h1>
-            <p className="lp-lead lp-in" style={{ animationDelay: "160ms" }}>
-              Compra, venta, permuta y preparación de unidades para particulares, vendedores y agencias. Cada operación la acompaña una persona.
+            <p className="lp-kicker lp-in">Estética automotriz · Mar del Plata</p>
+            <Titular lineas={["Tu stock,", "listo para vender."]} desde={120} />
+            <p className="lp-lead lp-in" style={{ animationDelay: "420ms" }}>
+              Preparamos cada unidad para que se venda mejor y más rápido. Trabajamos con agencias, vendedores y particulares.
             </p>
-            <div className="lp-acciones lp-in" style={{ animationDelay: "240ms" }}>
-              <Link href="/vehiculos" className="lp-btn">Ver catálogo</Link>
-              <a href={WA_CONSULTA} {...externo} className="lp-btn lp-btn-linea">Escribir por WhatsApp</a>
+            <div className="lp-acciones lp-in" style={{ animationDelay: "500ms" }}>
+              <a href={WA_AGENCIA} {...externo} className="lp-btn">Soy agencia</a>
+              <Link href="/servicios" className="lp-btn lp-btn-linea">Ver servicios y precios</Link>
             </div>
+            <p className="lp-tambien lp-in" style={{ animationDelay: "580ms" }}>
+              También:
+              <Link href="/vehiculos" className="lp-ir">Catálogo de unidades <span aria-hidden>→</span></Link>
+              <Link href="/financiacion" className="lp-ir">Financiación en pesos <span aria-hidden>→</span></Link>
+            </p>
           </section>
 
-          <nav className="lp-lista lp-in" style={{ animationDelay: "200ms" }} aria-label="Servicios">
-            {servicios.map((s, i) => (
-              <Link key={s.u} href={s.u} className="lp-fila">
-                <span className="lp-num">{String(i + 1).padStart(2, "0")}</span>
-                <span>
-                  <h2>{s.t}</h2>
-                  <p>{s.d}</p>
-                </span>
-                <span className="lp-ir">{s.cta} <span aria-hidden>→</span></span>
-              </Link>
-            ))}
-          </nav>
+          {trabajo ? (
+            <AntesDespues {...trabajo} barrido className="ad-hero lp-in" />
+          ) : (
+            <ul className="lp-lista lp-in" style={{ animationDelay: "300ms" }}>
+              {ARGUMENTOS.map(([t, d], i) => (
+                <li key={t} className="lp-fila">
+                  <span className="lp-num">{String(i + 1).padStart(2, "0")}</span>
+                  <span><h2>{t}</h2><p>{d}</p></span>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
 
-        <section className="lp-in" style={{ animationDelay: "320ms" }} aria-labelledby="estetica">
-          <div className="lp-titulo">
-            <h2 id="estetica" className="lp-kicker">Estética · precios en pesos</h2>
-            <Link href="/servicios" className="lp-ir">Qué incluye cada plan <span aria-hidden>→</span></Link>
-          </div>
-          <div className="lp-planes">
-            {PLANES.map((p) => {
-              const agencia = p.k === "agencia";
-              return (
-                <a key={p.k} href={agencia ? WA_AGENCIA : `/turnos?servicio=${p.k}`} {...(agencia ? externo : {})} className="lp-plan">
-                  <span>
-                    <h3>{SERVICIOS[p.k]}</h3>
-                    <p>{p.d}</p>
-                  </span>
-                  <span className="lp-plan-der">
-                    <span className="lp-precio">{precioPlan(config, p.k)}</span>
-                    <span className="lp-ir">{agencia ? "Coordinar" : "Pedir turno"} <span aria-hidden>→</span></span>
-                  </span>
-                </a>
-              );
-            })}
-          </div>
+        <section className="lp-planes lp-in" style={{ animationDelay: "660ms" }} aria-label="Planes de estética, precios en pesos">
+          {PLANES.map((p) => {
+            const agencia = p.k === "agencia";
+            return (
+              <a key={p.k} href={agencia ? WA_AGENCIA : `/turnos?servicio=${p.k}`} {...(agencia ? externo : {})} className="lp-plan">
+                <span>
+                  <h3>{SERVICIOS[p.k]}</h3>
+                  <p>{p.d}</p>
+                </span>
+                <span className="lp-plan-der">
+                  <span className="lp-precio">{precioPlan(config, p.k)}</span>
+                  <span className="lp-ir">{agencia ? "Coordinar" : "Pedir turno"} <span aria-hidden>→</span></span>
+                </span>
+              </a>
+            );
+          })}
         </section>
       </div>
 
-      <SitioPie ubicacion={ubicacion} horario={perfil.business_hours} />
+      <SitioPie ubicacion={perfil.location} horario={perfil.business_hours} />
     </main>
   );
 }

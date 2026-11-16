@@ -29,6 +29,10 @@ const noIndexar = [{ key: "X-Robots-Tag", value: "noindex, nofollow, noarchive" 
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  // Permutas está fuera del sitio por ahora: el portal /simulador no se muestra (el código se conserva).
+  async redirects() {
+    return [{ source: "/simulador", destination: "/", permanent: false }];
+  },
   async headers() {
     return [
       {
