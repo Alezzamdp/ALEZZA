@@ -44,3 +44,8 @@ Primero funcionalidad y seguridad; rediseño después. Celular y escritorio. Fot
 - docs/bot-marketplace.md — /admin/bot, /api/bot/*, extensión messenger-ai-agent.
 - docs/infraestructura.md — dominio alezza.com.ar, DNS Cloudflare/NIC.ar, SSL, entornos, arquitectura del sitio público.
 - README.md — rutas actuales.
+
+## Contexto (ahorro)
+- AGENTS.md pide leer node_modules/next/dist/docs: NO hacerlo, está bloqueado y consume contexto. Ante una duda concreta de API de Next 16, consultar la doc oficial puntual o preguntar.
+- No leer archivos por PowerShell (Get-Content, cat) para saltear los bloqueos de lectura.
+- No explorar el repo entero: abrir solo los archivos del tema en curso.
