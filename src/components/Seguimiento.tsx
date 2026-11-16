@@ -66,7 +66,7 @@ export default function Seguimiento({ avance }: { avance: Avance }) {
           </ul>
         </div>
       )}
-      {avance.estado === "listo" && <p className="mt-5 rounded-md bg-[var(--mostaza)] px-4 py-3 font-semibold text-[#17150f]">¡Tu auto está listo para retirar!</p>}
+      {avance.estado === "listo" && <p className="mt-5 rounded-md bg-[var(--tinta)] px-4 py-3 font-semibold text-[var(--papel)]">¡Tu auto está listo para retirar!</p>}
     </section>
   );
 }

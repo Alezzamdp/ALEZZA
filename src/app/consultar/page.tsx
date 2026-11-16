@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState, type FormEvent } from "react";
 import { supabase } from "@/lib/supabase";
 import { getWhatsAppUrl } from "@/lib/whatsapp";
+import { SitioCabecera, SitioPie } from "@/components/SitioMarco";
 
 type Vehicle = {
   id: string;
@@ -150,8 +151,9 @@ export default function VehicleInquiryPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[var(--papel)] px-4 py-10 text-gray-900 sm:px-6">
-      <div className="mx-auto max-w-2xl">
+    <main className="lp min-h-screen">
+      <SitioCabecera activa="/vehiculos" />
+      <div className="mx-auto max-w-2xl px-4 py-10 sm:px-6">
         <Link href="/vehiculos" className="text-sm font-semibold text-[var(--tinta)] hover:underline">
           ← Volver al catálogo
         </Link>
@@ -245,6 +247,7 @@ export default function VehicleInquiryPage() {
           )}
         </section>
       </div>
+      <SitioPie />
     </main>
   );
 }

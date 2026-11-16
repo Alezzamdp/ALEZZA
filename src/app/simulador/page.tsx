@@ -1,10 +1,9 @@
 ﻿"use client";
 
-import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { getWhatsAppUrl } from "@/lib/whatsapp";
-import Logo from "@/components/Logo";
+import { SitioCabecera, SitioPie } from "@/components/SitioMarco";
 import AsesorCompra, { type DatosTasacion } from "@/components/AsesorCompra";
 
 type PhotoKey =
@@ -384,13 +383,8 @@ export default function SimulatorPage() {
   }
 
   return (
-    <main className="min-h-screen bg-slate-50 text-slate-900">
-      <header className="border-b border-slate-200 bg-white">
-        <div className="mx-auto flex max-w-5xl items-center justify-between px-5 py-5">
-          <Link href="/" aria-label="ALEZZA - Inicio"><Logo alto={22} /></Link>
-          <span className="text-sm text-slate-500">Simulador de permutas</span>
-        </div>
-      </header>
+    <main className="lp min-h-screen">
+      <SitioCabecera activa="/simulador" />
 
       <section className="mx-auto max-w-3xl px-5 py-10 md:py-14">
         <div className="mb-9">
@@ -608,7 +602,7 @@ export default function SimulatorPage() {
                     ) : (
                       <span className="text-center text-slate-400"><span className="block text-2xl">+</span><span className="text-xs">{slot.detail}</span></span>
                     )}
-                    {photos[slot.key] && <span className="absolute right-1.5 top-1.5 rounded-full bg-[var(--mostaza)] px-2 text-xs font-bold text-[#17150f]">✓</span>}
+                    {photos[slot.key] && <span className="absolute right-1.5 top-1.5 rounded-full bg-[var(--tinta)] px-2 text-xs font-bold text-[var(--papel)]">✓</span>}
                   </div>
                   <span className="mt-1.5 block text-xs font-semibold">{slot.label}</span>
                   <input
@@ -724,9 +718,7 @@ export default function SimulatorPage() {
         </form>
       </section>
 
-      <footer className="border-t border-slate-200 bg-white px-5 py-6 text-center text-xs text-slate-500">
-        ALEZZA · Asesoría automotor integral
-      </footer>
+      <SitioPie />
     </main>
   );
 }

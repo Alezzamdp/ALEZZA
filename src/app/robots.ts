@@ -4,5 +4,6 @@ import type { MetadataRoute } from "next";
 export default function robots(): MetadataRoute.Robots {
   return {
     rules: { userAgent: "*", allow: "/", disallow: ["/admin", "/os", "/api/", "/turnos/", "/seguimiento/"] },
+    sitemap: "https://alezza.com.ar/sitemap.xml",
   };
 }

@@ -1,9 +1,10 @@
 import Link from "next/link";
+import type { ReactNode } from "react";
 import Logo from "@/components/Logo";
 import { TALLER } from "@/lib/turnos";
-import { INSTAGRAM, WA_CONSULTA, externo } from "@/lib/sitio";
+import { INSTAGRAM, UBICACION, WA_CONSULTA, externo } from "@/lib/contacto";
 
-// Cabecera y pie de las páginas públicas (Inicio y Servicios). Estilos .lp en globals.css.
+// Cabecera y pie de todos los portales públicos. Estilos .lp en globals.css.
 
 const SECCIONES = [
   { t: "Catálogo", u: "/vehiculos" },
@@ -12,7 +13,8 @@ const SECCIONES = [
   { t: "Estética", u: "/servicios" },
 ];
 
-export function SitioCabecera({ activa }: { activa?: string }) {
+// accion: reemplaza el botón "Pedir turno" (por ejemplo, el WhatsApp con los datos del turno).
+export function SitioCabecera({ activa, accion }: { activa?: string; accion?: ReactNode }) {
   return (
     <header className="lp-header">
       <div className="lp-wrap lp-header-in">
@@ -22,17 +24,17 @@ export function SitioCabecera({ activa }: { activa?: string }) {
             <Link key={s.u} href={s.u} aria-current={s.u === activa ? "page" : undefined}>{s.t}</Link>
           ))}
         </nav>
-        <Link href="/turnos" className="lp-btn lp-btn-sm">Pedir turno</Link>
+        {accion ?? <Link href="/turnos" className="lp-btn lp-btn-sm">Pedir turno</Link>}
       </div>
     </header>
   );
 }
 
-export function SitioPie({ ubicacion, horario }: { ubicacion: string; horario?: string }) {
+export function SitioPie({ ubicacion, horario }: { ubicacion?: string; horario?: string }) {
   return (
     <footer className="lp-footer">
       <div className="lp-wrap lp-footer-in">
-        <p>{[ubicacion, horario?.replace(/\s*\n\s*/g, " · ")].filter(Boolean).join(" · ")}</p>
+        <p>{[ubicacion || UBICACION, horario?.replace(/\s*\n\s*/g, " · ")].filter(Boolean).join(" · ")}</p>
         <nav aria-label="Contacto">
           <a href={WA_CONSULTA} {...externo}>WhatsApp 223 421-2621</a>
           <a href={INSTAGRAM} {...externo}>Instagram</a>

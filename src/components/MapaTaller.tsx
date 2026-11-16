@@ -58,7 +58,7 @@ export default function MapaTaller({ alto = 360 }: { alto?: number }) {
         <div className="absolute right-3 top-3 z-[400] flex overflow-hidden rounded-md border border-black/20 bg-[#17150f]/90 text-xs font-semibold text-[#f3efe6] shadow-lg backdrop-blur">
           {(Object.keys(CAPAS) as Capa[]).map((c) => (
             <button key={c} type="button" onClick={() => cambiar(c)} aria-pressed={modo === c}
-              className={`px-3 py-1.5 transition ${modo === c ? "bg-[#d4a017] text-[#17150f]" : "hover:bg-white/10"}`}>
+              className={`px-3 py-1.5 transition ${modo === c ? "bg-white text-black" : "hover:bg-white/10"}`}>
               {CAPAS[c].t}
             </button>
           ))}

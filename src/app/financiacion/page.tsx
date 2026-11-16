@@ -1,8 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import { type FormEvent, useEffect, useMemo, useState } from "react";
-import Logo from "@/components/Logo";
+import { SitioCabecera, SitioPie } from "@/components/SitioMarco";
 import { PLAZOS, condiciones, plan } from "@/lib/financiacion";
 import { supabase } from "@/lib/supabase";
 import { mensajeAlezza, pesos, waAlezza } from "@/lib/turnos";
@@ -79,13 +78,10 @@ export default function Financiacion() {
   ]));
 
   return (
-    <main className="min-h-screen text-[var(--tinta)]">
-      <header className="mx-auto flex max-w-5xl items-center justify-between px-6 py-5">
-        <Link href="/" aria-label="ALEZZA - Inicio"><Logo alto={22} /></Link>
-        <Link href="/vehiculos" className="text-sm text-gray-600 hover:underline">Ver autos en stock</Link>
-      </header>
+    <main className="lp min-h-screen">
+      <SitioCabecera activa="/financiacion" />
 
-      <section className="mx-auto grid max-w-5xl gap-8 px-6 pb-16 lg:grid-cols-[1.1fr_1fr]">
+      <section className="mx-auto grid max-w-5xl gap-8 px-6 pb-16 pt-10 lg:grid-cols-[1.1fr_1fr]">
         <div>
           <p className="font-mono text-xs uppercase tracking-widest text-gray-500">Financiación · con CreditCar</p>
           <h1 className="mt-3 text-3xl font-extrabold md:text-4xl">Financiá tu próximo auto <span className="text-[var(--mostaza)]">solo con tu DNI</span>.</h1>
@@ -190,7 +186,7 @@ export default function Financiacion() {
                     Autorizo a ALEZZA a usar mis datos solo para gestionar esta financiación con CreditCar (Ley 25.326).
                   </label>
                   {error && <p role="alert" className="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-800">{error}</p>}
-                  <button disabled={enviando} className="justify-self-start rounded-md bg-[var(--mostaza)] px-6 py-3 font-bold text-[#17150f] hover:brightness-95 disabled:opacity-60">
+                  <button disabled={enviando} className="justify-self-start lp-btn disabled:opacity-60">
                     {enviando ? "Enviando…" : "Pedir financiación →"}
                   </button>
                 </div>
@@ -200,6 +196,7 @@ export default function Financiacion() {
           )}
         </div>
       </section>
+      <SitioPie />
     </main>
   );
 }

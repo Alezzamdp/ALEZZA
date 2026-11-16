@@ -5,6 +5,7 @@ import QRCode from "qrcode";
 import { useCallback, useEffect, useState } from "react";
 import Cargando from "@/components/Cargando";
 import Logo from "@/components/Logo";
+import { SitioCabecera, SitioPie } from "@/components/SitioMarco";
 import MapaTaller from "@/components/MapaTaller";
 import Seguimiento from "@/components/Seguimiento";
 import { supabase } from "@/lib/supabase";
@@ -85,10 +86,10 @@ export default function EstadoTurno({ token, mp }: { token: string; mp: boolean 
     void cargar();
   }
 
-  if (turno === undefined) return <main className="min-h-screen"><Cargando frase="Buscando tu turno…" /></main>;
+  if (turno === undefined) return <main className="lp min-h-screen"><Cargando frase="Buscando tu turno…" /></main>;
   if (turno === null) {
     return (
-      <main className="grid min-h-screen place-items-center px-6 text-center">
+      <main className="lp grid min-h-screen place-items-center px-6 text-center">
         <div>
           <Logo alto={22} />
           <p className="mt-6">No encontramos ese turno. <Link href="/turnos" className="underline">Pedí uno nuevo</Link> o <a href={waAlezza(mensajeAlezza("No encuentro mi turno, ¿me ayudan?"))} className="underline">escribinos</a>.</p>
@@ -115,13 +116,10 @@ export default function EstadoTurno({ token, mp }: { token: string; mp: boolean 
   ];
 
   return (
-    <main className="min-h-screen text-[var(--tinta)]">
-      <header className="mx-auto flex max-w-3xl items-center justify-between px-6 py-5">
-        <Link href="/" aria-label="ALEZZA - Inicio"><Logo alto={22} /></Link>
-        <a href={wa.dudas} target="_blank" rel="noopener noreferrer" className="text-sm text-gray-600 hover:underline">¿Dudas? WhatsApp</a>
-      </header>
+    <main className="lp min-h-screen">
+      <SitioCabecera accion={<a href={wa.dudas} target="_blank" rel="noopener noreferrer" className="lp-btn lp-btn-sm lp-btn-linea">¿Dudas? WhatsApp</a>} />
 
-      <section className="mx-auto grid max-w-3xl gap-6 px-6 pb-16">
+      <section className="mx-auto grid max-w-3xl gap-6 px-6 pb-16 pt-10">
         <div>
           <p className="font-mono text-xs uppercase tracking-widest text-gray-500">Tu turno</p>
           <h1 className="mt-2 text-3xl font-extrabold first-letter:uppercase">{fechaLarga(turno.fecha)}</h1>
@@ -202,6 +200,7 @@ export default function EstadoTurno({ token, mp }: { token: string; mp: boolean 
 
         <p className="text-sm text-gray-500">Guardá este enlace: acá ves el estado de tu turno y, cuando el auto esté en el taller, cómo avanza el trabajo.</p>
       </section>
+      <SitioPie />
     </main>
   );
 }

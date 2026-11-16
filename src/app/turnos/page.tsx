@@ -1,10 +1,9 @@
 "use client";
 
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { type FormEvent, useEffect, useState } from "react";
 import Cargando from "@/components/Cargando";
-import Logo from "@/components/Logo";
+import { SitioCabecera, SitioPie } from "@/components/SitioMarco";
 import { supabase } from "@/lib/supabase";
 import {
   CONFIG_INICIAL, EXTRAS, SERVICIOS, calcularPrecio, calcularSena, normalizarPatente, pesos, servicioTexto, mensajeAlezza, waAlezza,
@@ -84,13 +83,10 @@ export default function PedirTurno() {
   const precioDe = (k: Servicio | Extra) => (Number(config.precios[k]) > 0 ? pesos(Number(config.precios[k])) : "a cotizar");
 
   return (
-    <main className="min-h-screen text-[var(--tinta)]">
-      <header className="mx-auto flex max-w-4xl items-center justify-between px-6 py-5">
-        <Link href="/" aria-label="ALEZZA - Inicio"><Logo alto={22} /></Link>
-        <Link href="/servicios" className="text-sm text-gray-600 hover:underline">Ver servicios</Link>
-      </header>
+    <main className="lp min-h-screen">
+      <SitioCabecera activa="/servicios" accion={<a href={consulta} target="_blank" rel="noopener noreferrer" className="lp-btn lp-btn-sm lp-btn-linea">WhatsApp</a>} />
 
-      <section className="mx-auto max-w-4xl px-6 pb-16">
+      <section className="mx-auto max-w-4xl px-6 pb-16 pt-10">
         <p className="font-mono text-xs uppercase tracking-widest text-gray-500">Estética técnica · Mar del Plata</p>
         <h1 className="mt-3 text-3xl font-extrabold md:text-4xl">Pedí tu turno</h1>
         <p className="mt-2 text-gray-600">Se reserva con una seña del {config.porcentaje_sena}% del servicio, que se descuenta del total.</p>
@@ -182,7 +178,7 @@ export default function PedirTurno() {
                       <b>Seña {pesos(sena)}</b>
                     </p>
                   </div>
-                  <button disabled={enviando} className="rounded-md bg-[var(--mostaza)] px-6 py-3 font-bold text-[#17150f] hover:brightness-95 disabled:opacity-60">
+                  <button disabled={enviando} className="lp-btn disabled:opacity-60">
                     {enviando ? "Reservando…" : "Reservar y pagar la seña →"}
                   </button>
                 </div>
@@ -194,6 +190,7 @@ export default function PedirTurno() {
           </form>
         )}
       </section>
+      <SitioPie />
     </main>
   );
 }

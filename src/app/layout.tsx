@@ -11,6 +11,8 @@ const body = DM_Sans({ subsets: ["latin"], weight: ["400", "500", "700"], variab
 const mono = IBM_Plex_Mono({ subsets: ["latin"], weight: ["400", "500"], variable: "--f-mono" });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://alezza.com.ar"),
+  openGraph: { siteName: "ALEZZA", locale: "es_AR", type: "website" },
   title: "ALEZZA — Asesoría automotor integral · Mar del Plata",
   description: "Compra, venta y permuta de autos, financiación en pesos y estética automotriz para particulares, vendedores y agencias en Mar del Plata.",
   // Instalable en el iPhone desde cualquier portal (Compartir → Agregar a inicio): abre BRUNO OS a pantalla completa.

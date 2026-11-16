@@ -1,10 +1,9 @@
 "use client";
 
-import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import Cargando from "@/components/Cargando";
-import Logo from "@/components/Logo";
+import { SitioCabecera, SitioPie } from "@/components/SitioMarco";
 import Seguimiento from "@/components/Seguimiento";
 import { supabase } from "@/lib/supabase";
 import { mensajeAlezza, waAlezza, type Avance } from "@/lib/turnos";
@@ -33,12 +32,9 @@ export default function Page() {
     : mensajeAlezza("Quiero consultar por mi auto en el taller."));
 
   return (
-    <main className="min-h-screen text-[var(--tinta)]">
-      <header className="mx-auto flex max-w-3xl items-center justify-between px-6 py-5">
-        <Link href="/" aria-label="ALEZZA - Inicio"><Logo alto={22} /></Link>
-        <a href={consulta} target="_blank" rel="noopener noreferrer" className="text-sm text-gray-600 hover:underline">¿Dudas? WhatsApp</a>
-      </header>
-      <section className="mx-auto grid max-w-3xl gap-4 px-6 pb-16">
+    <main className="lp min-h-screen">
+      <SitioCabecera accion={<a href={consulta} target="_blank" rel="noopener noreferrer" className="lp-btn lp-btn-sm lp-btn-linea">¿Dudas? WhatsApp</a>} />
+      <section className="mx-auto grid max-w-3xl gap-4 px-6 pb-16 pt-10">
         {avance === undefined ? (
           <Cargando frase="Mirando cómo va tu auto…" />
         ) : avance === null ? (
@@ -51,6 +47,7 @@ export default function Page() {
           </>
         )}
       </section>
+      <SitioPie />
     </main>
   );
 }

@@ -77,7 +77,7 @@ export default function AsesorCompra({ datos }: { datos: DatosTasacion }) {
             return (
               <article key={a.id} className={`grid gap-2 rounded-xl border p-4 sm:grid-cols-[1fr_auto] sm:items-center ${a.id === datos.deseado ? "border-[var(--tinta)]" : "border-gray-200"}`}>
                 <div>
-                  <p className="font-semibold">{nombre} {a.id === datos.deseado && <span className="ml-1 rounded-full bg-[var(--mostaza)] px-2 py-0.5 text-xs text-[#17150f]">el que elegiste</span>}</p>
+                  <p className="font-semibold">{nombre} {a.id === datos.deseado && <span className="ml-1 rounded-full bg-[var(--tinta)] px-2 py-0.5 text-xs text-[var(--papel)]">el que elegiste</span>}</p>
                   <p className="font-mono text-sm text-gray-600">
                     Precio {pesos(Number(a.price_ars))}{toma > 0 && ` − tu auto ${pesos(Math.min(toma, Number(a.price_ars)))}`}
                   </p>
