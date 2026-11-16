@@ -6,7 +6,7 @@ Estado al 2026-11-15. La fuente de verdad de los registros DNS es Vercel (`get_d
 | Pieza | Estado |
 |---|---|
 | Hosting | Vercel, team `alezzamdp`, proyecto `alezza05-cqnt`. Deploy de producción READY, responde 200. |
-| Auto-deploy | GitHub `Alezzamdp/Alezza05`, rama `master`. Cada push a master publica en producción. |
+| Auto-deploy | GitHub `Alezzamdp/ALEZZA`, rama `master`. Cada push a master publica en producción. |
 | URL actual | https://alezza05-cqnt.vercel.app |
 | Dominio | `alezza.com.ar` y `www.alezza.com.ar` ya están agregados al proyecto en Vercel. `www` redirige a apex con 308. |
 | DNS | Activo desde el 2026-11-16: delegado a Cloudflare; `https://alezza.com.ar` responde 200 y `www` redirige al apex con 308. |

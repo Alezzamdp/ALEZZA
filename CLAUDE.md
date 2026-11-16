@@ -5,7 +5,7 @@
 ## Stack
 - Next.js 16.4.5 (App Router), React 19, TypeScript, Tailwind 4.
 - Supabase (Auth, Postgres con RLS, Storage, funciones security definer).
-- Producción en Vercel (Alezzamdp/Alezza05, rama master). Puerto local 3000.
+- Producción en Vercel (Alezzamdp/ALEZZA, rama master). Puerto local 3000.
 
 ## Comandos (PowerShell)
 ```
