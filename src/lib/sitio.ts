@@ -4,7 +4,7 @@ import { readPublicProfile } from "@/components/StockVehiculos";
 import { supabase } from "@/lib/supabase";
 import { CONFIG_INICIAL, type TurnosConfig } from "@/lib/turnos";
 
-export { WA_AGENCIA, WA_CONSULTA, externo } from "@/lib/contacto";
+export { contacto, externo } from "@/lib/contacto";
 
 export async function datosSitio() {
   const { data } = await supabase.from("app_settings").select("key, value").in("key", ["public_profile", "turnos"]);

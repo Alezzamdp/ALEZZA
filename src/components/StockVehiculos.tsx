@@ -1,7 +1,5 @@
 import VehicleCard from "@/components/VehicleCard";
 import { supabase } from "@/lib/supabase";
-import { getWhatsAppUrl } from "@/lib/whatsapp";
-import { mensajeAlezza } from "@/lib/turnos";
 
 // Stock publicado. Lo usan el Inicio (#catalogo) y el portal /vehiculos.
 
@@ -56,7 +54,7 @@ export function getPublicEmailUrl(
 }
 
 // limite: en el Inicio se muestran los últimos N y un acceso al portal completo.
-export default async function StockVehiculos({ publicProfile, limite }: { publicProfile: PublicProfile; limite?: number }) {
+export default async function StockVehiculos({ limite }: { publicProfile?: PublicProfile; limite?: number }) {
   const { data, error } = await supabase
     .from("vehicles")
     .select(
@@ -68,7 +66,6 @@ export default async function StockVehiculos({ publicProfile, limite }: { public
 
   const todos = (data ?? []) as Vehicle[];
   const vehicles = limite ? todos.slice(0, limite) : todos;
-  const whatsapp = publicProfile.whatsapp;
 
   return (
     <section id="catalogo" className="bg-[var(--papel)]">
@@ -104,24 +101,8 @@ export default async function StockVehiculos({ publicProfile, limite }: { public
           </div>
         ) : (
           <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {vehicles.map((vehicle) => {
-              const inquiryMessage = mensajeAlezza("Vi esta unidad en el catálogo y quiero saber más.", [["Vehículo", `${vehicle.brand} ${vehicle.model}${vehicle.version ? ` ${vehicle.version}` : ""}`], ["Año", String(vehicle.year)]]);
-              const contactHref = whatsapp
-                ? getWhatsAppUrl(whatsapp, inquiryMessage)
-                : publicProfile.email
-                  ? getPublicEmailUrl(publicProfile.email, `Consulta por ${vehicle.brand} ${vehicle.model}`, inquiryMessage)
-                  : null;
-
-              return (
-                <VehicleCard
-                  key={vehicle.id}
-                  vehicle={vehicle}
-                  contactHref={contactHref}
-                  contactTarget={whatsapp ? "_blank" : undefined}
-                  contactLabel={whatsapp ? "Escribir por WhatsApp" : "Enviar correo"}
-                />
-              );
-            })}
+            {/* Cada ficha lleva a "Consultar por esta unidad" (/consultar); el contacto directo vive solo en /contacto. */}
+            {vehicles.map((vehicle) => <VehicleCard key={vehicle.id} vehicle={vehicle} />)}
           </div>
         )}
       </div>

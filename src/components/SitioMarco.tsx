@@ -3,11 +3,12 @@ import type { CSSProperties, ReactNode } from "react";
 import Logo from "@/components/Logo";
 import SitioMenu from "@/components/SitioMenu";
 import { TALLER } from "@/lib/turnos";
-import { INSTAGRAM, UBICACION, WA_CONSULTA, externo } from "@/lib/contacto";
+import { UBICACION, externo } from "@/lib/contacto";
 
 // Cabecera, pie y titular de todos los portales públicos. Estilos .lp en globals.css.
+// El contacto (WhatsApp e Instagram) vive solo en /contacto: acá se enlaza, no se repite.
 
-// accion: reemplaza el botón "Pedir turno" (por ejemplo, el WhatsApp con los datos del turno).
+// accion: reemplaza el botón "Pedir turno" (por ejemplo, "¿Dudas?" en la página de un turno).
 export function SitioCabecera({ accion }: { activa?: string; accion?: ReactNode }) {
   return (
     <header className="lp-header">
@@ -30,7 +31,7 @@ export function Titular({ lineas, desde = 0 }: { lineas: string[]; desde?: numbe
       {lineas.map((linea) => (
         <span key={linea} className="lp-linea" aria-hidden>
           {linea.split(" ").map((palabra) => (
-            <span key={n} className="lp-pal"><span style={{ "--d": `${desde + n++ * 70}ms` } as CSSProperties}>{palabra}</span></span>
+            <span key={n} className="lp-pal"><span style={{ "--d": `${desde + n++ * 35}ms` } as CSSProperties}>{palabra}</span></span>
           ))}
         </span>
       ))}
@@ -43,9 +44,8 @@ export function SitioPie({ ubicacion, horario }: { ubicacion?: string; horario?:
     <footer className="lp-footer">
       <div className="lp-wrap lp-footer-in">
         <p>{[ubicacion || UBICACION, horario?.replace(/\s*\n\s*/g, " · ")].filter(Boolean).join(" · ")}</p>
-        <nav aria-label="Contacto">
-          <a href={WA_CONSULTA} {...externo}>WhatsApp 223 421-2621</a>
-          <a href={INSTAGRAM} {...externo}>Instagram</a>
+        <nav aria-label="Contacto y ubicación">
+          <Link href="/contacto">Contacto</Link>
           <a href={TALLER.maps} {...externo}>Cómo llegar</a>
         </nav>
         <p>© {new Date().getFullYear()} ALEZZA</p>

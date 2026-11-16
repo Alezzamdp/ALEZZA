@@ -4,17 +4,18 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { type CSSProperties, useEffect, useState } from "react";
 import { TALLER } from "@/lib/turnos";
-import { INSTAGRAM, WA_CONSULTA, externo } from "@/lib/contacto";
+import { externo } from "@/lib/contacto";
 
 // Menú escalonado del sitio público: dos capas entran desde la derecha, después el panel,
 // y los renglones suben de a uno. Sin librerías: transiciones CSS (estilos .sm-* en globals.css).
 
 const ITEMS = [
   { t: "Inicio", u: "/" },
-  { t: "Estética", u: "/servicios" },
   { t: "Catálogo", u: "/vehiculos" },
   { t: "Financiación", u: "/financiacion" },
+  { t: "Estética", u: "/servicios" },
   { t: "Pedir turno", u: "/turnos" },
+  { t: "Contacto", u: "/contacto" },
 ];
 
 export default function SitioMenu() {
@@ -58,10 +59,9 @@ export default function SitioMenu() {
           ))}
         </ul>
         <div className="sm-contacto">
-          <p>Contacto</p>
-          <a href={WA_CONSULTA} {...externo}>WhatsApp</a>
-          <a href={INSTAGRAM} {...externo}>Instagram</a>
+          <p>Taller ALEZZA DETAIL · Mar del Plata</p>
           <a href={TALLER.maps} {...externo}>Cómo llegar</a>
+          <Link href="/#servicios" onClick={() => setAbierto(false)}>Gestoría y talleres de confianza</Link>
         </div>
       </nav>
     </div>

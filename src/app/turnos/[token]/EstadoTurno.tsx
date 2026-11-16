@@ -10,9 +10,10 @@ import MapaTaller from "@/components/MapaTaller";
 import Seguimiento from "@/components/Seguimiento";
 import { supabase } from "@/lib/supabase";
 import {
-  CONFIG_INICIAL, PAGO_TEXTO, fechaLarga, mensajeAlezza, pesos, servicioTexto, waAlezza,
+  CONFIG_INICIAL, PAGO_TEXTO, fechaLarga, pesos, servicioTexto,
   type Avance, type Turno, type TurnosConfig,
 } from "@/lib/turnos";
+import { contacto } from "@/lib/contacto";
 
 type Publico = Pick<Turno, "id" | "fecha" | "servicio" | "extras" | "nombre" | "patente" | "vehiculo" | "precio" | "sena" | "estado" | "pago_estado" | "pago_metodo"> & { orden: Avance | null };
 
@@ -81,7 +82,7 @@ export default function EstadoTurno({ token, mp }: { token: string; mp: boolean 
     const ruta = `${token}/comprobante-${crypto.randomUUID()}.${ext}`;
     const up = await supabase.storage.from("turno-comprobantes").upload(ruta, file, { contentType: file.type });
     const { error } = up.error ? up : await supabase.rpc("informar_pago", { p_token: token, p_comprobante: ruta });
-    setAviso(error ? "No se pudo enviar el comprobante. Probá de nuevo o mandalo por WhatsApp." : "¡Listo! Recibimos el comprobante; lo verificamos y te confirmamos.");
+    setAviso(error ? "No se pudo enviar el comprobante. Probá de nuevo o escribinos desde Contacto." : "¡Listo! Recibimos el comprobante; lo verificamos y te confirmamos.");
     setOcupado(false);
     void cargar();
   }
@@ -92,23 +93,15 @@ export default function EstadoTurno({ token, mp }: { token: string; mp: boolean 
       <main className="lp grid min-h-screen place-items-center px-6 text-center">
         <div>
           <Logo alto={22} />
-          <p className="mt-6">No encontramos ese turno. <Link href="/turnos" className="underline">Pedí uno nuevo</Link> o <a href={waAlezza(mensajeAlezza("No encuentro mi turno, ¿me ayudan?"))} className="underline">escribinos</a>.</p>
+          <p className="mt-6">No encontramos ese turno. <Link href="/turnos" className="underline">Pedí uno nuevo</Link> o <Link href={contacto("turno")} className="underline">escribinos</Link>.</p>
         </div>
       </main>
     );
   }
 
   const servicio = servicioTexto(turno.servicio, turno.extras ?? []);
-  const enlace = typeof window === "undefined" ? "" : location.origin + location.pathname;
-  const fila: [string, string][] = [
-    ["Servicio", servicio], ["Día", fechaLarga(turno.fecha)], ["Vehículo", turno.vehiculo],
-    ["Patente", turno.patente], ["Nombre", turno.nombre], ["Seña", pesos(Number(turno.sena))],
-  ];
-  const wa = {
-    dudas: waAlezza(mensajeAlezza("Tengo una consulta sobre mi turno.", fila, enlace)),
-    datos: waAlezza(mensajeAlezza("¿Me pasan los datos para transferir la seña?", fila, enlace)),
-    comprobante: waAlezza(mensajeAlezza("Les mando el comprobante de la seña (lo adjunto en el próximo mensaje).", fila, enlace)),
-  };
+  // Único contacto del sitio: /contacto, con el turno como referencia en el mensaje.
+  const dudas = contacto("turno", `Turno del ${fechaLarga(turno.fecha)} · ${turno.vehiculo} · ${turno.patente}`);
   const pasos = [
     { t: "Turno pedido", ok: true },
     { t: PAGO_TEXTO[turno.pago_estado], ok: turno.pago_estado === "confirmado" },
@@ -117,7 +110,7 @@ export default function EstadoTurno({ token, mp }: { token: string; mp: boolean 
 
   return (
     <main className="lp min-h-screen">
-      <SitioCabecera accion={<a href={wa.dudas} target="_blank" rel="noopener noreferrer" className="lp-btn lp-btn-sm lp-btn-linea">¿Dudas? WhatsApp</a>} />
+      <SitioCabecera accion={<Link href={dudas} className="lp-btn lp-btn-sm lp-btn-linea">¿Dudas?</Link>} />
 
       <section className="mx-auto grid max-w-3xl gap-6 px-6 pb-16 pt-10">
         <div>
@@ -182,15 +175,13 @@ export default function EstadoTurno({ token, mp }: { token: string; mp: boolean 
                     </button>
                   </>
                 ) : (
-                  <p className="mt-1 text-sm text-gray-600">Pedinos los datos por <a href={wa.datos} target="_blank" rel="noopener noreferrer" className="underline">WhatsApp</a>.</p>
+                  <p className="mt-1 text-sm text-gray-600"><Link href={dudas} className="underline">Pedinos los datos para transferir</Link>.</p>
                 )}
                 <div className="mt-3 flex flex-wrap gap-2">
                   <label className={`cursor-pointer rounded-md border border-gray-300 px-4 py-2 text-sm font-semibold hover:bg-gray-50 ${ocupado ? "pointer-events-none opacity-60" : ""}`}>
                     Subir comprobante
                     <input type="file" accept="image/jpeg,image/png,image/webp,application/pdf" className="sr-only" onChange={(e) => subirComprobante(e.target.files?.[0])} />
-                  </label>
-                  <a href={wa.comprobante} target="_blank" rel="noopener noreferrer" className="rounded-md px-4 py-2 text-sm underline">o mandarlo por WhatsApp</a>
-                </div>
+                  </label>                </div>
               </div>
             </div>
           </div>

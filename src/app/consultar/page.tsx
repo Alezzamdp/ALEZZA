@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState, type FormEvent } from "react";
 import { supabase } from "@/lib/supabase";
+import { contacto } from "@/lib/contacto";
 import { getWhatsAppUrl } from "@/lib/whatsapp";
 import { SitioCabecera, SitioPie } from "@/components/SitioMarco";
 
@@ -15,34 +16,11 @@ type Vehicle = {
   status: "available" | "reserved";
 };
 
-type PublicProfile = {
-  whatsapp: string;
-  email: string;
-};
-
 const inputClass =
   "mt-2 w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-base text-gray-900 outline-none focus:border-[var(--m700)] focus:ring-2 focus:ring-[var(--m700)]/20";
 
-function getEmailUrl(email: string, subject: string, body: string) {
-  const recipient = encodeURIComponent(email).replace(/%40/i, "@");
-  return `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-}
-
-function readPublicProfile(value: unknown): PublicProfile {
-  if (value === null || typeof value !== "object" || Array.isArray(value)) {
-    return { whatsapp: "", email: "" };
-  }
-
-  const profile = value as Partial<Record<keyof PublicProfile, unknown>>;
-  return {
-    whatsapp: typeof profile.whatsapp === "string" ? profile.whatsapp.trim() : "",
-    email: typeof profile.email === "string" ? profile.email.trim() : "",
-  };
-}
-
 export default function VehicleInquiryPage() {
   const [vehicle, setVehicle] = useState<Vehicle | null>(null);
-  const [profile, setProfile] = useState<PublicProfile>({ whatsapp: "", email: "" });
   const [loadingVehicle, setLoadingVehicle] = useState(true);
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -62,27 +40,19 @@ export default function VehicleInquiryPage() {
         return;
       }
 
-      const [vehicleResult, profileResult] = await Promise.all([
-        supabase
-          .from("vehicles")
-          .select("id, brand, model, version, year, status")
-          .eq("id", vehicleId)
-          .eq("is_published", true)
-          .in("status", ["available", "reserved"])
-          .maybeSingle(),
-        supabase
-          .from("app_settings")
-          .select("value")
-          .eq("key", "public_profile")
-          .maybeSingle(),
-      ]);
+      const vehicleResult = await supabase
+        .from("vehicles")
+        .select("id, brand, model, version, year, status")
+        .eq("id", vehicleId)
+        .eq("is_published", true)
+        .in("status", ["available", "reserved"])
+        .maybeSingle();
 
       if (!active) return;
 
       if (!vehicleResult.error && vehicleResult.data) {
         setVehicle(vehicleResult.data as Vehicle);
       }
-      setProfile(readPublicProfile(profileResult.data?.value));
       setLoadingVehicle(false);
     }
 
@@ -96,13 +66,8 @@ export default function VehicleInquiryPage() {
   const vehicleName = vehicle
     ? `${vehicle.year} ${vehicle.brand} ${vehicle.model}${vehicle.version ? ` ${vehicle.version}` : ""}`
     : "esta unidad";
-  const contactMessage = `Hola, acabo de dejar una consulta por el ${vehicleName} en el sitio de ALEZZA. Mi nombre es ${name.trim()}${phone.trim() ? ` y mi teléfono es ${phone.trim()}` : ""}${email.trim() ? `; mi correo es ${email.trim()}` : ""}.${message.trim() ? ` Consulta: ${message.trim()}` : ""}`;
-  const whatsappHref = profile.whatsapp
-    ? getWhatsAppUrl(profile.whatsapp, contactMessage)
-    : null;
-  const emailHref = profile.email
-    ? getEmailUrl(profile.email, `Consulta por ${vehicleName}`, contactMessage)
-    : null;
+  // El contacto directo vive solo en /contacto; la unidad viaja como referencia del mensaje.
+  const contactoHref = contacto("compra", vehicle ? vehicleName : null);
 
   async function submitInquiry(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -180,18 +145,11 @@ export default function VehicleInquiryPage() {
                 Recibimos tu consulta por el {vehicleName}. ALEZZA va a revisar la solicitud y ponerse en contacto.
               </p>
               <div className="mt-6 flex flex-wrap gap-3">
-                {whatsappHref && (
-                  <a href={whatsappHref} target="_blank" rel="noreferrer" className="rounded-lg bg-[var(--tinta)] px-5 py-3 font-semibold text-white hover:bg-[var(--n800)]">
-                    Continuar por WhatsApp
-                  </a>
-                )}
-                {emailHref && (
-                  <a href={emailHref} className="rounded-lg border border-[var(--tinta)] px-5 py-3 font-semibold text-[var(--tinta)] hover:bg-[var(--papel)]">
-                    Continuar por correo
-                  </a>
-                )}
-                <Link href="/vehiculos" className="rounded-lg border border-gray-200 px-5 py-3 font-semibold text-gray-700 hover:bg-gray-50">
+                <Link href="/vehiculos" className="rounded-lg bg-[var(--tinta)] px-5 py-3 font-semibold text-white hover:bg-[var(--n800)]">
                   Volver al catálogo
+                </Link>
+                <Link href={contactoHref} className="rounded-lg border border-gray-200 px-5 py-3 font-semibold text-gray-700 hover:bg-gray-50">
+                  Contacto
                 </Link>
               </div>
             </>
@@ -233,10 +191,7 @@ export default function VehicleInquiryPage() {
                 {error && (
                   <div role="alert" className="rounded-lg bg-red-50 p-3 text-sm text-red-700">
                     <p>{error}</p>
-                    <div className="mt-3 flex flex-wrap gap-3 font-semibold">
-                      {whatsappHref && <a href={whatsappHref} target="_blank" rel="noreferrer" className="underline">WhatsApp</a>}
-                      {emailHref && <a href={emailHref} className="underline">Correo</a>}
-                    </div>
+                    <p className="mt-3 font-semibold"><Link href={contactoHref} className="underline">Ir a Contacto</Link></p>
                   </div>
                 )}
                 <button type="submit" disabled={busy} className="w-full rounded-lg bg-[var(--tinta)] px-5 py-4 font-semibold text-white transition hover:bg-[var(--n800)] disabled:cursor-not-allowed disabled:opacity-60">

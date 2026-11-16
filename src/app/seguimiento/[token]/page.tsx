@@ -1,12 +1,14 @@
 "use client";
 
+import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import Cargando from "@/components/Cargando";
 import { SitioCabecera, SitioPie } from "@/components/SitioMarco";
 import Seguimiento from "@/components/Seguimiento";
 import { supabase } from "@/lib/supabase";
-import { mensajeAlezza, waAlezza, type Avance } from "@/lib/turnos";
+import { contacto } from "@/lib/contacto";
+import type { Avance } from "@/lib/turnos";
 
 // Enlace que se le manda al cliente desde el Taller: ve el avance de su auto en vivo.
 export default function Page() {
@@ -25,20 +27,16 @@ export default function Page() {
     return () => clearInterval(t);
   }, [cargar]);
 
-  const consulta = waAlezza(avance
-    ? mensajeAlezza("Quiero consultar por mi auto en el taller.", [
-        ["Orden", "#" + avance.numero], ["Vehículo", avance.vehiculo], ["Patente", avance.patente], ["Nombre", avance.nombre],
-      ], typeof window === "undefined" ? undefined : location.href)
-    : mensajeAlezza("Quiero consultar por mi auto en el taller."));
+  const consulta = contacto("turno", avance ? ["Orden #" + avance.numero, avance.vehiculo, avance.patente].filter(Boolean).join(" · ") : null);
 
   return (
     <main className="lp min-h-screen">
-      <SitioCabecera accion={<a href={consulta} target="_blank" rel="noopener noreferrer" className="lp-btn lp-btn-sm lp-btn-linea">¿Dudas? WhatsApp</a>} />
+      <SitioCabecera accion={<Link href={consulta} className="lp-btn lp-btn-sm lp-btn-linea">¿Dudas?</Link>} />
       <section className="mx-auto grid max-w-3xl gap-4 px-6 pb-16 pt-10">
         {avance === undefined ? (
           <Cargando frase="Mirando cómo va tu auto…" />
         ) : avance === null ? (
-          <p className="rounded-lg border border-gray-200 bg-white p-6">No encontramos ese seguimiento. <a href={consulta} className="underline">Escribinos</a>.</p>
+          <p className="rounded-lg border border-gray-200 bg-white p-6">No encontramos ese seguimiento. <Link href={consulta} className="underline">Escribinos</Link>.</p>
         ) : (
           <>
             <h1 className="text-3xl font-extrabold">Hola {avance.nombre}</h1>

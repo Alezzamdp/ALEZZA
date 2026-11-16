@@ -13,8 +13,8 @@ const mono = IBM_Plex_Mono({ subsets: ["latin"], weight: ["400", "500"], variabl
 export const metadata: Metadata = {
   metadataBase: new URL("https://alezza.com.ar"),
   openGraph: { siteName: "ALEZZA", locale: "es_AR", type: "website" },
-  title: "ALEZZA — Estética automotriz y venta de autos · Mar del Plata",
-  description: "Preparación estética de unidades para agencias, vendedores y particulares en Mar del Plata. Catálogo de autos y financiación en pesos.",
+  title: "ALEZZA — Asesoría automotor integral · Mar del Plata",
+  description: "Todo lo de tu auto en un solo lugar: compra y venta, permutas, financiación, estética vehicular, gestoría y talleres de confianza en Mar del Plata.",
   formatDetection: { telephone: false },
 };
 

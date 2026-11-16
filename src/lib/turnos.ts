@@ -86,7 +86,19 @@ export const DETALLE_EXTRAS: Record<Extra, [string, string]> = {
   pulido1: ["Pulido en 1 paso", "Devuelve el brillo en una sola pasada. Para pinturas en buen estado."],
   pulido2: ["Pulido en 2 pasos", "Primero corrige las marcas del barniz y después devuelve el brillo. Para pinturas castigadas."],
 };
-export const precioPlan = (c: TurnosConfig, k: Servicio | Extra) =>
+// Guía para elegir: qué problema resuelve cada servicio del taller ("Elegilo si…"). Se muestra en /servicios y /turnos.
+export const ELEGILO_SI: Record<Exclude<Servicio, "otro"> | Extra, string> = {
+  lavado: "Está sucio del uso diario o lo vas a publicar y necesitás buenas fotos.",
+  puesta: "Lo vas a vender y querés que rinda más, o hace años que no recibe un trabajo completo.",
+  agencia: "Tenés varias unidades para preparar y necesitás tarifa y prioridad.",
+  interiores: "Tiene manchas, tierra o pelos en alfombras, techo y tapizados.",
+  butacas: "Hay manchas u olor en los asientos (mascotas, chicos, humedad).",
+  motor: "El vano motor está engrasado o con tierra y lo querés mostrar prolijo.",
+  pulido1: "La pintura está sana pero perdió brillo.",
+  pulido2: "Tiene rayones finos, marcas de lavado u opacidad que no sale lavando.",
+};
+
+export const precioPlan =(c: TurnosConfig, k: Servicio | Extra) =>
   Number(c.precios[k]) > 0 ? pesos(Number(c.precios[k])) : "A convenir";
 
 export type Avance = {

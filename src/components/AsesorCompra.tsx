@@ -6,7 +6,8 @@ import Cargando from "@/components/Cargando";
 import { plan } from "@/lib/financiacion";
 import { MARGEN_TOMA, valorToma } from "@/lib/market";
 import { supabase } from "@/lib/supabase";
-import { mensajeAlezza, pesos, waAlezza } from "@/lib/turnos";
+import { contacto } from "@/lib/contacto";
+import { pesos } from "@/lib/turnos";
 
 // Asesor de compra después de tasar: valor estimado de toma (mercado − 15 %), autos del stock
 // que le entran con esa toma + financiación CreditCar, y el plan de cada uno.
@@ -91,10 +92,7 @@ export default function AsesorCompra({ datos }: { datos: DatosTasacion }) {
                   {p.financiado > 0 && (
                     <Link href={`/financiacion?vehiculo=${a.id}&aporte=${toma}`} className="rounded-md bg-[var(--tinta)] px-4 py-2 text-sm font-semibold text-white">Financiarlo</Link>
                   )}
-                  <a href={waAlezza(mensajeAlezza("Quiero avanzar con una permuta.", [
-                    ["Mi auto", auto], ["Toma estimada", toma ? pesos(toma) : "a tasar"], ["Me interesa", nombre],
-                    ["Financiación", p.financiado ? `${pesos(p.financiado)} en ${p.meses} cuotas de ${pesos(p.cuota)}` : null],
-                  ]))} target="_blank" rel="noopener noreferrer" className="rounded-md border border-gray-300 px-4 py-2 text-sm hover:bg-gray-50">Hablar con un asesor</a>
+                  <Link href={contacto("permuta", `Entrego ${auto} · me interesa ${nombre}`)} className="rounded-md border border-gray-300 px-4 py-2 text-sm hover:bg-gray-50">Hablar con un asesor</Link>
                 </div>
               </article>
             );

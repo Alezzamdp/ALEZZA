@@ -3,8 +3,8 @@ import Link from "next/link";
 import MapaTaller from "@/components/MapaTaller";
 import Revelar from "@/components/Revelar";
 import { SitioCabecera, SitioPie, Titular } from "@/components/SitioMarco";
-import { WA_AGENCIA, datosSitio, externo, trabajosPublicos } from "@/lib/sitio";
-import { DETALLE_EXTRAS, PLANES, SERVICIOS, precioPlan, type Extra } from "@/lib/turnos";
+import { contacto, datosSitio, trabajosPublicos } from "@/lib/sitio";
+import { DETALLE_EXTRAS, ELEGILO_SI, PLANES, SERVICIOS, precioPlan, type Extra } from "@/lib/turnos";
 import Catalogo from "./Catalogo";
 
 export const dynamic = "force-dynamic";
@@ -34,15 +34,15 @@ export default async function Servicios() {
           <div className="lp-dos">
             <section>
               <p className="lp-kicker lp-in">Estética automotriz · Mar del Plata</p>
-              <Titular lineas={["Tu auto vale más", "cuando se ve."]} desde={120} />
-              <p className="lp-lead lp-in" style={{ animationDelay: "420ms" }}>
+              <Titular lineas={["Tu auto vale más", "cuando se ve."]} desde={0} />
+              <p className="lp-lead lp-in" style={{ animationDelay: "160ms" }}>
                 Preparamos unidades para vender mejor y más rápido: particulares, vendedores y agencias que necesitan rotar stock.
               </p>
-              <div className="lp-acciones lp-in" style={{ animationDelay: "500ms" }}>
+              <div className="lp-acciones lp-in" style={{ animationDelay: "220ms" }}>
                 <Link href="/turnos" className="lp-btn">Pedir turno</Link>
-                <a href={WA_AGENCIA} {...externo} className="lp-btn lp-btn-linea">Soy agencia</a>
+                <a href="#elegir" className="lp-btn lp-btn-linea">¿Cuál elijo?</a>
               </div>
-              <ol className="lp-pasos lp-in" style={{ animationDelay: "580ms" }} aria-label="Cómo trabajamos">
+              <ol className="lp-pasos lp-in" style={{ animationDelay: "280ms" }} aria-label="Cómo trabajamos">
                 {PASOS.map((p, i) => (
                   <li key={p}><span className="lp-num">{String(i + 1).padStart(2, "0")}</span>{p}</li>
                 ))}
@@ -53,7 +53,7 @@ export default async function Servicios() {
               {PLANES.map((p, i) => {
                 const agencia = p.k === "agencia";
                 return (
-                  <article key={p.k} className="lp-ficha lp-in" style={{ animationDelay: `${300 + i * 90}ms` }}>
+                  <article key={p.k} className="lp-ficha lp-in" style={{ animationDelay: `${120 + i * 50}ms` }}>
                     <div>
                       <p className="lp-num">{p.para}</p>
                       <h2>{SERVICIOS[p.k]}</h2>
@@ -62,7 +62,7 @@ export default async function Servicios() {
                     <div className="lp-plan-der">
                       <span className="lp-precio">{precioPlan(config, p.k)}</span>
                       {agencia
-                        ? <a href={WA_AGENCIA} {...externo} className="lp-btn lp-btn-sm lp-btn-linea">Coordinar</a>
+                        ? <Link href={contacto("agencia")} className="lp-btn lp-btn-sm lp-btn-linea">Coordinar</Link>
                         : <Link href={`/turnos?servicio=${p.k}`} className="lp-btn lp-btn-sm">Pedir turno</Link>}
                     </div>
                   </article>
@@ -73,9 +73,9 @@ export default async function Servicios() {
         </div>
       </div>
 
-      <section className="lp-wrap lp-seccion">
-        <p className="lp-kicker">Qué hacemos en cada uno</p>
-        <h2>Los planes, en detalle</h2>
+      <section id="elegir" className="lp-wrap lp-seccion">
+        <p className="lp-kicker">Guía para elegir</p>
+        <h2>Qué resuelve cada plan</h2>
         <div className="lp-detalles">
           {PLANES.map((p, i) => {
             const agencia = p.k === "agencia";
@@ -86,6 +86,7 @@ export default async function Servicios() {
                   <h3>{SERVICIOS[p.k]}</h3>
                   <span className="lp-precio">{precioPlan(config, p.k)}</span>
                 </header>
+                <p className="lp-elegilo"><b>Elegilo si:</b> {ELEGILO_SI[p.k]}</p>
                 <p>{p.detalle}</p>
                 <dl>
                   {p.etapas.map(([t, d]) => (
@@ -93,7 +94,7 @@ export default async function Servicios() {
                   ))}
                 </dl>
                 {agencia
-                  ? <a href={WA_AGENCIA} {...externo} className="lp-ir">Coordinar por WhatsApp <span aria-hidden>→</span></a>
+                  ? <Link href={contacto("agencia")} className="lp-ir">Coordinar por lote <span aria-hidden>→</span></Link>
                   : <Link href={`/turnos?servicio=${p.k}`} className="lp-ir">Pedir turno <span aria-hidden>→</span></Link>}
               </Revelar>
             );
@@ -112,6 +113,7 @@ export default async function Servicios() {
                 <span>
                   <h3>{DETALLE_EXTRAS[k][0]}</h3>
                   <p>{DETALLE_EXTRAS[k][1]}</p>
+                  <p><b>Elegilo si:</b> {ELEGILO_SI[k].charAt(0).toLowerCase() + ELEGILO_SI[k].slice(1)}</p>
                 </span>
                 <span className="lp-precio">{precioPlan(config, k)}</span>
                 <span className="lp-ir">Pedir turno <span aria-hidden>→</span></span>

@@ -4,7 +4,8 @@ import { type FormEvent, useEffect, useMemo, useState } from "react";
 import { SitioCabecera, SitioPie } from "@/components/SitioMarco";
 import { PLAZOS, condiciones, plan } from "@/lib/financiacion";
 import { supabase } from "@/lib/supabase";
-import { mensajeAlezza, pesos, waAlezza } from "@/lib/turnos";
+import { contacto } from "@/lib/contacto";
+import { pesos } from "@/lib/turnos";
 
 type Auto = { id: string; brand: string; model: string; version: string | null; year: number; price_ars: number | null };
 
@@ -68,14 +69,11 @@ export default function Financiacion() {
     };
     const { error } = await supabase.rpc("pedir_financiacion", { p: datos });
     setEnviando(false);
-    if (error) { setError(error.code === "P0001" ? error.message : "No se pudo enviar. Revisá los datos o escribinos por WhatsApp."); return; }
+    if (error) { setError(error.code === "P0001" ? error.message : "No se pudo enviar. Revisá los datos y probá de nuevo."); return; }
     setEnviado(true);
   }
 
-  const resumenWa = waAlezza(mensajeAlezza("Quiero financiar un auto con mi DNI.", [
-    ["Vehículo", nombreAuto || null], ["Año", String(anio)], ["Precio", precio ? pesos(precio) : null],
-    ["A financiar", p ? pesos(p.financiado) : null], ["Plazo", p ? `${p.meses} meses` : null], ["Cuota estimada", p?.cuota ? pesos(p.cuota) : null],
-  ]));
+  const consulta = contacto("financiacion", p ? [nombreAuto, `${pesos(p.financiado)} en ${p.meses} meses`].filter(Boolean).join(" · ") : nombreAuto);
 
   return (
     <main className="lp min-h-screen">
@@ -109,7 +107,7 @@ export default function Financiacion() {
             <div className="paso-aparece grid gap-4">
               <h2 className="text-2xl font-bold">¡Listo! Recibimos tu solicitud.</h2>
               <p className="text-gray-600">La cargamos en CreditCar y te escribimos por WhatsApp con la respuesta.</p>
-              <a href={resumenWa} target="_blank" rel="noopener noreferrer" className="justify-self-start rounded-md bg-[var(--tinta)] px-5 py-2.5 text-sm font-semibold text-white">Escribirnos por WhatsApp</a>
+              <a href={consulta} className="justify-self-start text-sm underline">¿Alguna duda? Contacto</a>
             </div>
           ) : (
             <form onSubmit={pedir} className="grid gap-4">
