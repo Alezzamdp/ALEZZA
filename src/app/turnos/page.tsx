@@ -37,6 +37,9 @@ export default function PedirTurno() {
       if (d.error) { setCerrado(true); return; }
       setDias((d.data ?? []) as { fecha: string; libres: number }[]);
       if (c.data?.value) setConfig({ ...CONFIG_INICIAL, ...(c.data.value as Partial<TurnosConfig>) });
+      // Desde Inicio o Servicios se llega con el plan ya elegido (/turnos?servicio=lavado); solo se aceptan los conocidos.
+      const pedido = new URLSearchParams(window.location.search).get("servicio");
+      if (pedido && Object.hasOwn(SERVICIOS, pedido)) setServicio((s) => s ?? (pedido as Servicio));
     });
   }, []);
 

@@ -1,122 +1,83 @@
 import Link from "next/link";
-import StockVehiculos, { getPublicEmailUrl, readPublicProfile } from "@/components/StockVehiculos";
-import { supabase } from "@/lib/supabase";
-import { getWhatsAppUrl } from "@/lib/whatsapp";
-import { mensajeAlezza } from "@/lib/turnos";
-import Logo from "@/components/Logo";
+import { SitioCabecera, SitioPie } from "@/components/SitioMarco";
+import { WA_AGENCIA, WA_CONSULTA, datosSitio, externo } from "@/lib/sitio";
+import { PLANES, SERVICIOS, precioPlan } from "@/lib/turnos";
 
 export const dynamic = "force-dynamic";
 
-// Landing de ALEZZA: blanco y negro, poco texto, tres puertas (catálogo, permutas/financiación, servicios).
-// Estilos en globals.css (.lp): animaciones cortas y suaves, se apagan con "reducir movimiento".
+// Inicio de ALEZZA: una sola pantalla en escritorio, sin scroll. Propuesta a la izquierda,
+// los cuatro servicios a la derecha y los planes de estética abajo; cada bloque con su acción.
+// Estilos en globals.css (.lp).
 
-const puertas = [
+const servicios = [
   { t: "Catálogo", d: "Unidades revisadas, listas para ver.", u: "/vehiculos", cta: "Ver unidades" },
-  { t: "Permutas y financiación", d: "Tasá tu auto y calculá las cuotas en pesos.", u: "/simulador", cta: "Tasar mi auto" },
-  { t: "Servicios", d: "Estética y preparación, con turno online.", u: "/servicios", cta: "Ver servicios" },
-];
-
-const pasos = [
-  { t: "Elegís", d: "Una unidad del catálogo." },
-  { t: "Tasamos", d: "Tu auto, con referencias reales." },
-  { t: "Cerramos", d: "Entrega y cuotas, confirmadas por una persona." },
+  { t: "Permutas", d: "Tasación con referencias reales de mercado.", u: "/simulador", cta: "Tasar mi auto" },
+  { t: "Financiación", d: "Cuotas en pesos, confirmadas por una persona.", u: "/financiacion", cta: "Calcular cuotas" },
+  { t: "Estética", d: "Preparación de unidades, con turno online.", u: "/servicios", cta: "Ver servicios" },
 ];
 
 export default async function Home() {
-  const { data } = await supabase.from("app_settings").select("value").eq("key", "public_profile").maybeSingle();
-  const perfil = readPublicProfile(data?.value);
-  const whatsapp = perfil.whatsapp
-    ? getWhatsAppUrl(perfil.whatsapp, mensajeAlezza("Quiero hacer una consulta.", [["Vehículo", "(marca, modelo y año)"]]))
-    : null;
-  const contacto = whatsapp ?? (perfil.email ? getPublicEmailUrl(perfil.email) : null);
+  const { perfil, config } = await datosSitio();
   const ubicacion = perfil.location || "Mar del Plata, Argentina";
 
   return (
-    <main className="lp">
-      <header className="lp-header">
-        <div className="lp-wrap lp-header-in">
-          <Link href="/" aria-label="ALEZZA - Inicio"><Logo alto={20} /></Link>
-          <nav className="lp-nav" aria-label="Secciones">
-            <Link href="/vehiculos">Catálogo</Link>
-            <Link href="/servicios">Servicios</Link>
-          </nav>
-          {contacto && (
-            <a href={contacto} target={whatsapp ? "_blank" : undefined} rel={whatsapp ? "noreferrer" : undefined} className="lp-btn lp-btn-sm">
-              Contacto
-            </a>
-          )}
-        </div>
-      </header>
+    <main className="lp lp-pantalla">
+      <SitioCabecera />
 
-      <section className="lp-hero">
-        <div className="lp-wrap lp-hero-in">
-          <p className="lp-kicker lp-in" style={{ animationDelay: "100ms" }}>ALEZZA · {ubicacion}</p>
-          <h1 className="lp-in" style={{ animationDelay: "200ms" }}>Autos seleccionados.<br />Operaciones claras.</h1>
-          <p className="lp-lead lp-in" style={{ animationDelay: "360ms" }}>
-            Compra, venta y permuta con tasación real y financiación en pesos. Cada operación la acompaña una persona.
-          </p>
-          <div className="lp-acciones lp-in" style={{ animationDelay: "480ms" }}>
-            <Link href="/vehiculos" className="lp-btn">Ver catálogo</Link>
-            <Link href="/simulador" className="lp-btn lp-btn-linea">Tasar mi auto</Link>
+      <div className="lp-wrap lp-main">
+        <div className="lp-dos">
+          <section>
+            <p className="lp-kicker lp-in">Asesoría automotor integral · Mar del Plata</p>
+            <h1 className="lp-in" style={{ animationDelay: "80ms" }}>Autos seleccionados.<br />Operaciones claras.</h1>
+            <p className="lp-lead lp-in" style={{ animationDelay: "160ms" }}>
+              Compra, venta, permuta y preparación de unidades para particulares, vendedores y agencias. Cada operación la acompaña una persona.
+            </p>
+            <div className="lp-acciones lp-in" style={{ animationDelay: "240ms" }}>
+              <Link href="/vehiculos" className="lp-btn">Ver catálogo</Link>
+              <a href={WA_CONSULTA} {...externo} className="lp-btn lp-btn-linea">Escribir por WhatsApp</a>
+            </div>
+          </section>
+
+          <nav className="lp-lista lp-in" style={{ animationDelay: "200ms" }} aria-label="Servicios">
+            {servicios.map((s, i) => (
+              <Link key={s.u} href={s.u} className="lp-fila">
+                <span className="lp-num">{String(i + 1).padStart(2, "0")}</span>
+                <span>
+                  <h2>{s.t}</h2>
+                  <p>{s.d}</p>
+                </span>
+                <span className="lp-ir">{s.cta} <span aria-hidden>→</span></span>
+              </Link>
+            ))}
+          </nav>
+        </div>
+
+        <section className="lp-in" style={{ animationDelay: "320ms" }} aria-labelledby="estetica">
+          <div className="lp-titulo">
+            <h2 id="estetica" className="lp-kicker">Estética · precios en pesos</h2>
+            <Link href="/servicios" className="lp-ir">Qué incluye cada plan <span aria-hidden>→</span></Link>
           </div>
-        </div>
-        <span className="lp-cue lp-in" style={{ animationDelay: "900ms" }} aria-hidden />
-      </section>
+          <div className="lp-planes">
+            {PLANES.map((p) => {
+              const agencia = p.k === "agencia";
+              return (
+                <a key={p.k} href={agencia ? WA_AGENCIA : `/turnos?servicio=${p.k}`} {...(agencia ? externo : {})} className="lp-plan">
+                  <span>
+                    <h3>{SERVICIOS[p.k]}</h3>
+                    <p>{p.d}</p>
+                  </span>
+                  <span className="lp-plan-der">
+                    <span className="lp-precio">{precioPlan(config, p.k)}</span>
+                    <span className="lp-ir">{agencia ? "Coordinar" : "Pedir turno"} <span aria-hidden>→</span></span>
+                  </span>
+                </a>
+              );
+            })}
+          </div>
+        </section>
+      </div>
 
-      <section className="lp-wrap lp-puertas" aria-label="Qué podés hacer">
-        {puertas.map((p, i) => (
-          <Link key={p.u} href={p.u} className="lp-card lp-in" style={{ animationDelay: `${600 + i * 80}ms` }}>
-            <span className="lp-num">{String(i + 1).padStart(2, "0")}</span>
-            <h2>{p.t}</h2>
-            <p>{p.d}</p>
-            <span className="lp-card-cta">{p.cta} <span aria-hidden>→</span></span>
-          </Link>
-        ))}
-      </section>
-
-      <StockVehiculos publicProfile={perfil} limite={3} />
-
-      <section className="lp-wrap lp-seccion">
-        <p className="lp-kicker">Cómo trabajamos</p>
-        <ol className="lp-pasos">
-          {pasos.map((p, i) => (
-            <li key={p.t}>
-              <span className="lp-num">{String(i + 1).padStart(2, "0")}</span>
-              <h3>{p.t}</h3>
-              <p>{p.d}</p>
-            </li>
-          ))}
-        </ol>
-      </section>
-
-      <section className="lp-wrap lp-seccion lp-contacto">
-        <div>
-          <h2>Hablemos de tu próxima operación.</h2>
-          <p>{ubicacion}</p>
-          {perfil.business_hours && <p className="whitespace-pre-line">{perfil.business_hours}</p>}
-        </div>
-        <div className="lp-acciones">
-          {contacto && (
-            <a href={contacto} target={whatsapp ? "_blank" : undefined} rel={whatsapp ? "noreferrer" : undefined} className="lp-btn">
-              {whatsapp ? "Escribir por WhatsApp" : "Enviar correo"}
-            </a>
-          )}
-          <Link href="/turnos" className="lp-btn lp-btn-linea">Pedir turno</Link>
-        </div>
-      </section>
-
-      <footer className="lp-footer">
-        <div className="lp-wrap lp-footer-in">
-          <Logo alto={16} />
-          <nav aria-label="Pie">
-            <Link href="/vehiculos">Catálogo</Link>
-            <Link href="/simulador">Permutas</Link>
-            <Link href="/financiacion">Financiación</Link>
-            <Link href="/servicios">Servicios</Link>
-          </nav>
-          <p>© ALEZZA · {ubicacion}</p>
-        </div>
-      </footer>
+      <SitioPie ubicacion={ubicacion} horario={perfil.business_hours} />
     </main>
   );
 }

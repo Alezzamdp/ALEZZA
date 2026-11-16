@@ -11,7 +11,7 @@ Estado al 2026-11-15. La fuente de verdad de los registros DNS es Vercel (`get_d
 | Dominio | `alezza.com.ar` y `www.alezza.com.ar` ya están agregados al proyecto en Vercel. `www` redirige a apex con 308. |
 | DNS | **Falta.** `alezza.com.ar` hoy no resuelve (NXDOMAIN) porque NIC.ar no lo tiene delegado. |
 | SSL | Lo emite Vercel en forma automática cuando el DNS apunte bien. |
-| Headers de seguridad | En `next.config.ts`, verificados en producción: HSTS de 1 año, CSP (frame-ancestors/base-uri/form-action/object-src), X-Frame-Options DENY, nosniff, Referrer-Policy y Permissions-Policy. |
+| Headers de seguridad | En `next.config.ts`: HSTS de 2 años, CSP completa (scripts propios, conexiones solo al sitio y a Supabase, sin iframes), X-Frame-Options DENY, nosniff, COOP, Referrer-Policy y Permissions-Policy. `X-Robots-Tag: noindex` en /admin, /os, /api, /turnos/[token] y /seguimiento. Si se suma un servicio externo que el navegador llame directo, hay que agregarlo a `connect-src`. |
 | Sitio viejo | https://alezzamdp.github.io/ALEZZA/ (GitHub Pages). Sus og:url apuntan a `alezzamdp.com`, que no existe. |
 
 ## Pasos para activar el dominio (requieren al usuario)

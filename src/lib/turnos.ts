@@ -2,9 +2,10 @@
 // Tablas y funciones: supabase/migrations/202611150001_turnos_taller.sql
 
 export const SERVICIOS = {
-  lavado: "Lavado técnico",
-  puesta: "Puesta en valor",
-  agencia: "Plan agencia",
+  // Las claves (lavado, puesta, agencia) son las de la base; solo cambia el nombre que se muestra.
+  lavado: "Preparación base",
+  puesta: "Preparación integral",
+  agencia: "Agencias",
   otro: "Otro / a definir",
 } as const;
 export type Servicio = keyof typeof SERVICIOS;
@@ -34,7 +35,7 @@ export type TurnosConfig = {
 
 export const CONFIG_INICIAL: TurnosConfig = {
   dias: [1, 2, 3, 4, 5], cupo: 2, sena: 30000, porcentaje_sena: 50,
-  precios: { lavado: 100000, puesta: 250000 }, anticipacion: 1, horizonte: 45, alias: "", cbu: "", titular: "",
+  precios: { lavado: 60000, puesta: 250000 }, anticipacion: 1, horizonte: 45, alias: "", cbu: "", titular: "",
 };
 
 // Misma cuenta que private.precio_turno y pedir_turno en la base (la base es la que manda).
@@ -46,6 +47,19 @@ export function calcularPrecio(c: TurnosConfig, servicio: Servicio, extras: Extr
 export function calcularSena(c: TurnosConfig, precio: number | null) {
   return precio === null ? c.sena : Math.round((precio * c.porcentaje_sena) / 100);
 }
+
+// Planes de estética que se muestran en el Inicio y en /servicios. El precio sale de la configuración
+// (el mismo que cobra pedir_turno); sin precio cargado se muestra "A convenir".
+export const PLANES: { k: Exclude<Servicio, "otro">; para: string; d: string; items: string[] }[] = [
+  { k: "lavado", para: "Particulares y vendedores", d: "Lavado detallado y técnico.",
+    items: ["Lavado exterior detallado", "Interior, tablero y plásticos", "Lista para fotos de publicación"] },
+  { k: "puesta", para: "La unidad lista para vender", d: "Barniz, motor e interior.",
+    items: ["Abrillantado de barniz", "Acondicionado de vano motor", "Saneamiento de habitáculo"] },
+  { k: "agencia", para: "Agencias y flotas", d: "Preparación de stock por volumen.",
+    items: ["Tarifa por volumen", "Turnos por lote, con prioridad", "Mismo estándar en todo el stock"] },
+];
+export const precioPlan = (c: TurnosConfig, k: Servicio) =>
+  Number(c.precios[k]) > 0 ? pesos(Number(c.precios[k])) : "A convenir";
 
 export type Avance = {
   numero: number; estado: EstadoOrden; updated_at: string; vehiculo: string | null; patente: string | null;

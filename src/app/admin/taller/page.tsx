@@ -262,7 +262,7 @@ function Editor({ inicial, alCerrar }: { inicial: Borrador; alCerrar: () => void
         </div>
         <div className="mt-3 flex flex-wrap gap-2">
           <button onClick={() => set("trabajos", [...o.trabajos, { t: "", precio: null, hecho: false }])} className={ui.botonSuave}>+ Trabajo</button>
-          {["Abrillantado de barniz", "Acondicionado de vano motor", "Saneamiento de habitáculo", "Lavado técnico"].map((s) => (
+          {["Abrillantado de barniz", "Acondicionado de vano motor", "Saneamiento de habitáculo", "Preparación base"].map((s) => (
             <button key={s} onClick={() => set("trabajos", [...o.trabajos, { t: s, precio: null, hecho: false }])} className={`${ui.botonSuave} text-xs`}>+ {s}</button>
           ))}
         </div>

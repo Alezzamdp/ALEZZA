@@ -29,13 +29,11 @@ export default function Catalogo() {
   if (!items.length) return null;
 
   return (
-    <section className="mx-auto max-w-6xl px-6 py-12">
-      <h2 className="text-2xl font-bold">Antes y después <span className="font-mono text-sm font-normal text-gray-500">trabajos reales del taller</span></h2>
-      <div className="mt-6">
-        <Carrusel etiqueta="Trabajos antes y después">
-          {items.map((t) => <Comparador key={t.id} {...t} />)}
-        </Carrusel>
-      </div>
+    <section className="lp-wrap lp-seccion">
+      <h2>Antes y después</h2>
+      <Carrusel etiqueta="Trabajos antes y después">
+        {items.map((t) => <Comparador key={t.id} {...t} />)}
+      </Carrusel>
     </section>
   );
 }
@@ -53,7 +51,7 @@ function Comparador({ titulo, trabajos, antes, despues }: Tarjeta) {
           <span className="absolute left-1/2 top-1/2 grid h-8 w-8 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-[#17150f] text-xs text-[#f3efe6]">⇆</span>
         </span>
         <span className="pointer-events-none absolute left-2 top-2 rounded bg-black/65 px-2 py-0.5 font-mono text-[11px] uppercase tracking-wider text-[#f3efe6]">Antes</span>
-        <span className="pointer-events-none absolute right-2 top-2 rounded bg-[#d4a017] px-2 py-0.5 font-mono text-[11px] uppercase tracking-wider text-[#17150f]">Después</span>
+        <span className="pointer-events-none absolute right-2 top-2 rounded bg-white px-2 py-0.5 font-mono text-[11px] uppercase tracking-wider text-black">Después</span>
         <input type="range" min={0} max={100} value={p} onChange={(e) => setP(Number(e.target.value))} aria-label={`Comparar antes y después: ${titulo}`}
           className="absolute inset-0 h-full w-full cursor-ew-resize opacity-0" />
       </div>

@@ -11,8 +11,8 @@ const body = DM_Sans({ subsets: ["latin"], weight: ["400", "500", "700"], variab
 const mono = IBM_Plex_Mono({ subsets: ["latin"], weight: ["400", "500"], variable: "--f-mono" });
 
 export const metadata: Metadata = {
-  title: "ALEZZA | Catálogo de vehículos",
-  description: "Administración del catálogo de vehículos de ALEZZA.",
+  title: "ALEZZA — Asesoría automotor integral · Mar del Plata",
+  description: "Compra, venta y permuta de autos, financiación en pesos y estética automotriz para particulares, vendedores y agencias en Mar del Plata.",
   // Instalable en el iPhone desde cualquier portal (Compartir → Agregar a inicio): abre BRUNO OS a pantalla completa.
   manifest: "/os/manifest.json",
   icons: { apple: "/os/icon-180.png" },
