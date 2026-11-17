@@ -3,9 +3,9 @@ import { SITIO } from "@/lib/contacto";
 
 // Solo las páginas públicas; gestión y enlaces personales quedan afuera (ver robots.ts).
 export default function sitemap(): MetadataRoute.Sitemap {
-  return ["", "/vehiculos", "/financiacion", "/servicios", "/turnos", "/contacto"].map((ruta) => ({
+  return ["", "/turnos", "/contacto"].map((ruta) => ({
     url: SITIO + ruta,
-    changeFrequency: ruta === "/vehiculos" ? "daily" : "weekly",
+    changeFrequency: "weekly" as const,
     priority: ruta === "" ? 1 : 0.8,
   }));
 }

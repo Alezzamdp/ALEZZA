@@ -7,10 +7,11 @@ export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Contacto · ALEZZA",
-  description: "Escribinos por WhatsApp o Instagram. Asesoría automotor integral en Mar del Plata.",
+  description: "Escribinos por WhatsApp o Instagram: turnos de estética vehicular y alianzas con agencias en Mar del Plata.",
 };
 
-const ELEGIBLES: Tema[] = ["asesoria", "compra", "permuta", "financiacion", "estetica", "gestoria", "talleres", "agencia"];
+// Por ahora el sitio es solo ALEZZA DETAIL: se ofrecen los temas del taller y de las agencias.
+const ELEGIBLES: Tema[] = ["estetica", "agencia", "turno", "consulta"];
 
 // Único apartado de contacto del sitio: WhatsApp e Instagram. El resto de las páginas enlaza acá con
 // /contacto?tema=…, y el mensaje de WhatsApp ya sale armado para ese tema.

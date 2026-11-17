@@ -8,7 +8,7 @@ import { SitioCabecera, SitioPie } from "@/components/SitioMarco";
 import { contacto } from "@/lib/contacto";
 import { supabase } from "@/lib/supabase";
 import {
-  CONFIG_INICIAL, DETALLE_EXTRAS, ELEGILO_SI, EXTRAS, SERVICIOS, calcularPrecio, calcularSena, normalizarPatente, pesos, servicioTexto,
+  CONFIG_INICIAL, DETALLE_EXTRAS, ELEGILO_SI, ETAPAS_INTEGRAL, EXTRAS, SERVICIOS, ahorroIntegral, calcularPrecio, calcularSena, normalizarPatente, pesos, servicioTexto,
   type Extra, type Servicio, type TurnosConfig,
 } from "@/lib/turnos";
 
@@ -18,7 +18,7 @@ const titulo = "mb-3 flex items-baseline gap-3 text-lg font-bold";
 const DATOS = ["nombre", "whatsapp", "patente", "vehiculo", "direccion", "notas"] as const;
 type Datos = Record<(typeof DATOS)[number], string>;
 const VACIO: Datos = { nombre: "", whatsapp: "", patente: "", vehiculo: "", direccion: "", notas: "" };
-const PLANES_TURNO = ["lavado", "puesta"] as const;
+const PLANES_TURNO = ["puesta", "lavado"] as const; // la integral va primero y viene elegida: es la recomendada
 const RECORDAR = "alezza-turno-datos"; // nombre, WhatsApp, patente y vehículo quedan en este dispositivo para el próximo turno
 
 // Pedido de turno en una sola pantalla: qué necesita el auto (cada opción dice cuándo elegirla), qué día y los datos.
@@ -46,9 +46,11 @@ export default function PedirTurno() {
       // Desde Inicio o Servicios se llega con el plan ya elegido (/turnos?servicio=lavado); solo se aceptan los conocidos.
       const q = new URLSearchParams(window.location.search);
       const pedido = q.get("servicio");
-      if (pedido && (PLANES_TURNO as readonly string[]).includes(pedido)) setServicio((s) => s ?? (pedido as Servicio));
+      const plan = pedido && (PLANES_TURNO as readonly string[]).includes(pedido) ? (pedido as Servicio) : null;
       const extra = q.get("extra");
-      if (extra && Object.hasOwn(EXTRAS, extra)) { setServicio((s) => s ?? "otro"); setExtras((x) => (x.length ? x : [extra as Extra])); }
+      const suelto = extra && Object.hasOwn(EXTRAS, extra) ? (extra as Extra) : null;
+      if (suelto) { setServicio((s) => s ?? "otro"); setExtras((x) => (x.length ? x : [suelto])); }
+      else setServicio((s) => s ?? plan ?? "puesta"); // sin pedido concreto, viene elegida la integral
       try {
         const guardado = JSON.parse(localStorage.getItem(RECORDAR) ?? "null") as Partial<Datos> | null;
         if (guardado && typeof guardado === "object") {
@@ -65,6 +67,10 @@ export default function PedirTurno() {
   const fmtDia = (iso: string, o: Intl.DateTimeFormatOptions) => new Intl.DateTimeFormat("es-AR", { ...o, timeZone: "UTC" }).format(new Date(iso + "T00:00:00Z"));
   const precioDe = (k: Servicio | Extra) => (Number(config.precios[k]) > 0 ? pesos(Number(config.precios[k])) : "a cotizar");
   const falta = !conServicio ? "Elegí qué necesita tu auto" : !fecha ? "Elegí un día" : "";
+  const ahorro = ahorroIntegral(config);
+  // Con dos o más de las tres etapas de la integral por separado, la integral es la mejor cuenta: se lo decimos.
+  const enIntegral = extras.filter((x) => ETAPAS_INTEGRAL.some(([k]) => k === x));
+  const sugerirIntegral = servicio === "otro" && enIntegral.length >= 2 && Number(config.precios.puesta) > 0;
 
   function elegirPlan(s: Servicio) {
     setServicio(servicio === s ? null : s);
@@ -117,9 +123,13 @@ export default function PedirTurno() {
               <legend className={titulo}><span className="lp-num">01</span>¿Qué necesita tu auto?</legend>
               <div className="grid gap-2">
                 {PLANES_TURNO.map((s) => (
-                  <button key={s} type="button" aria-pressed={servicio === s} onClick={() => elegirPlan(s)} className="tu-op">
+                  <button key={s} type="button" aria-pressed={servicio === s} onClick={() => elegirPlan(s)} className={`tu-op${s === "puesta" ? " tu-op-top" : ""}`}>
                     <span className="tu-marca" aria-hidden>✓</span>
-                    <span><b>{SERVICIOS[s]}</b><small>Elegilo si: {ELEGILO_SI[s].charAt(0).toLowerCase() + ELEGILO_SI[s].slice(1)}</small></span>
+                    <span>
+                      <b>{SERVICIOS[s]}{s === "puesta" && <em className="tu-recomendada">Recomendada</em>}</b>
+                      <small>Elegilo si: {ELEGILO_SI[s].charAt(0).toLowerCase() + ELEGILO_SI[s].slice(1)}</small>
+                      {s === "puesta" && ahorro !== null && <small className="tu-ahorro">Incluye barniz, motor e interior: ahorrás {pesos(ahorro)} frente a contratarlos por separado.</small>}
+                    </span>
                     <span className="lp-precio">{precioDe(s)}</span>
                   </button>
                 ))}
@@ -134,8 +144,17 @@ export default function PedirTurno() {
                   </button>
                 ))}
               </div>
+              {sugerirIntegral && (
+                <div className="tu-sugerencia paso-aparece" role="status">
+                  <p>
+                    Elegiste {enIntegral.length} de las 3 etapas de la Preparación integral. Con la integral tenés las tres por <b>{precioDe("puesta")}</b>
+                    {ahorro !== null && <> (ahorrás {pesos(ahorro)} frente a las tres por separado)</>}.
+                  </p>
+                  <button type="button" onClick={() => elegirPlan("puesta")} className="lp-btn lp-btn-sm">Pasar a la integral</button>
+                </div>
+              )}
               <p className="mt-3 text-sm text-gray-500">
-                ¿No sabés cuál? <Link href="/servicios#elegir" className="underline">Mirá la guía</Link>. ¿Sos agencia? <Link href={contacto("agencia")} className="underline">Coordinamos por lote</Link>.
+                ¿No sabés cuál? <Link href="/#servicios" className="underline">Mirá la guía</Link>. ¿Sos agencia? <Link href={contacto("agencia")} className="underline">Coordinamos por lote</Link>.
               </p>
             </fieldset>
 
@@ -194,6 +213,7 @@ export default function PedirTurno() {
                     <p className="mt-0.5 font-mono text-sm">
                       {precio !== null ? <>Total {pesos(precio)} · </> : <>Precio a cotizar · </>}
                       <b>Seña {pesos(sena)}</b>
+                      {servicio === "puesta" && ahorro !== null && <> · Ahorrás {pesos(ahorro)}</>}
                     </p>
                   )}
                 </div>

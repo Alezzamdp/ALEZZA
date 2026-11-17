@@ -17,7 +17,7 @@ export const TEMAS = {
   financiacion: { t: "Financiación", pedido: "Quiero consultar por una financiación.", datos: ["Vehículo", "Monto a financiar"] },
   estetica: { t: "Estética vehicular", pedido: "Quiero consultar por un servicio de estética.", datos: ["Vehículo", "Qué le quiero hacer"] },
   turno: { t: "Mi turno o mi auto en el taller", pedido: "Tengo una consulta sobre mi turno.", datos: [] },
-  agencia: { t: "Agencias y flotas", pedido: "Soy de una agencia y quiero coordinar la preparación de unidades.", datos: ["Agencia", "Unidades por mes"] },
+  agencia: { t: "Alianza para agencias", pedido: "Soy de una agencia y quiero coordinar una alianza para preparar nuestras unidades.", datos: ["Agencia", "Unidades por mes", "Qué necesitan las unidades"] },
   gestoria: { t: "Gestoría", pedido: "Necesito hacer un trámite del automotor.", datos: ["Trámite", "Vehículo"] },
   talleres: { t: "Talleres de confianza", pedido: "Necesito que me recomienden un taller.", datos: ["Qué le pasa al auto", "Vehículo"] },
 } as const;

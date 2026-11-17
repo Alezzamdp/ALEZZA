@@ -3,7 +3,7 @@
 import { type ReactNode, useEffect, useRef } from "react";
 
 // Hace aparecer su contenido cuando entra en pantalla (clase .rv → .rv-visto, en globals.css).
-export default function Revelar({ children, className = "", como: Como = "div" }: { children: ReactNode; className?: string; como?: "div" | "section" | "li" | "article" }) {
+export default function Revelar({ children, className = "", como: Como = "div", "aria-label": etiqueta }: { children: ReactNode; className?: string; como?: "div" | "section" | "li" | "article" | "ol"; "aria-label"?: string }) {
   const ref = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
@@ -17,5 +17,5 @@ export default function Revelar({ children, className = "", como: Como = "div" }
     return () => io.disconnect();
   }, []);
 
-  return <Como ref={ref as never} className={`rv ${className}`}>{children}</Como>;
+  return <Como ref={ref as never} className={`rv ${className}`} aria-label={etiqueta}>{children}</Como>;
 }

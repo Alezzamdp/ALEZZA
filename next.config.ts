@@ -29,9 +29,10 @@ const noIndexar = [{ key: "X-Robots-Tag", value: "noindex, nofollow, noarchive" 
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
-  // Permutas está fuera del sitio por ahora: el portal /simulador no se muestra (el código se conserva).
+  // El sitio público es hoy solo ALEZZA DETAIL (estética vehicular y alianzas con agencias): los demás portales
+  // (permutas, catálogo, financiación, consultas y la página vieja de servicios) no se muestran; el código se conserva.
   async redirects() {
-    return [{ source: "/simulador", destination: "/", permanent: false }];
+    return ["/simulador", "/vehiculos", "/financiacion", "/consultar", "/servicios"].map((source) => ({ source, destination: "/", permanent: false }));
   },
   async headers() {
     return [

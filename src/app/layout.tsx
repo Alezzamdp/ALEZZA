@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { DM_Sans, IBM_Plex_Mono, Unbounded } from "next/font/google";
 import Arranque from "@/components/Arranque";
+import FondoPixeles from "@/components/FondoPixeles";
 import PortalBar from "@/components/PortalBar";
 import { SCRIPT_TEMA } from "@/lib/tema";
 import "./globals.css";
@@ -13,8 +14,8 @@ const mono = IBM_Plex_Mono({ subsets: ["latin"], weight: ["400", "500"], variabl
 export const metadata: Metadata = {
   metadataBase: new URL("https://alezza.com.ar"),
   openGraph: { siteName: "ALEZZA", locale: "es_AR", type: "website" },
-  title: "ALEZZA — Asesoría automotor integral · Mar del Plata",
-  description: "Todo lo de tu auto en un solo lugar: compra y venta, permutas, financiación, estética vehicular, gestoría y talleres de confianza en Mar del Plata.",
+  title: "ALEZZA DETAIL — Estética vehicular y preparación de unidades · Mar del Plata",
+  description: "Taller de detail en Mar del Plata: preparación de autos para vender mejor y alianzas con agencias para preparar su stock. Turno online.",
   formatDetection: { telephone: false },
 };
 
@@ -39,6 +40,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="min-h-full flex flex-col font-sans">
         <Arranque />
         <PortalBar />
+        <FondoPixeles />
         {children}
       </body>
     </html>

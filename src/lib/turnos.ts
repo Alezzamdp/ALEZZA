@@ -98,7 +98,40 @@ export const ELEGILO_SI: Record<Exclude<Servicio, "otro"> | Extra, string> = {
   pulido2: "Tiene rayones finos, marcas de lavado u opacidad que no sale lavando.",
 };
 
-export const precioPlan =(c: TurnosConfig, k: Servicio | Extra) =>
+// Problema que resuelve cada plan y qué se lleva el cliente (lo que se lee en la web antes de elegir).
+export const CASOS: Record<Exclude<Servicio, "otro">, { problema: string; resultado: string }> = {
+  lavado: {
+    problema: "Tu auto está sucio del uso y las fotos no lo muestran como es.",
+    resultado: "Limpio de verdad, por fuera y por dentro, listo para las fotos de la publicación.",
+  },
+  puesta: {
+    problema: "Querés vender y el auto se ve más viejo de lo que es: pintura opaca, motor sucio, interior gastado.",
+    resultado: "Se ve cuidado de punta a punta: mejor primera impresión y más fácil sostener el precio.",
+  },
+  agencia: {
+    problema: "Tenés stock que rota lento y cada unidad sale con una terminación distinta, o sin preparar.",
+    resultado: "Todo el stock con el mismo estándar y listo para publicar, sin coordinar unidad por unidad.",
+  },
+};
+
+// La Preparación integral equivale a estas tres etapas contratadas por separado (barniz, motor, habitáculo).
+export const ETAPAS_INTEGRAL: [Extra, string][] = [
+  ["pulido2", "Abrillantado de barniz"],
+  ["motor", "Acondicionado de vano motor"],
+  ["interiores", "Saneamiento de habitáculo"],
+];
+// Lo que costarían las tres etapas por separado (con los precios de la configuración) y cuánto se ahorra con la integral.
+export function valorSeparado(c: TurnosConfig): number | null {
+  const precios = ETAPAS_INTEGRAL.map(([k]) => Number(c.precios[k]));
+  return precios.every((p) => p > 0) ? precios.reduce((a, b) => a + b, 0) : null;
+}
+export function ahorroIntegral(c: TurnosConfig): number | null {
+  const sep = valorSeparado(c);
+  const integral = Number(c.precios.puesta);
+  return sep !== null && integral > 0 && sep > integral ? sep - integral : null;
+}
+
+export const precioPlan = (c: TurnosConfig, k: Servicio | Extra) =>
   Number(c.precios[k]) > 0 ? pesos(Number(c.precios[k])) : "A convenir";
 
 export type Avance = {

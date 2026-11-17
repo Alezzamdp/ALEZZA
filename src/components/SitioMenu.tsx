@@ -11,9 +11,8 @@ import { externo } from "@/lib/contacto";
 
 const ITEMS = [
   { t: "Inicio", u: "/" },
-  { t: "Catálogo", u: "/vehiculos" },
-  { t: "Financiación", u: "/financiacion" },
-  { t: "Estética", u: "/servicios" },
+  { t: "Servicios", u: "/#servicios" },
+  { t: "Agencias", u: "/#agencias" },
   { t: "Pedir turno", u: "/turnos" },
   { t: "Contacto", u: "/contacto" },
 ];
@@ -61,7 +60,6 @@ export default function SitioMenu() {
         <div className="sm-contacto">
           <p>Taller ALEZZA DETAIL · Mar del Plata</p>
           <a href={TALLER.maps} {...externo}>Cómo llegar</a>
-          <Link href="/#servicios" onClick={() => setAbierto(false)}>Gestoría y talleres de confianza</Link>
         </div>
       </nav>
     </div>

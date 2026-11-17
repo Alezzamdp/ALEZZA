@@ -21,3 +21,10 @@ Asesoría automotor integral (no solo lavadero ni agencia): simulador de permuta
 ## Despliegue
 - Producción en Vercel (repo Alezzamdp/ALEZZA, rama master). Los Quick Tunnels de Cloudflare ya no se usan.
 - 2026-11-15: dominio oficial `alezza.com.ar`, con el apex como principal y `www` redirigiendo con 308. DNS en Cloudflare en modo DNS only, con SSL emitido por Vercel. Detalle y registros en `docs/infraestructura.md`.
+
+## Sitio público = solo ALEZZA DETAIL (2026-11-17)
+- El sitio es una sola página (/) de estética vehicular, pensada para vender el taller y buscar alianzas con agencias, más /turnos y /contacto.
+- Retirados por ahora (redirect a / en next.config.ts, el código se conserva): /simulador, /vehiculos, /financiacion, /consultar y /servicios. La visión de ecosistema (src/lib/ecosistema.ts) queda para cuando vuelvan.
+- Los precios destacan la Preparación integral como la mejor opción; el ahorro frente a las tres etapas por separado (barniz, motor, habitáculo) sale de los precios de la configuración (valorSeparado en src/lib/turnos.ts).
+- Google: solo se muestran las cinco estrellas (src/components/GoogleEstrellas.tsx), sin puntaje ni cantidad de reseñas.
+- Fondo de píxeles PixelBlast (React Bits) en todo el sitio público: src/components/PixelBlast.tsx y FondoPixeles.tsx.
