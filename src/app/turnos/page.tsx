@@ -68,7 +68,7 @@ export default function PedirTurno() {
   const precioDe = (k: Servicio | Extra) => (Number(config.precios[k]) > 0 ? pesos(Number(config.precios[k])) : "a cotizar");
   const falta = !conServicio ? "Elegí qué necesita tu auto" : !fecha ? "Elegí un día" : "";
   const ahorro = ahorroIntegral(config);
-  // Con dos o más de las tres etapas de la integral por separado, la integral es la mejor cuenta: se lo decimos.
+  // Con dos o más de los servicios que incluye la integral por separado, la integral es la mejor cuenta: se lo decimos.
   const enIntegral = extras.filter((x) => ETAPAS_INTEGRAL.some(([k]) => k === x));
   const sugerirIntegral = servicio === "otro" && enIntegral.length >= 2 && Number(config.precios.puesta) > 0;
 
@@ -147,8 +147,8 @@ export default function PedirTurno() {
               {sugerirIntegral && (
                 <div className="tu-sugerencia paso-aparece" role="status">
                   <p>
-                    Elegiste {enIntegral.length} de las 3 etapas de la Preparación integral. Con la integral tenés las tres por <b>{precioDe("puesta")}</b>
-                    {ahorro !== null && <> (ahorrás {pesos(ahorro)} frente a las tres por separado)</>}.
+                    Elegiste {enIntegral.length} de los {ETAPAS_INTEGRAL.length} servicios que incluye la Preparación integral. Con la integral tenés todos por <b>{precioDe("puesta")}</b>
+                    {ahorro !== null && <> (ahorrás {pesos(ahorro)} frente a contratarlos por separado)</>}.
                   </p>
                   <button type="button" onClick={() => elegirPlan("puesta")} className="lp-btn lp-btn-sm">Pasar a la integral</button>
                 </div>

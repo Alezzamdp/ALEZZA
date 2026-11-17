@@ -114,13 +114,15 @@ export const CASOS: Record<Exclude<Servicio, "otro">, { problema: string; result
   },
 };
 
-// La Preparación integral equivale a estas tres etapas contratadas por separado (barniz, motor, habitáculo).
+// La Preparación integral equivale a estos servicios contratados por separado: abrillantado de barniz (pulido en 1 paso),
+// vano motor y saneamiento de habitáculo (interiores y butacas). Confirmado por el dueño el 2026-11-17.
 export const ETAPAS_INTEGRAL: [Extra, string][] = [
-  ["pulido2", "Abrillantado de barniz"],
+  ["pulido1", "Abrillantado de barniz"],
   ["motor", "Acondicionado de vano motor"],
-  ["interiores", "Saneamiento de habitáculo"],
+  ["interiores", "Saneamiento de habitáculo: interiores"],
+  ["butacas", "Saneamiento de habitáculo: butacas"],
 ];
-// Lo que costarían las tres etapas por separado (con los precios de la configuración) y cuánto se ahorra con la integral.
+// Lo que costarían esos servicios por separado (con los precios de la configuración) y cuánto se ahorra con la integral.
 export function valorSeparado(c: TurnosConfig): number | null {
   const precios = ETAPAS_INTEGRAL.map(([k]) => Number(c.precios[k]));
   return precios.every((p) => p > 0) ? precios.reduce((a, b) => a + b, 0) : null;

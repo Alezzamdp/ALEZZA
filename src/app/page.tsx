@@ -62,7 +62,7 @@ export default async function Home() {
               <ul className="lp-lista lp-guia">
                 <li>
                   <Link href="/turnos?servicio=puesta" className="lp-fila lp-fila-guia">
-                    <span><h2>“Voy a vender mi auto.”</h2><p>Preparación integral · la recomendada</p></span>
+                    <span><h2>“Voy a vender mi auto.”</h2><p>Preparación integral · {ahorro !== null ? `ahorrás ${pesos(ahorro)}` : "la recomendada"}</p></span>
                     <span className="lp-ir" aria-hidden><span>→</span></span>
                   </Link>
                 </li>
@@ -126,7 +126,7 @@ export default async function Home() {
               </span>
               <Link href={`/turnos?servicio=${integral.k}`} className="lp-btn">Pedir turno</Link>
             </div>
-            {ahorro !== null && <p className="lp-card-ahorro">Ahorrás {pesos(ahorro)} frente a contratar las tres etapas por separado.</p>}
+            {ahorro !== null && <p className="lp-card-ahorro">Ahorrás {pesos(ahorro)} frente a contratar esos servicios por separado.</p>}
           </Revelar>
 
           {/* Agencias */}
@@ -147,8 +147,8 @@ export default async function Home() {
           <Revelar className="lp-valor">
             <div>
               <p className="lp-kicker">Por qué la integral</p>
-              <h3>Tres etapas en un solo trabajo, por menos que por separado</h3>
-              <p>La {SERVICIOS.puesta} reúne lo que más cambia la primera impresión de un auto. Contratadas por separado, estas etapas costarían:</p>
+              <h3>Todo en un solo trabajo, por menos que por separado</h3>
+              <p>La {SERVICIOS.puesta} reúne lo que más cambia la primera impresión de un auto. Contratados por separado, estos servicios costarían:</p>
             </div>
             <table>
               <tbody>
@@ -157,6 +157,7 @@ export default async function Home() {
                 ))}
                 <tr className="lp-valor-suma"><th scope="row">Total por separado</th><td>{pesos(separado)}</td></tr>
                 <tr className="lp-valor-top"><th scope="row">{SERVICIOS.puesta}</th><td>{precioPlan(config, "puesta")}</td></tr>
+                {ahorro !== null && <tr className="lp-valor-ahorro"><th scope="row">Tu ahorro</th><td>{pesos(ahorro)}</td></tr>}
               </tbody>
             </table>
           </Revelar>
@@ -167,7 +168,7 @@ export default async function Home() {
       <section id="por-separado" className="lp-wrap lp-seccion">
         <p className="lp-kicker">Servicios por separado</p>
         <h2>Si necesitás una sola cosa</h2>
-        <p className="lp-intro">Cada servicio resuelve un problema puntual. Si necesitás más de uno, la integral suele salir menos.</p>
+        <p className="lp-intro">Cada servicio resuelve un problema puntual. Si necesitás más de uno, la integral suele salir menos{ahorro !== null && <>: ahorrás {pesos(ahorro)} frente a contratarlos por separado</>}.</p>
         <ul className="lp-lista">
           {(Object.keys(DETALLE_EXTRAS) as Extra[]).map((k, i) => (
             <Revelar key={k} como="li">

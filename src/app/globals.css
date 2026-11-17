@@ -509,3 +509,9 @@ a.lp-fila:hover { background: var(--lp-soft); }
 .tu-ahorro { color: var(--tinta); font-weight: 600; }
 .tu-sugerencia { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 16px; margin-top: 12px; padding: 14px 16px; border: 1px solid var(--tinta); border-radius: 14px; font-size: 14px; line-height: 1.45; }
 .tu-sugerencia p { flex: 1 1 260px; }
+
+/* Fila "Tu ahorro" de la tabla de valor de la integral. */
+.lp-valor tr.lp-valor-ahorro { border-bottom: 0; }
+.lp-valor-ahorro th, .lp-valor-ahorro td { padding: 12px 14px; background: var(--tinta); color: var(--papel); font-size: 16px; font-weight: 700; }
+.lp-valor-ahorro th { border-radius: 10px 0 0 10px; }
+.lp-valor-ahorro td { border-radius: 0 10px 10px 0; }
