@@ -185,7 +185,7 @@ body { padding-bottom: env(safe-area-inset-bottom, 0px); -webkit-tap-highlight-c
 
 /* ---------- Sitio público (todos los portales que ve el cliente): blanco, negro y grises neutros ---------- */
 .lp {
-  --papel: #ffffff; --tinta: #0a0a0a; --lp-mute: #6b6b6b; --lp-line: #e6e6e6; --lp-soft: #f5f5f5; --lp-capa: #b9b9b9;
+  --papel: #ffffff; --tinta: #0a0a0a; --lp-mute: #262626; --lp-line: #e6e6e6; --lp-soft: #f5f5f5; --lp-capa: #b9b9b9;
   --mostaza: #0a0a0a; --m50: #f6f6f6; --m100: #efefef; --m200: #e0e0e0; --m300: #c8c8c8; --m400: #8a8a8a; --m600: #404040; --m700: #6b6b6b; --m800: #171717; --m900: #0a0a0a;
   --color-white: #ffffff; --color-gray-50: #fafafa; --color-gray-100: #f4f4f4; --color-gray-200: #e8e8e8; --color-gray-300: #d4d4d4;
   --color-gray-400: #a3a3a3; --color-gray-500: #737373; --color-gray-600: #5c5c5c; --color-gray-700: #404040; --color-gray-800: #262626;
@@ -236,7 +236,7 @@ html[data-tema="oscuro"]:has(main.lp) body { background: #0a0a0a; }
 /* Cabecera: logo, acción y menú. Fondo liso (el menú usa capas fijas que cuelgan de acá). */
 .lp-header { position: sticky; top: 0; z-index: 50; border-bottom: 1px solid var(--lp-line); }
 /* El desenfoque va en un pseudo-elemento: un filtro en el propio encabezado volvería su contenedor al menú de capas fijas. */
-.lp-header::before { content: ""; position: absolute; inset: 0; z-index: -1; background: color-mix(in srgb, var(--papel) 80%, transparent); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
+.lp-header::before { content: ""; position: absolute; inset: 0; z-index: -1; background: color-mix(in srgb, var(--papel) 90%, transparent); }
 .lp-header-in { position: relative; z-index: 4; display: flex; align-items: center; justify-content: space-between; gap: 16px; height: 60px; }
 .lp-header-der { display: flex; align-items: center; gap: 20px; }
 
@@ -363,7 +363,7 @@ a.lp-fila:hover { background: var(--lp-soft); }
 /* Tarjetas y pie con fondo propio: el texto se lee limpio sobre los píxeles. */
 .lp-plan, .lp-ficha, .lp-detalle, .lp-canal, .lp-card, .lp-valor, .tu-op, .tu-dia { background: color-mix(in srgb, var(--papel) 82%, transparent); }
 .lp-canal-principal, .lp-card-top { background: var(--tinta); }
-.lp-footer { background: color-mix(in srgb, var(--papel) 80%, transparent); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+.lp-footer { background: color-mix(in srgb, var(--papel) 90%, transparent); }
 .lp-footer { border-top: 1px solid var(--lp-line); padding: 14px 0 calc(14px + env(safe-area-inset-bottom)); font-size: 13px; color: var(--lp-mute); }
 .lp-footer-in { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 24px; }
 .lp-footer nav { display: flex; flex-wrap: wrap; gap: 6px 24px; }
@@ -455,7 +455,10 @@ html { scroll-behavior: smooth; }
 :root .lp a:focus-visible, :root .lp button:focus-visible { outline-color: var(--rosa); }
 
 /* Fondo rosa: tenue y más apagado en el centro, donde está el texto. Además cada tarjeta lleva fondo negro sólido. */
-.fondo-pixeles { opacity: .4; -webkit-mask-image: radial-gradient(ellipse 75% 65% at 50% 45%, rgb(0 0 0 / .3), #000 100%); mask-image: radial-gradient(ellipse 75% 65% at 50% 45%, rgb(0 0 0 / .3), #000 100%); }
+.fondo-pixeles { opacity: .4; contain: strict; transform: translateZ(0); }
+/* Velo estático (no una máscara): apaga el centro, donde está el texto, sin obligar a recomponer el fondo animado en cada cuadro. */
+.fondo-pixeles::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse 75% 65% at 50% 45%, rgb(10 10 10 / .62), transparent 100%); }
+:root[data-tema="claro"] .fondo-pixeles::after { background: radial-gradient(ellipse 75% 65% at 50% 45%, rgb(255 255 255 / .62), transparent 100%); }
 @media (max-width: 720px) { .fondo-pixeles { opacity: .28; } }
 .lp :is(h1, h2, h3, p, li, summary, small) { text-shadow: 0 0 10px var(--papel), 0 0 2px var(--papel); }
 .lp-plan, .lp-ficha, .lp-detalle, .lp-canal, .lp-card, .lp-part, .lp-proceso li, .tu-op, .lp-sugerencia { background: var(--papel); text-shadow: none; }
@@ -593,7 +596,7 @@ html { scroll-behavior: smooth; }
 }
 .lp-barra { display: none; }
 @media (max-width: 719px) {
-  .lp-barra { position: fixed; left: 0; right: 0; bottom: 0; z-index: 40; display: grid; grid-template-columns: 1.15fr 1fr; gap: 10px; padding: 10px 16px calc(10px + env(safe-area-inset-bottom)); background: color-mix(in srgb, var(--papel) 92%, transparent); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); border-top: 1px solid var(--lp-line); }
+  .lp-barra { position: fixed; left: 0; right: 0; bottom: 0; z-index: 40; display: grid; grid-template-columns: 1.15fr 1fr; gap: 10px; padding: 10px 16px calc(10px + env(safe-area-inset-bottom)); background: color-mix(in srgb, var(--papel) 96%, transparent); border-top: 1px solid var(--lp-line); }
   .lp-barra .lp-btn { min-height: 48px; padding: 0 10px; font-size: 15px; flex: none; }
   .lp-con-barra .lp-footer { padding-bottom: calc(88px + env(safe-area-inset-bottom)); }
   .lp-header-in { height: 64px; }
@@ -611,3 +614,33 @@ html { scroll-behavior: smooth; }
 .lp-cifras span { font-size: 14px; color: var(--lp-mute); }
 .lp-persona .lp-acciones { margin-top: 4px; }
 @media (min-width: 760px) { .lp-persona { grid-template-columns: 280px minmax(0, 1fr); gap: 48px; justify-items: center; } .lp-persona-foto { width: 280px; } .lp-persona > div { justify-self: start; } }
+
+/* ===== Modo claro: todo el texto en negro (los grises de apoyo pasan a casi negro) ===== */
+.lp { --color-gray-400: #4a4a4a; --color-gray-500: #333333; --color-gray-600: #262626; --color-gray-700: #1a1a1a; --color-slate-500: #333333; --color-slate-600: #262626; }
+:root[data-tema="claro"] .lp-lead, :root[data-tema="claro"] .lp-persona-bio, :root[data-tema="claro"] .lp-intro { color: var(--tinta); }
+:root[data-tema="claro"] .lp-campo::placeholder { color: #595959; }
+:root[data-tema="claro"] .lp-por, :root[data-tema="claro"] .lp-estrellas { color: #262626; }
+
+/* ===== Fotos de detalle repartidas por la página (Particulares y Alianza) ===== */
+.lp-visual { margin: 0; }
+.lp-visual img { display: block; width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 18px; border: 1px solid var(--lp-line); }
+.lp-part { display: grid; gap: 22px; align-items: center; justify-content: stretch; }
+.lp-part-der { justify-items: start; }
+.lp-como { display: grid; gap: 28px; align-items: start; }
+@media (min-width: 760px) {
+  .lp-part { grid-template-columns: 240px minmax(0, 1fr) auto; gap: 36px; }
+  .lp-visual img { aspect-ratio: 4 / 5; }
+}
+@media (min-width: 900px) { .lp-como { grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr); gap: 44px; } }
+@media (min-width: 560px) { .lp-como .lp-proceso { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* ===== Animaciones de alta fluidez: solo transform y opacity, capas propias y nada que obligue a recalcular el diseño ===== */
+.ag-panel { contain: layout paint style; will-change: transform; }
+.ag-panel__media { will-change: transform; backface-visibility: hidden; }
+.lp-in, .lp-pal > span, .sm-capa, .sm-item-txt { will-change: transform, opacity; }
+.lp-btn, .tema-btn, .lp-tema, .tu-op, .lp-campo { transition-property: opacity, background-color, border-color, color, box-shadow, transform; }
+
+/* ===== Avisos de datos faltantes en los formularios ===== */
+.lp-campo[aria-invalid="true"] { border-color: var(--rosa); box-shadow: 0 0 0 3px color-mix(in srgb, var(--rosa) 22%, transparent); }
+.lp-campo-error { margin-top: 6px; font-size: 14px; font-weight: 650; line-height: 1.35; color: var(--rosa-txt); }
+.lp-enlace { font-weight: 700; text-decoration: underline; text-underline-offset: 3px; color: var(--rosa-txt); }

@@ -1,5 +1,5 @@
-// @ts-nocheck -- componente de React Bits (AccordionGallery); se agregan ariaLabel y carga diferida de imágenes. Abajo se exporta con tipos propios.
 /* eslint-disable */
+// @ts-nocheck -- componente de React Bits (AccordionGallery); se agregan ariaLabel y carga diferida de imágenes. Abajo se exporta con tipos propios.
 'use client';
 
 import { useRef, useEffect, useState, useCallback } from 'react';

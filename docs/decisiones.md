@@ -48,3 +48,10 @@ Asesoría automotor integral (no solo lavadero ni agencia): simulador de permuta
 
 ## Foto de la persona del taller (2026-11-19)
 - Bloque "Quién está detrás" en el Inicio (id equipo): foto de Bruno con marco redondo (public/fotos/bruno-2.webp, recorte cuadrado con el color de la web) y su bio. La bio y las cifras (+30 operaciones comerciales, +70 servicios) las dio Bruno el 2026-11-19; actualizarlas en src/app/page.tsx cuando cambien.
+
+## Fotos con cartel, detalles, avisos y fluidez (2026-11-19)
+- Mostrador con 7 unidades en 4:3, con el auto entero y el cartel de ALEZZA a la vista (Tracker, Vento, Passat CC x2, Suran, Partner, Gol Trend). La foto trasera del Vento blanco no se usa. Patentes difuminadas en las fotos originales antes del recorte.
+- Fotos de detalle (public/fotos/detalle-*.webp) repartidas: una en Particulares y otra en Alianza para agencias; para sumar más, usar la clase .lp-visual junto al bloque de texto.
+- Modo claro con texto negro (--lp-mute casi negro y grises de Tailwind oscurecidos en .lp).
+- Formularios: si faltan datos se avisa cuáles (aviso arriba y en cada campo, con foco en el primero); con todo completo se redirige a WhatsApp con el mensaje armado (y un enlace de respaldo).
+- Fluidez: fondo PixelBlast limitado a 30 cuadros (maxFps) y menor resolución, sin desenfoques de fondo (backdrop-filter) ni máscaras sobre el fondo animado, y paneles del mostrador aislados (contain). Medido en local: unos 97-99 fps al hacer scroll y al mover el mostrador.

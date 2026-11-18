@@ -1,5 +1,5 @@
-// @ts-nocheck -- componente de React Bits (PixelBlast) tal cual; abajo se exporta con tipos propios.
 /* eslint-disable */
+// @ts-nocheck -- componente de React Bits (PixelBlast) tal cual; abajo se exporta con tipos propios.
 'use client';
 
 import { useEffect, useRef, type CSSProperties } from 'react';
@@ -531,7 +531,8 @@ const PixelBlast = ({
   intro = true,
   variation,
   lightMode = false,
-  dpr
+  dpr,
+  maxFps = 0
 }) => {
   const containerRef = useRef(null);
   const canvasRef = useRef(null);
@@ -567,7 +568,8 @@ const PixelBlast = ({
     intro,
     variation,
     lightMode,
-    dpr
+    dpr,
+    maxFps
   };
   const settingsRef = useRef(settings);
   settingsRef.current = settings;
@@ -823,6 +825,11 @@ const PixelBlast = ({
       const s = settingsRef.current;
       if (!visible && s.autoPauseOffscreen) return;
       if (document.hidden) return;
+      // Cambio sobre el original: tope de cuadros por segundo (maxFps), para dejarle margen al resto de las animaciones.
+      if (s.maxFps && last && now - last < 1000 / s.maxFps - 2) {
+        raf = requestAnimationFrame(frame);
+        return;
+      }
       const dt = last ? clamp((now - last) / 1000, 0, 1 / 20) : 0;
       last = now;
       if (!reduce) elapsed += dt;
@@ -998,6 +1005,7 @@ export type PixelBlastProps = {
   variation?: number;
   lightMode?: boolean;
   dpr?: number;
+  maxFps?: number;
 };
 
 export default PixelBlast as (props: PixelBlastProps) => React.JSX.Element;

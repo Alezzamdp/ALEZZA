@@ -32,7 +32,8 @@ export default function FondoPixeles() {
         hoverRadius={110}
         enableRipples={false}
         edgeFade={0.2}
-        dpr={chico ? 1 : 1.5}
+        dpr={chico ? 0.75 : 1}
+        maxFps={30}
       />
     </div>
   );
