@@ -112,7 +112,7 @@ export default async function Home() {
         <p className="lp-intro">Pedí solo lo que tu auto necesita, con el precio a la vista.</p>
         <div className="lp-sueltos">
           <figure className="lp-sueltos-foto">
-            <Image src="/fotos/particular-suran.webp" width={600} height={750} sizes="(max-width: 560px) 104px, (max-width: 900px) 180px, 220px" alt="Volkswagen Suran negra, limpia y con brillo, frente al taller ALEZZA" />
+            <Image src="/fotos/detalle-2008.webp" width={600} height={750} sizes="(max-width: 560px) 104px, (max-width: 900px) 180px, 220px" alt="Luz trasera, logo y pintura roja con brillo de un Peugeot 2008" />
           </figure>
           <ul className="lp-sueltos-lista">
             {(Object.keys(DETALLE_EXTRAS) as Extra[]).map((k) => (
