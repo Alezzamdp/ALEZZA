@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { CSSProperties, ReactNode } from "react";
 import Logo from "@/components/Logo";
 import SitioMenu from "@/components/SitioMenu";
+import TemaBoton from "@/components/TemaBoton";
 import { TALLER } from "@/lib/turnos";
 import { UBICACION, externo } from "@/lib/contacto";
 
@@ -16,6 +17,7 @@ export function SitioCabecera({ accion }: { activa?: string; accion?: ReactNode 
         <Link href="/" aria-label="ALEZZA - Inicio" className="lp-logo"><Logo alto={20} /></Link>
         <div className="lp-header-der">
           {accion ?? <Link href="/turnos" className="lp-btn lp-btn-sm">Solicitar turno</Link>}
+          <TemaBoton />
           <SitioMenu />
         </div>
       </div>

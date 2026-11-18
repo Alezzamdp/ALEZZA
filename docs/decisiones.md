@@ -34,3 +34,9 @@ Asesoría automotor integral (no solo lavadero ni agencia): simulador de permuta
 - /turnos ya no tiene calendario ni seña online: es un pedido (plan, nombre, vehículo) que abre WhatsApp con el mensaje armado; el día y la hora se coordinan por WhatsApp. Estos pedidos NO se guardan en la base ni aparecen en /admin/turnos. Las rutas /turnos/[token] y /seguimiento/[token] siguen funcionando para los turnos ya creados.
 - Sitio público siempre oscuro: negro, blanco y rosa #ff2e93 (variable --rosa en globals.css). Fondo PixelBlast rosa con opacidad baja y más tenue en el centro, y tarjetas con fondo negro sólido para cuidar la legibilidad.
 - El Inicio tiene cuatro bloques: oferta de agencias, particulares, cómo trabajamos con la agencia y mapa.
+
+## Galería, modo claro/oscuro y datos del auto (2026-11-18)
+- Fotos de unidades en public/fotos/unidad-N.webp, igualadas en brillo, contraste, saturación y tono; se muestran con AccordionGallery (React Bits, GSAP) en src/components/GaleriaUnidades.tsx, que la carga recién al acercarse. Los nombres de las unidades están ahí; actualizarlos si cambian las fotos.
+- El visitante elige modo claro u oscuro con el botón de la cabecera (se guarda en su navegador; por defecto sigue al sistema). El fondo PixelBlast rosa sigue ese modo (src/components/FondoPixeles.tsx).
+- Antes de abrir WhatsApp (en /contacto y /turnos) se piden marca y modelo, año y patente, y el mensaje sale con esos datos (src/lib/auto.ts). Para agencias son opcionales.
+- Estrellas de Google en amarillo, sin puntaje ni cantidad.

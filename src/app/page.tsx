@@ -1,7 +1,8 @@
 import Link from "next/link";
 import CatalogoTrabajos from "@/components/CatalogoTrabajos";
 import GoogleEstrellas from "@/components/GoogleEstrellas";
-import MapaTaller from "@/components/MapaTaller";
+import GaleriaUnidades from "@/components/GaleriaUnidades";
+import MapaDiferido from "@/components/MapaDiferido";
 import { SitioCabecera, SitioPie, Titular } from "@/components/SitioMarco";
 import { contacto, datosSitio, trabajosPublicos } from "@/lib/sitio";
 import { CASOS, ETAPAS_INTEGRAL, PLANES, ahorroIntegral, pesos, precioPlan, valorSeparado } from "@/lib/turnos";
@@ -117,13 +118,21 @@ export default async function Home() {
         </div>
       </section>
 
+      {/* Unidades que pasaron por el taller (fotos igualadas en color) */}
+      <section id="unidades" className="lp-wrap lp-seccion">
+        <p className="lp-kicker">Unidades preparadas</p>
+        <h2>Así salen del taller</h2>
+        <p className="lp-intro">Autos que pasaron por ALEZZA DETAIL. Pasá el mouse o tocá una foto para verla completa.</p>
+        <GaleriaUnidades />
+      </section>
+
       <CatalogoTrabajos items={trabajos} />
 
       {/* Dónde estamos */}
       <section className="lp-wrap lp-seccion">
         <p className="lp-kicker">Taller ALEZZA DETAIL</p>
         <h2>Dónde estamos</h2>
-        <MapaTaller alto={300} />
+        <MapaDiferido alto={300} />
       </section>
 
       <SitioPie ubicacion={perfil.location} horario={perfil.business_hours} />

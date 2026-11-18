@@ -2,7 +2,9 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import CamposAuto from "@/components/CamposAuto";
 import { SitioCabecera, SitioPie } from "@/components/SitioMarco";
+import { AUTO_VACIO, errorAuto, filasAuto, type DatosAuto } from "@/lib/auto";
 import { contacto } from "@/lib/contacto";
 import { supabase } from "@/lib/supabase";
 import { CONFIG_INICIAL, mensajeAlezza, pesos, waAlezza, type TurnosConfig } from "@/lib/turnos";
@@ -15,17 +17,16 @@ const OPCIONES: { k: Opcion; t: string; d: string }[] = [
   { k: "otro", t: "Otro servicio", d: "Pulido, motor, interior o butacas: lo coordinamos por WhatsApp." },
 ];
 
-const campo = "w-full rounded-md border border-gray-300 bg-white px-3 py-2.5 text-base outline-none focus:border-[var(--rosa)]";
-const etiqueta = "mb-1 block text-sm font-medium";
-
-// Solicitud de turno sin calendario: elegís qué necesitás, dejás nombre y vehículo y se abre WhatsApp con el mensaje armado.
-// El día y la hora se coordinan por WhatsApp.
+// Solicitud de turno sin calendario: elegís qué necesitás, cargás tus datos y los del auto (modelo, año y patente) y se abre
+// WhatsApp con todo armado. El día y la hora se coordinan por WhatsApp. Para el plan de agencias los datos del auto son opcionales.
 export default function SolicitarTurno() {
   const [config, setConfig] = useState<TurnosConfig>(CONFIG_INICIAL);
   const [opcion, setOpcion] = useState<Opcion>("puesta");
   const [nombre, setNombre] = useState("");
-  const [vehiculo, setVehiculo] = useState("");
   const [unidades, setUnidades] = useState("");
+  const [auto, setAuto] = useState<DatosAuto>(AUTO_VACIO);
+  const [error, setError] = useState("");
+  const agencia = opcion === "puesta";
 
   useEffect(() => {
     // Los precios salen de la configuración (los mismos de la página principal); sin conexión quedan los iniciales.
@@ -42,63 +43,65 @@ export default function SolicitarTurno() {
 
   const precioDe = (k: Opcion) => (k !== "otro" && Number(config.precios[k]) > 0 ? pesos(Number(config.precios[k])) : "");
   const elegida = OPCIONES.find((o) => o.k === opcion)!;
-  const completo = nombre.trim().length >= 2 && vehiculo.trim().length >= 2;
-  const mensaje = waAlezza(mensajeAlezza("Quiero solicitar un turno en el taller.", [
-    ["Servicio", elegida.t],
-    ["Unidades", opcion === "puesta" ? unidades.trim() || null : null],
-    ["Vehículo", vehiculo.trim()],
-    ["Nombre", nombre.trim()],
-  ]));
+
+  function enviar() {
+    const falla = nombre.trim().length < 2 ? (agencia ? "Escribí tu nombre o el de la agencia." : "Escribí tu nombre.") : errorAuto(auto, !agencia);
+    if (falla) { setError(falla); return; }
+    setError("");
+    const url = waAlezza(mensajeAlezza("Quiero solicitar un turno en el taller.", [
+      ["Servicio", elegida.t],
+      ["Unidades", agencia ? unidades.trim() || null : null],
+      [agencia ? "Agencia" : "Nombre", nombre.trim()],
+      ...filasAuto(auto),
+    ]));
+    window.open(url, "_blank", "noopener,noreferrer");
+  }
 
   return (
     <main className="lp min-h-screen">
       <SitioCabecera accion={<Link href={contacto("turno")} className="lp-btn lp-btn-sm lp-btn-linea">¿Dudas?</Link>} />
 
-      <section className="mx-auto max-w-2xl px-6 pb-16 pt-10">
+      <section className="lp-form-pagina">
         <p className="lp-kicker">Taller ALEZZA DETAIL · Mar del Plata</p>
-        <h1 className="mt-3 text-3xl font-extrabold md:text-4xl">Solicitar turno</h1>
-        <p className="mt-3 text-lg text-gray-600">Contanos qué necesitás y te escribimos por WhatsApp para coordinar el día y la hora.</p>
+        <h1 className="lp-titular">Solicitar turno</h1>
+        <p className="lp-lead">Contanos qué necesitás y cargá los datos del auto: te escribimos por WhatsApp para coordinar el día y la hora.</p>
 
-        <fieldset className="mt-8 min-w-0">
-          <legend className="mb-3 text-lg font-bold">1. ¿Qué necesitás?</legend>
-          <div className="grid gap-2">
-            {OPCIONES.map((o) => (
-              <button key={o.k} type="button" aria-pressed={opcion === o.k} onClick={() => setOpcion(o.k)} className="tu-op">
-                <span className="tu-marca" aria-hidden>✓</span>
-                <span><b>{o.t}</b><small>{o.d}</small></span>
-                <span className="lp-precio">{precioDe(o.k)}</span>
-              </button>
-            ))}
-          </div>
-        </fieldset>
+        <form className="lp-form" onSubmit={(e) => { e.preventDefault(); enviar(); }} noValidate>
+          <fieldset className="lp-fieldset">
+            <legend>1. ¿Qué necesitás?</legend>
+            <div className="lp-opciones">
+              {OPCIONES.map((o) => (
+                <button key={o.k} type="button" aria-pressed={opcion === o.k} onClick={() => { setOpcion(o.k); setError(""); }} className="tu-op">
+                  <span className="tu-marca" aria-hidden>✓</span>
+                  <span><b>{o.t}</b><small>{o.d}</small></span>
+                  <span className="lp-precio">{precioDe(o.k)}</span>
+                </button>
+              ))}
+            </div>
+          </fieldset>
 
-        <fieldset className="mt-8 min-w-0">
-          <legend className="mb-3 text-lg font-bold">2. Tus datos</legend>
-          <div className="grid gap-4 sm:grid-cols-2">
-            <div>
-              <label className={etiqueta} htmlFor="nombre">Nombre{opcion === "puesta" && " o agencia"}</label>
-              <input id="nombre" className={campo} maxLength={120} autoComplete="name" value={nombre} onChange={(e) => setNombre(e.target.value)} />
-            </div>
-            <div>
-              <label className={etiqueta} htmlFor="vehiculo">Vehículo</label>
-              <input id="vehiculo" className={campo} maxLength={120} placeholder="Marca, modelo y año" value={vehiculo} onChange={(e) => setVehiculo(e.target.value)} />
-            </div>
-            {opcion === "puesta" && (
-              <div className="sm:col-span-2">
-                <label className={etiqueta} htmlFor="unidades">¿Cuántas unidades? <span className="font-normal text-gray-500">(opcional)</span></label>
-                <input id="unidades" className={campo} inputMode="numeric" maxLength={4} placeholder="1" value={unidades} onChange={(e) => setUnidades(e.target.value.replace(/\D/g, ""))} />
+          <fieldset className="lp-fieldset">
+            <legend>2. Tus datos y los del auto</legend>
+            <div className="lp-form-campos">
+              <div className="lp-campo-caja lp-campo-ancho">
+                <label htmlFor="turno-nombre">{agencia ? "Tu nombre o el de la agencia" : "Tu nombre"}</label>
+                <input id="turno-nombre" className="lp-campo" maxLength={120} autoComplete="name" value={nombre} onChange={(e) => setNombre(e.target.value)} />
               </div>
-            )}
-          </div>
-        </fieldset>
+              {agencia && (
+                <div className="lp-campo-caja lp-campo-ancho">
+                  <label htmlFor="turno-unidades">¿Cuántas unidades? (opcional)</label>
+                  <input id="turno-unidades" className="lp-campo" inputMode="numeric" maxLength={4} placeholder="1" value={unidades} onChange={(e) => setUnidades(e.target.value.replace(/\D/g, ""))} />
+                </div>
+              )}
+              <CamposAuto valor={auto} onCambio={setAuto} opcional={agencia} />
+            </div>
+            {agencia && <p className="lp-form-nota">Para agencias, los datos del auto son opcionales: podés cargar los de una unidad de ejemplo.</p>}
+          </fieldset>
 
-        <div className="mt-8 grid gap-3">
-          <a href={completo ? mensaje : undefined} target="_blank" rel="noopener noreferrer" aria-disabled={!completo}
-            className={`lp-btn ${completo ? "" : "pointer-events-none opacity-40"}`}>
-            Solicitar turno por WhatsApp
-          </a>
-          <p className="text-sm text-gray-500">{completo ? "Se abre WhatsApp con tu pedido listo para enviar." : "Completá nombre y vehículo para continuar."}</p>
-        </div>
+          {error && <p role="alert" className="lp-error">{error}</p>}
+          <button type="submit" className="lp-btn lp-btn-grande">Solicitar turno por WhatsApp</button>
+          <p className="lp-form-nota">Se abre WhatsApp con tu pedido y los datos del auto ya cargados; solo tenés que enviarlo.</p>
+        </form>
       </section>
       <SitioPie />
     </main>

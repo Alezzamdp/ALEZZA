@@ -203,7 +203,7 @@ body { padding-bottom: env(safe-area-inset-bottom, 0px); -webkit-tap-highlight-c
 /* Fondo de píxeles de todo el sitio (src/components/FondoPixeles.tsx): fijo, detrás del contenido y sin tapar clics. */
 .fondo-pixeles { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: .34; }
 @media (max-width: 720px) { .fondo-pixeles { opacity: .24; } }
-:root .lp {
+:root[data-tema="oscuro"] .lp {
   --papel: #0a0a0a; --tinta: #f5f5f5; --lp-mute: #a3a3a3; --lp-line: #242424; --lp-soft: #141414; --lp-capa: #3a3a3a;
   --mostaza: #f5f5f5; --m50: #1c1c1c; --m100: #262626; --m200: #333333; --m300: #525252; --m400: #a3a3a3; --m600: #d4d4d4; --m700: #a3a3a3; --m800: #f0f0f0; --m900: #f5f5f5;
   --color-white: #141414; --color-gray-50: #141414; --color-gray-100: #1c1c1c; --color-gray-200: #262626; --color-gray-300: #333333;
@@ -218,7 +218,7 @@ body { padding-bottom: env(safe-area-inset-bottom, 0px); -webkit-tap-highlight-c
 }
 /* Fondo liso (sin la cuadrícula de BRUNO OS) y el mismo color detrás de la página. */
 main.lp { background-image: none; }
-html:has(main.lp) body { background: #0a0a0a; }
+html:has(main.lp) body { background: #ffffff; }
 html[data-tema="oscuro"]:has(main.lp) body { background: #0a0a0a; }
 
 /* Tipografía: los títulos usan la letra ancha del logo; el texto, DM Sans. */
@@ -446,7 +446,11 @@ a.lp-fila:hover { background: var(--lp-soft); }
 .lp-valor-ahorro td { border-radius: 0 10px 10px 0; }
 
 /* ===== Paleta del sitio público: negro, blanco y rosa chillón en detalles mínimos (siempre oscuro) ===== */
-:root .lp { --rosa: #ff2e93; --lp-mute: #c4c4c4; --lp-line: #2e2e2e; }
+/* Rosa de fondos y botones; en claro el rosa para texto es más oscuro, para que se lea sobre blanco. */
+.lp { --rosa: #ff2e93; --rosa-txt: #d4006c; }
+:root[data-tema="oscuro"] .lp { --rosa-txt: #ff2e93; --lp-mute: #c4c4c4; --lp-line: #2e2e2e; }
+html { scroll-behavior: smooth; }
+.lp [id] { scroll-margin-top: 76px; }
 .lp { font-size: 16px; line-height: 1.6; }
 :root .lp a:focus-visible, :root .lp button:focus-visible { outline-color: var(--rosa); }
 
@@ -461,14 +465,14 @@ a.lp-fila:hover { background: var(--lp-soft); }
 :root .lp .lp-btn-linea { background: transparent; color: var(--tinta); border-color: color-mix(in srgb, var(--tinta) 35%, transparent); }
 :root .lp .lp-btn-linea:hover { background: var(--lp-soft); }
 .lp-kicker { font-size: 12px; color: var(--lp-mute); }
-.lp-num { color: var(--rosa); }
-.lp-lead { font-size: 18px; color: #dcdcdc; }
-.lp-ir:hover { color: var(--rosa); }
+.lp-num { color: var(--rosa-txt); }
+.lp-lead { font-size: 18px; color: color-mix(in srgb, var(--tinta) 82%, transparent); }
+.lp-ir:hover { color: var(--rosa-txt); }
 
 /* Estrellas de Google en rosa, sin puntaje ni cantidad. */
 .lp-estrellas { display: inline-flex; align-items: center; gap: 10px; margin-top: 22px; font-size: 14px; color: var(--lp-mute); transition: color .2s; }
 .lp-estrellas:hover { color: var(--tinta); }
-.lp-estrellas-fila { display: inline-flex; gap: 2px; color: var(--rosa); }
+.lp-estrellas-fila { display: inline-flex; gap: 2px; color: #fbbc04; }
 
 /* Inicio: tarjeta del Plan Agencias, particulares y pasos. */
 .lp-intro { margin: -14px 0 28px; max-width: 40rem; font-size: 17px; line-height: 1.6; color: var(--lp-mute); }
@@ -480,12 +484,12 @@ a.lp-fila:hover { background: var(--lp-soft); }
 .lp-resuelve { font-size: 15.5px; line-height: 1.55; color: var(--lp-mute); }
 .lp-resuelve b { margin-right: 6px; color: var(--tinta); font-weight: 650; }
 .lp-card ul, .lp-checks { display: grid; gap: 6px; font-size: 16px; line-height: 1.45; }
-.lp-card li::before, .lp-checks li::before { content: "✓  "; color: var(--rosa); font-weight: 700; }
+.lp-card li::before, .lp-checks li::before { content: "✓  "; color: var(--rosa-txt); font-weight: 700; }
 .lp-precio-fila { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 12px; }
 .lp-precio-top { font-family: var(--f-body), system-ui, sans-serif; font-size: 40px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.1; font-variant-numeric: tabular-nums; }
-.lp-card-top .lp-precio-top { color: var(--rosa); }
+.lp-card-top .lp-precio-top { color: var(--rosa-txt); }
 .lp-por { font-size: 15px; color: var(--lp-mute); }
-.lp-ahorro { align-self: flex-start; padding: 7px 12px; border-radius: 10px; background: color-mix(in srgb, var(--rosa) 16%, transparent); color: var(--rosa); font-size: 14.5px; font-weight: 700; text-shadow: none; }
+.lp-ahorro { align-self: flex-start; padding: 7px 12px; border-radius: 10px; background: color-mix(in srgb, var(--rosa) 16%, transparent); color: var(--rosa-txt); font-size: 14.5px; font-weight: 700; text-shadow: none; }
 .lp-det summary { cursor: pointer; font-size: 14.5px; text-decoration: underline; text-underline-offset: 4px; color: var(--lp-mute); }
 .lp-det[open] summary { margin-bottom: 8px; }
 .lp-det table { width: 100%; border-collapse: collapse; font-size: 15px; }
@@ -517,3 +521,53 @@ a.lp-fila:hover { background: var(--lp-soft); }
 /* Solicitud de turno: opción elegida con borde rosa. */
 .tu-op[aria-pressed="true"] { border-color: var(--rosa); box-shadow: inset 0 0 0 1px var(--rosa); background: var(--papel); }
 .tu-op[aria-pressed="true"] .tu-marca { background: var(--rosa); border-color: var(--rosa); color: #0a0a0a; }
+
+/* Fondo de píxeles: un poco más fuerte en modo claro, porque el rosa sobre blanco se ve más suave. */
+:root[data-tema="claro"] .fondo-pixeles { opacity: .5; }
+
+/* Botón de modo claro/oscuro. */
+.tema-btn { display: inline-grid; place-items: center; width: 36px; height: 36px; border: 1px solid var(--lp-line); border-radius: 50%; color: var(--tinta); background: transparent; cursor: pointer; transition: border-color .2s, background .2s; }
+.tema-btn:hover { border-color: var(--rosa); background: var(--lp-soft); }
+.lp-header-der { gap: 12px; }
+
+/* Galería de unidades y mapa: reservan su alto para que la página no salte al cargar. */
+.lp-galeria { min-height: 520px; }
+@media (max-width: 520px) {
+  .lp-galeria { min-height: 0; }
+  .lp-galeria .ag-panel { min-height: 84px; transition: min-height .45s cubic-bezier(.3, 0, .2, 1); }
+  .lp-galeria .ag-panel--active { min-height: 380px; }
+}
+.lp-mapa { border-radius: 18px; overflow: hidden; }
+
+/* Tarjetas: un borde rosa al pasar el mouse. */
+.lp-card:hover, .lp-part:hover, .lp-proceso li:hover { border-color: color-mix(in srgb, var(--rosa) 70%, transparent); }
+.lp-card, .lp-part, .lp-proceso li { transition: border-color .25s; }
+
+/* Formularios (contacto y turno): campos grandes, claros y con el foco en rosa. */
+.lp-form-pagina { max-width: 680px; margin: 0 auto; padding: 40px 24px 72px; }
+.lp-form-pagina .lp-titular { margin-top: 12px; }
+.lp-form-pagina .lp-lead { max-width: none; }
+.lp-form { display: grid; gap: 24px; margin-top: 28px; }
+.lp-fieldset { display: grid; gap: 12px; min-width: 0; border: 0; padding: 0; margin: 0; }
+.lp-fieldset legend { margin-bottom: 12px; font-size: 18px; font-weight: 700; }
+.lp-opciones { display: grid; gap: 8px; }
+.lp-form-campos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.lp-campo-ancho { grid-column: 1 / -1; }
+.lp-campo-caja label { display: block; margin-bottom: 6px; font-size: 14px; font-weight: 600; }
+.lp-campo { width: 100%; min-height: 48px; padding: 0 14px; border: 1px solid var(--lp-line); border-radius: 12px; background: var(--lp-soft); color: var(--tinta); font-size: 16px; outline: none; transition: border-color .2s, box-shadow .2s; }
+.lp-campo::placeholder { color: color-mix(in srgb, var(--tinta) 38%, transparent); }
+.lp-campo:focus { border-color: var(--rosa); box-shadow: 0 0 0 3px color-mix(in srgb, var(--rosa) 25%, transparent); }
+.lp-campo-patente { text-transform: uppercase; letter-spacing: .08em; }
+.lp-form-sub { margin-top: 4px; font-size: 15px; color: var(--lp-mute); }
+.lp-form-ref { padding: 10px 14px; border: 1px dashed var(--lp-line); border-radius: 12px; font-size: 14.5px; color: var(--lp-mute); }
+.lp-form-nota { font-size: 14px; color: var(--lp-mute); }
+.lp-error { padding: 12px 14px; border: 1px solid var(--rosa); border-radius: 12px; background: color-mix(in srgb, var(--rosa) 12%, transparent); font-size: 15px; font-weight: 600; }
+.lp-btn-grande { min-height: 54px; font-size: 17px; }
+.lp-contacto { max-width: 900px; }
+.lp-contacto-grid { display: grid; gap: 20px; margin-top: 28px; align-items: start; }
+@media (min-width: 860px) { .lp-contacto-grid { grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); } }
+.lp-contacto-grid .lp-form { margin-top: 0; padding: 26px 24px; border: 1px solid var(--lp-line); border-radius: 20px; background: var(--papel); }
+.lp-temas { margin-top: 0; }
+.lp-tema { cursor: pointer; background: var(--papel); }
+.lp-tema[aria-pressed="true"] { background: var(--rosa); border-color: var(--rosa); color: #0a0a0a; }
+.lp .tu-op small, .lp .tu-op b { text-shadow: none; }

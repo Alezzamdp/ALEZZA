@@ -34,7 +34,12 @@ export function contacto(tema: Tema = "consulta", ref?: string | null) {
   return "/contacto" + (s ? "?" + s : "");
 }
 
-// Mensaje estructurado de WhatsApp para un tema (solo lo usa /contacto).
+// WhatsApp con el pedido del tema y los datos que cargó la persona (nombre, auto…); los renglones vacíos no se mandan.
+export function waMensaje(tema: Tema, filas: [string, string | null][], ref?: string) {
+  return waAlezza(mensajeAlezza(TEMAS[tema].pedido, [...(ref ? ([["Referencia", ref]] as [string, string][]) : []), ...filas]));
+}
+
+// Mensaje estructurado de WhatsApp para un tema, con marcas "(completar)" (ya no se usa: /contacto pide los datos antes).
 export function waTema(tema: Tema, ref?: string) {
   const { pedido, datos } = TEMAS[tema];
   return waAlezza(mensajeAlezza(pedido, [

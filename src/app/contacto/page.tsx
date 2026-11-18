@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { SitioCabecera, SitioPie } from "@/components/SitioMarco";
-import { INSTAGRAM, TEMAS, UBICACION, esTema, externo, waTema, type Tema } from "@/lib/contacto";
+import { UBICACION, esTema, type Tema } from "@/lib/contacto";
 import { datosSitio } from "@/lib/sitio";
+import ContactoForm from "./ContactoForm";
 
 export const dynamic = "force-dynamic";
 
@@ -10,11 +11,8 @@ export const metadata: Metadata = {
   description: "Escribinos por WhatsApp o Instagram: turnos de estética vehicular y alianzas con agencias en Mar del Plata.",
 };
 
-// Por ahora el sitio es solo ALEZZA DETAIL: se ofrecen los temas del taller y de las agencias.
-const ELEGIBLES: Tema[] = ["estetica", "agencia", "turno", "consulta"];
-
-// Único apartado de contacto del sitio: WhatsApp e Instagram. El resto de las páginas enlaza acá con
-// /contacto?tema=…, y el mensaje de WhatsApp ya sale armado para ese tema.
+// Único apartado de contacto del sitio: WhatsApp (con los datos del auto ya cargados) e Instagram. El resto de las páginas
+// enlaza acá con /contacto?tema=… y la referencia (turno, unidad) viaja en el mensaje.
 export default async function Contacto({ searchParams }: { searchParams: Promise<{ tema?: string | string[]; ref?: string | string[] }> }) {
   const q = await searchParams;
   const tema: Tema = esTema(q.tema) ? q.tema : "consulta";
@@ -31,31 +29,12 @@ export default async function Contacto({ searchParams }: { searchParams: Promise
           <p className="lp-kicker lp-in">Contacto</p>
           <h1 className="lp-titular lp-in">Hablemos de tu auto.</h1>
           <p className="lp-lead lp-in" style={{ animationDelay: "80ms" }}>
-            Elegí el tema y escribinos: el mensaje ya sale armado para que te respondamos más rápido.
+            Contanos qué auto es y qué necesitás: te respondemos por WhatsApp con todo a mano.
           </p>
-
-          <nav className="lp-temas lp-in" style={{ animationDelay: "160ms" }} aria-label="Tema de la consulta">
-            {ELEGIBLES.map((k) => (
-              <a key={k} href={`/contacto?tema=${k}`} aria-current={k === tema ? "true" : undefined} className="lp-tema">{TEMAS[k].t}</a>
-            ))}
-          </nav>
-
-          <div className="lp-canales lp-in" style={{ animationDelay: "240ms" }}>
-            <a href={waTema(tema, ref)} {...externo} className="lp-canal lp-canal-principal">
-              <span className="lp-num">WhatsApp</span>
-              <strong>223 421-2621</strong>
-              <span>{tema === "consulta" ? "Escribinos y te respondemos." : `Mensaje armado: ${TEMAS[tema].t.toLowerCase()}.`}</span>
-              <span className="lp-ir">Abrir WhatsApp <span aria-hidden>→</span></span>
-            </a>
-            <a href={INSTAGRAM} {...externo} className="lp-canal">
-              <span className="lp-num">Instagram</span>
-              <strong>@alezzamdp</strong>
-              <span>Trabajos del taller, unidades nuevas y novedades.</span>
-              <span className="lp-ir">Abrir Instagram <span aria-hidden>→</span></span>
-            </a>
+          <div className="lp-in" style={{ animationDelay: "160ms" }}>
+            <ContactoForm temaInicial={tema} refInicial={ref} />
           </div>
-
-          <p className="lp-contacto-pie lp-in" style={{ animationDelay: "320ms" }}>
+          <p className="lp-contacto-pie lp-in" style={{ animationDelay: "240ms" }}>
             {[perfil.location || UBICACION, horario].filter(Boolean).join(" · ")}
           </p>
         </section>
