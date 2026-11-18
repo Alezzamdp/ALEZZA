@@ -7,7 +7,8 @@ import ContactoForm from "./ContactoForm";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Contacto · ALEZZA",
+  title: "Contacto",
+  alternates: { canonical: "/contacto" },
   description: "Escribinos por WhatsApp o Instagram: turnos de estética vehicular y alianzas con agencias en Mar del Plata.",
 };
 

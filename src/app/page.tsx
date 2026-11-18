@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import CatalogoTrabajos from "@/components/CatalogoTrabajos";
@@ -7,10 +8,18 @@ import BarraMovil from "@/components/BarraMovil";
 import GaleriaUnidades from "@/components/GaleriaUnidades";
 import MapaDiferido from "@/components/MapaDiferido";
 import { SitioCabecera, SitioPie, Titular } from "@/components/SitioMarco";
+import { SEO_DESCRIPCION, SEO_TITULO, jsonLdNegocio, jsonLdPreguntas, jsonSeguro, preguntas } from "@/lib/seo";
 import { contacto, datosSitio, trabajosPublicos } from "@/lib/sitio";
 import { CASOS, DETALLE_EXTRAS, ETAPAS_INTEGRAL, PLANES, ahorroIntegral, pesos, precioPlan, valorSeparado, type Extra } from "@/lib/turnos";
 
 export const dynamic = "force-dynamic";
+
+// Título y descripción propios de la home para Google (el título es "absolute": no lleva el sufijo de las otras páginas).
+export const metadata: Metadata = {
+  title: { absolute: SEO_TITULO },
+  description: SEO_DESCRIPCION,
+  alternates: { canonical: "/" },
+};
 
 // ALEZZA DETAIL: una sola página para vender el taller a agencias (Plan Agencias = Preparación integral) y atender a particulares
 // (Preparación base). Cuatro bloques: la oferta de agencias, particulares, cómo trabajamos y dónde estamos.
@@ -29,9 +38,13 @@ export default async function Home() {
   const integral = PLANES[1];
   const separado = valorSeparado(config);
   const ahorro = ahorroIntegral(config);
+  const faq = preguntas(config);
 
   return (
     <main className="lp lp-con-barra">
+      {/* Datos estructurados para Google: el negocio (con sus servicios y precios) y las preguntas frecuentes */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonSeguro(jsonLdNegocio(config)) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonSeguro(jsonLdPreguntas(faq)) }} />
       <div className="lp-pantalla">
         <SitioCabecera />
 
@@ -41,7 +54,7 @@ export default async function Home() {
               <p className="lp-kicker lp-in">ALEZZA DETAIL · Estética vehicular · Mar del Plata</p>
               <Titular lineas={["Tus autos listos", "para vender."]} />
               <p className="lp-lead lp-in" style={{ animationDelay: "160ms" }}>
-                Taller de estética vehicular en Mar del Plata. Preparamos el stock de agencias para que se publique mejor y rote más rápido.
+                Taller de detail y estética vehicular en Mar del Plata. Preparamos el stock de agencias para que se publique mejor y rote más rápido.
               </p>
               <div className="lp-acciones lp-in" style={{ animationDelay: "220ms" }}>
                 <Link href={contacto("agencia")} className="lp-btn">Coordinar con mi agencia</Link>
@@ -187,6 +200,20 @@ export default async function Home() {
       </section>
 
       <CatalogoTrabajos items={trabajos} />
+
+      {/* Preguntas frecuentes (también como FAQPage para Google) */}
+      <section id="preguntas" className="lp-wrap lp-seccion">
+        <p className="lp-kicker">Preguntas frecuentes</p>
+        <h2>Todo sobre el detail de tu auto</h2>
+        <div className="lp-faq">
+          {faq.map((x) => (
+            <details key={x.p}>
+              <summary>{x.p}</summary>
+              <p>{x.r}</p>
+            </details>
+          ))}
+        </div>
+      </section>
 
       {/* Dónde estamos */}
       <section className="lp-wrap lp-seccion">
