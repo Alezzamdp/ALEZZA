@@ -107,8 +107,6 @@ export default async function Home() {
 
       {/* Cómo trabajamos con una agencia */}
       <section id="como" className="lp-wrap lp-seccion">
-        <div className="lp-como">
-        <div>
         <p className="lp-kicker">Alianza para agencias</p>
         <h2>Cómo trabajamos con tu agencia</h2>
         <p className="lp-intro">Una unidad sin preparar tarda más en venderse y se ve peor en la publicación. Nos ocupamos de que todo tu stock salga con el mismo nivel.</p>
@@ -123,11 +121,6 @@ export default async function Home() {
         </ol>
         <div className="lp-acciones">
           <Link href={contacto("agencia")} className="lp-btn">Coordinar con mi agencia</Link>
-        </div>
-        </div>
-        <figure className="lp-visual">
-          <Image src="/fotos/detalle-passat.webp" width={800} height={1000} sizes="(max-width: 900px) 92vw, 340px" alt="Lateral trasero de un Volkswagen Passat CC junto al cartel de ALEZZA" />
-        </figure>
         </div>
       </section>
 
