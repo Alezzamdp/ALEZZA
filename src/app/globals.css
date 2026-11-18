@@ -709,3 +709,33 @@ html { scroll-behavior: smooth; }
 .lp-sueltos-foto img.lp-sueltos-principal { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; object-position: center; }
 @media (min-width: 560px) { .lp-sueltos { grid-template-columns: 180px minmax(0, 1fr); } }
 @media (min-width: 900px) { .lp-sueltos { grid-template-columns: 220px minmax(0, 1fr); } }
+
+/* ===== Servicios sueltos sin franjas borrosas: la caja de la foto tiene su misma proporción (3:4) y la lista se ajusta a esa altura ===== */
+.lp-sueltos { grid-template-columns: 190px minmax(0, 1fr); gap: 12px; align-items: stretch; }
+.lp-sueltos-foto { aspect-ratio: 3 / 4; min-height: 0; background: transparent; }
+.lp-sueltos-foto img.lp-sueltos-principal { object-fit: cover; }
+.lp-sueltos-foto img.lp-sueltos-fondo { display: none; }
+/* En celular la lista reparte la altura en cinco filas con el nombre arriba y el precio abajo. */
+.lp-sueltos-lista { display: flex; flex-direction: column; }
+.lp-sueltos-lista li { display: flex; flex: 1 1 0; }
+.lp-sueltos-lista .lp-suelto { flex: 1; grid-template-columns: minmax(0, 1fr); align-content: center; gap: 2px; min-height: 0; padding: 6px 12px; }
+.lp-sueltos-lista .lp-suelto b { font-size: 15px; line-height: 1.2; }
+.lp-sueltos-lista .lp-suelto .lp-precio { font-size: 16px; }
+@media (min-width: 560px) {
+  .lp-sueltos { grid-template-columns: 220px minmax(0, 1fr); gap: 22px; }
+  .lp-sueltos-lista .lp-suelto { grid-template-columns: minmax(0, 1fr) auto; align-content: normal; gap: 4px 12px; padding: 12px 18px; }
+  .lp-sueltos-lista .lp-suelto b { font-size: 16px; }
+  .lp-sueltos-lista .lp-suelto .lp-precio { font-size: 17px; }
+}
+@media (min-width: 900px) { .lp-sueltos { gap: 32px; } }
+
+/* Servicios sueltos, celular: foto 3:4 de ancho flexible y filas compactas de una línea por dato, para que la lista mida lo mismo que la foto. */
+.lp-sueltos { grid-template-columns: clamp(130px, 57%, 200px) minmax(0, 1fr); }
+.lp-sueltos-foto { width: 100%; }
+.lp-sueltos-lista .lp-suelto { padding: 4px 10px; }
+.lp-sueltos-lista .lp-suelto b { font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.lp-sueltos-lista .lp-suelto .lp-precio { font-size: 15px; }
+@media (min-width: 560px) {
+  .lp-sueltos { grid-template-columns: 220px minmax(0, 1fr); }
+  .lp-sueltos-lista .lp-suelto b { white-space: normal; }
+}

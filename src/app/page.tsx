@@ -125,7 +125,6 @@ export default async function Home() {
         <p className="lp-intro">Pedí solo lo que tu auto necesita, con el precio a la vista.</p>
         <div className="lp-sueltos">
           <figure className="lp-sueltos-foto">
-            <Image src="/fotos/detalle-interior.webp" width={600} height={800} sizes="60px" alt="" aria-hidden className="lp-sueltos-fondo" />
             <Image src="/fotos/detalle-interior.webp" width={600} height={800} sizes="(max-width: 560px) 128px, (max-width: 900px) 180px, 220px" alt="Interior de un Volkswagen Vento: volante, tablero y butacas de cuero" className="lp-sueltos-principal" />
           </figure>
           <ul className="lp-sueltos-lista">
@@ -133,7 +132,7 @@ export default async function Home() {
               <li key={k}>
                 <Link href={`/turnos?extra=${k}`} className="lp-suelto">
                   <span>
-                    <b>{DETALLE_EXTRAS[k][0]}</b>
+                    <b>{DETALLE_EXTRAS[k][0].replace("Pulido en ", "Pulido ")}</b>
                     <small>{DETALLE_EXTRAS[k][1]}</small>
                   </span>
                   <span className="lp-precio">{precioPlan(config, k)}</span>
