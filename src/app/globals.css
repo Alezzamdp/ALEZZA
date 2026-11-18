@@ -739,3 +739,24 @@ html { scroll-behavior: smooth; }
   .lp-sueltos { grid-template-columns: 220px minmax(0, 1fr); }
   .lp-sueltos-lista .lp-suelto b { white-space: normal; }
 }
+
+/* ===== Celular: sin huecos, bloques compactos y fotos al lado del texto ===== */
+@media (max-width: 759px) {
+  .lp-seccion { padding-top: 30px; padding-bottom: 30px; }
+  .lp-main { padding-top: 18px; padding-bottom: 22px; }
+  .lp-seccion > h2 { margin-bottom: 8px; }
+  .lp-intro { margin-bottom: 14px; }
+  .lp-card, .lp-part { padding: 18px 16px; }
+  /* Particulares: la foto (entera) a la izquierda, precio y botón a su lado, el texto debajo a todo el ancho. */
+  .lp-part { grid-template-columns: 118px minmax(0, 1fr); grid-template-areas: "foto der" "txt txt"; gap: 14px 16px; align-items: center; }
+  .lp-part .lp-visual { grid-area: foto; max-width: none; }
+  .lp-part > div:not(.lp-part-der) { grid-area: txt; }
+  .lp-part .lp-part-der { grid-area: der; justify-items: start; align-content: center; }
+  .lp-part-der .lp-precio-top { font-size: 30px; }
+  .lp-part h2 { font-size: 24px; margin: 4px 0 8px; }
+  /* Fundador: foto redonda más chica. */
+  .lp-persona { gap: 16px; }
+  .lp-persona-foto { width: min(38vw, 150px); }
+  .lp-persona-bio { font-size: 16px; line-height: 1.55; margin-bottom: 10px; }
+  .lp-footer { padding-top: 12px; }
+}

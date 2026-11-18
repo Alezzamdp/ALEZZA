@@ -64,3 +64,5 @@ Asesoría automotor integral (no solo lavadero ni agencia): simulador de permuta
 - La home dice "detail" en el texto y tiene una sección de preguntas frecuentes sobre el detail.
 - Pendiente fuera del código (lo hace el dueño): dar de alta alezza.com.ar en Google Search Console, enviar https://alezza.com.ar/sitemap.xml y completar la ficha de Google Business Profile (la ficha "ALEZZA DETAIL" ya existe en Maps: agregar horarios, fotos, categoría y el sitio web). Si Search Console pide verificación por etiqueta, agregar `verification: { google: "<código>" }` en el metadata de src/app/layout.tsx.
 - Fotos de detalle (detalle-faro y detalle-interior del Vento) se muestran ENTERAS, en su proporción original 3:4, sin recortar (pedido de Bruno 2026-11-19). En Servicios sueltos la caja de la foto tiene su misma proporción (3:4) y la lista se ajusta a esa altura: sin recortes ni franjas borrosas (se quitó el fondo borroso el 2026-11-19).
+
+- Celular (<760px): secciones con 30px de aire (antes 44), Particulares con la foto a la izquierda y precio+botón a su lado, foto del fundador más chica (150px). La página bajó de 6267 a 5467 px sin desbordes en 360/375.
