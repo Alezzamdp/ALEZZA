@@ -13,6 +13,7 @@ const ITEMS = [
   { t: "Inicio", u: "/" },
   { t: "Plan Agencias", u: "/#plan" },
   { t: "Particulares", u: "/#particulares" },
+  { t: "Servicios sueltos", u: "/#sueltos" },
   { t: "Unidades", u: "/#unidades" },
   { t: "Solicitar turno", u: "/turnos" },
   { t: "Contacto", u: "/contacto" },

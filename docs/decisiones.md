@@ -51,8 +51,10 @@ Asesoría automotor integral (no solo lavadero ni agencia): simulador de permuta
 
 ## Fotos con cartel, detalles, avisos y fluidez (2026-11-19)
 - Mostrador con 7 unidades en 4:3, con el auto entero y el cartel de ALEZZA a la vista (Tracker, Vento, Passat CC x2, Suran, Partner, Gol Trend). La foto trasera del Vento blanco no se usa. Patentes difuminadas en las fotos originales antes del recorte.
-- Fotos de detalle (public/fotos/detalle-*.webp) (hoy el faro del Vento en Particulares; la del Passat se quitó por tener la rueda cortada); para sumar más, usar la clase .lp-visual junto al bloque de texto.
+- Fotos de detalle (public/fotos/detalle-*.webp) (hoy: detalle-faro en Particulares y, provisoriamente, particular-suran en Servicios sueltos hasta cargar la foto del Peugeot 2008; la del Passat se quitó por tener la rueda cortada); para sumar más, usar la clase .lp-visual junto al bloque de texto.
 - Modo claro con texto negro (--lp-mute casi negro y grises de Tailwind oscurecidos en .lp).
 - Formularios: si faltan datos se avisa cuáles (aviso arriba y en cada campo, con foco en el primero); con todo completo se redirige a WhatsApp con el mensaje armado (y un enlace de respaldo).
 - Fluidez: fondo PixelBlast limitado a 30 cuadros (maxFps) y menor resolución, sin desenfoques de fondo (backdrop-filter) ni máscaras sobre el fondo animado, y paneles del mostrador aislados (contain). Medido en local: unos 97-99 fps al hacer scroll y al mover el mostrador.
 - Bio de Bruno: se suma la calificación como vendedor en Marketplace (4,9 e insignia "Calificación alta") sin cantidad de reseñas ni puntos fuertes. Datos de la captura de Bruno del 2026-11-19; actualizar en src/app/page.tsx si cambian.
+- Galería: se quitaron `contain`, `backface-visibility` y el filtro de grises del mostrador (y la carga diferida de sus imágenes) porque en Safari y algunos celulares pueden hacer desaparecer las fotos, sobre todo en modo claro. No se pudo reproducir en Chrome (2026-11-19).
+- Inicio: sección "Servicios sueltos" (id sueltos) con foto chica al costado y los cinco servicios con precio de la configuración (Interiores, Butacas, Motor, Pulido en 1 y 2 pasos); cada fila lleva a /turnos?extra=<servicio>. Entra en el menú como "Servicios sueltos".

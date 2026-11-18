@@ -632,8 +632,8 @@ html { scroll-behavior: smooth; }
 }
 
 /* ===== Animaciones de alta fluidez: solo transform y opacity, capas propias y nada que obligue a recalcular el diseño ===== */
-.ag-panel { contain: layout paint style; will-change: transform; }
-.ag-panel__media { will-change: transform; backface-visibility: hidden; }
+.ag-panel { will-change: transform; }
+.lp-galeria .ag-panel__media { will-change: transform; filter: none; } /* sin filtro ni backface-visibility: en Safari y algunos celulares hacen desaparecer las fotos */
 .lp-in, .lp-pal > span, .sm-capa, .sm-item-txt { will-change: transform, opacity; }
 .lp-btn, .tema-btn, .lp-tema, .tu-op, .lp-campo { transition-property: opacity, background-color, border-color, color, box-shadow, transform; }
 
@@ -659,3 +659,27 @@ html { scroll-behavior: smooth; }
 .lp-proceso li > span:last-child { font-size: 14.5px; line-height: 1.45; }
 .lp-proceso li:hover { border-color: var(--lp-line); }
 @media (min-width: 860px) { .lp-proceso { grid-template-columns: minmax(0, 1fr); max-width: 44rem; } }
+
+/* ===== Servicios sueltos: foto chica al costado y lista con precios en una sola tarjeta ===== */
+.lp-sueltos { display: grid; grid-template-columns: 104px minmax(0, 1fr); gap: 14px; align-items: start; }
+.lp-sueltos-foto { margin: 0; position: sticky; top: 84px; }
+.lp-sueltos-foto img { display: block; width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 14px; border: 1px solid var(--lp-line); }
+.lp-sueltos-lista { overflow: hidden; border: 1px solid var(--lp-line); border-radius: 16px; background: var(--papel); }
+.lp-sueltos-lista li { border-bottom: 1px solid var(--lp-line); }
+.lp-sueltos-lista li:last-child { border-bottom: 0; }
+.lp-suelto { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 4px 12px; min-height: 56px; padding: 12px 14px; transition: background-color .2s; }
+.lp-suelto:hover { background: var(--lp-soft); }
+.lp-suelto b { display: block; font-size: 16px; font-weight: 650; line-height: 1.25; }
+.lp-suelto small { display: none; margin-top: 2px; font-size: 14px; line-height: 1.4; color: var(--lp-mute); }
+.lp-suelto .lp-precio { font-size: 17px; }
+@media (min-width: 560px) {
+  .lp-sueltos { grid-template-columns: 180px minmax(0, 1fr); gap: 22px; }
+  .lp-suelto { padding: 14px 18px; }
+  .lp-suelto small { display: block; }
+}
+@media (min-width: 900px) { .lp-sueltos { grid-template-columns: 220px minmax(0, 1fr); gap: 32px; } .lp-sueltos-lista { max-width: 46rem; } }
+
+/* Servicios sueltos: la foto tiene siempre la misma altura que la caja de la lista (se estira con ella, sin deformarse). */
+.lp-sueltos { align-items: stretch; }
+.lp-sueltos-foto { position: relative; top: auto; min-height: 100%; }
+.lp-sueltos-foto img { position: absolute; inset: 0; width: 100%; height: 100%; aspect-ratio: auto; object-fit: cover; object-position: 50% 40%; }

@@ -8,7 +8,7 @@ import GaleriaUnidades from "@/components/GaleriaUnidades";
 import MapaDiferido from "@/components/MapaDiferido";
 import { SitioCabecera, SitioPie, Titular } from "@/components/SitioMarco";
 import { contacto, datosSitio, trabajosPublicos } from "@/lib/sitio";
-import { CASOS, ETAPAS_INTEGRAL, PLANES, ahorroIntegral, pesos, precioPlan, valorSeparado } from "@/lib/turnos";
+import { CASOS, DETALLE_EXTRAS, ETAPAS_INTEGRAL, PLANES, ahorroIntegral, pesos, precioPlan, valorSeparado, type Extra } from "@/lib/turnos";
 
 export const dynamic = "force-dynamic";
 
@@ -90,7 +90,7 @@ export default async function Home() {
       <section id="particulares" className="lp-wrap lp-seccion">
         <div className="lp-part">
           <figure className="lp-visual">
-            <Image src="/fotos/detalle-vento.webp" width={800} height={1000} sizes="(max-width: 760px) 92vw, 260px" alt="Faro y pintura de un Volkswagen Vento blanco, limpios y con brillo" />
+            <Image src="/fotos/detalle-faro.webp" width={600} height={750} sizes="(max-width: 760px) 92vw, 260px" alt="Faro y paragolpes de un Volkswagen Vento blanco, limpios y con brillo" />
           </figure>
           <div>
             <p className="lp-kicker">Para particulares</p>
@@ -102,6 +102,31 @@ export default async function Home() {
             <span className="lp-precio-top">{precioPlan(config, "lavado")}</span>
             <Link href="/turnos?servicio=lavado" className="lp-btn lp-btn-linea">Solicitar turno</Link>
           </div>
+        </div>
+      </section>
+
+      {/* Servicios sueltos: foto chica al costado y la lista con precios (cada uno lleva a pedir turno con ese servicio) */}
+      <section id="sueltos" className="lp-wrap lp-seccion">
+        <p className="lp-kicker">Servicios sueltos</p>
+        <h2>Si necesitás una sola cosa</h2>
+        <p className="lp-intro">Pedí solo lo que tu auto necesita, con el precio a la vista.</p>
+        <div className="lp-sueltos">
+          <figure className="lp-sueltos-foto">
+            <Image src="/fotos/particular-suran.webp" width={600} height={750} sizes="(max-width: 560px) 104px, (max-width: 900px) 180px, 220px" alt="Volkswagen Suran negra, limpia y con brillo, frente al taller ALEZZA" />
+          </figure>
+          <ul className="lp-sueltos-lista">
+            {(Object.keys(DETALLE_EXTRAS) as Extra[]).map((k) => (
+              <li key={k}>
+                <Link href={`/turnos?extra=${k}`} className="lp-suelto">
+                  <span>
+                    <b>{DETALLE_EXTRAS[k][0]}</b>
+                    <small>{DETALLE_EXTRAS[k][1]}</small>
+                  </span>
+                  <span className="lp-precio">{precioPlan(config, k)}</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
         </div>
       </section>
 
