@@ -51,7 +51,7 @@ Asesoría automotor integral (no solo lavadero ni agencia): simulador de permuta
 
 ## Fotos con cartel, detalles, avisos y fluidez (2026-11-19)
 - Mostrador con 7 unidades en 4:3, con el auto entero y el cartel de ALEZZA a la vista (Tracker, Vento, Passat CC x2, Suran, Partner, Gol Trend). La foto trasera del Vento blanco no se usa. Patentes difuminadas en las fotos originales antes del recorte.
-- Fotos de detalle (public/fotos/detalle-*.webp) (hoy: detalle-faro en Particulares y detalle-2008 (Peugeot 2008) en Servicios sueltos; la del Passat se quitó por tener la rueda cortada); para sumar más, usar la clase .lp-visual junto al bloque de texto.
+- Fotos de detalle (public/fotos/detalle-*.webp) (hoy: detalle-faro en Particulares y detalle-interior (interior del Vento) en Servicios sueltos; la del Passat se quitó por tener la rueda cortada); para sumar más, usar la clase .lp-visual junto al bloque de texto.
 - Modo claro con texto negro (--lp-mute casi negro y grises de Tailwind oscurecidos en .lp).
 - Formularios: si faltan datos se avisa cuáles (aviso arriba y en cada campo, con foco en el primero); con todo completo se redirige a WhatsApp con el mensaje armado (y un enlace de respaldo).
 - Fluidez: fondo PixelBlast limitado a 30 cuadros (maxFps) y menor resolución, sin desenfoques de fondo (backdrop-filter) ni máscaras sobre el fondo animado, y paneles del mostrador aislados (contain). Medido en local: unos 97-99 fps al hacer scroll y al mover el mostrador.
@@ -63,3 +63,4 @@ Asesoría automotor integral (no solo lavadero ni agencia): simulador de permuta
 - src/lib/seo.ts: título, descripción, imagen para compartir (public/og.jpg, 1200x630), datos estructurados del negocio (schema.org AutoWash, con servicios y precios de la configuración) y preguntas frecuentes (FAQPage). La home los publica; el layout define metadatos, Open Graph, Twitter y permiso de indexación; cada página declara su canónica (/ , /turnos, /contacto).
 - La home dice "detail" en el texto y tiene una sección de preguntas frecuentes sobre el detail.
 - Pendiente fuera del código (lo hace el dueño): dar de alta alezza.com.ar en Google Search Console, enviar https://alezza.com.ar/sitemap.xml y completar la ficha de Google Business Profile (la ficha "ALEZZA DETAIL" ya existe en Maps: agregar horarios, fotos, categoría y el sitio web). Si Search Console pide verificación por etiqueta, agregar `verification: { google: "<código>" }` en el metadata de src/app/layout.tsx.
+- Fotos de detalle (detalle-faro y detalle-interior del Vento) se muestran ENTERAS, en su proporción original 3:4, sin recortar (pedido de Bruno 2026-11-19). En Servicios sueltos la caja de la foto mide lo mismo que la lista y la foto va completa sobre un fondo borroso de ella misma.

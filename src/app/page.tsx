@@ -103,7 +103,7 @@ export default async function Home() {
       <section id="particulares" className="lp-wrap lp-seccion">
         <div className="lp-part">
           <figure className="lp-visual">
-            <Image src="/fotos/detalle-faro.webp" width={600} height={750} sizes="(max-width: 760px) 92vw, 260px" alt="Faro y paragolpes de un Volkswagen Vento blanco, limpios y con brillo" />
+            <Image src="/fotos/detalle-faro.webp" width={600} height={800} sizes="(max-width: 760px) 200px, 240px" alt="Faro y paragolpes de un Volkswagen Vento blanco, limpios y con brillo" />
           </figure>
           <div>
             <p className="lp-kicker">Para particulares</p>
@@ -125,7 +125,8 @@ export default async function Home() {
         <p className="lp-intro">Pedí solo lo que tu auto necesita, con el precio a la vista.</p>
         <div className="lp-sueltos">
           <figure className="lp-sueltos-foto">
-            <Image src="/fotos/detalle-2008.webp" width={600} height={750} sizes="(max-width: 560px) 104px, (max-width: 900px) 180px, 220px" alt="Luz trasera, logo y pintura roja con brillo de un Peugeot 2008" />
+            <Image src="/fotos/detalle-interior.webp" width={600} height={800} sizes="60px" alt="" aria-hidden className="lp-sueltos-fondo" />
+            <Image src="/fotos/detalle-interior.webp" width={600} height={800} sizes="(max-width: 560px) 128px, (max-width: 900px) 180px, 220px" alt="Interior de un Volkswagen Vento: volante, tablero y butacas de cuero" className="lp-sueltos-principal" />
           </figure>
           <ul className="lp-sueltos-lista">
             {(Object.keys(DETALLE_EXTRAS) as Extra[]).map((k) => (
