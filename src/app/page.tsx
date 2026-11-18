@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import CatalogoTrabajos from "@/components/CatalogoTrabajos";
+import EstrellasFila from "@/components/EstrellasFila";
 import GoogleEstrellas from "@/components/GoogleEstrellas";
 import BarraMovil from "@/components/BarraMovil";
 import GaleriaUnidades from "@/components/GaleriaUnidades";
@@ -139,6 +140,15 @@ export default async function Home() {
             <h2>Soy Bruno, fundador de ALEZZA</h2>
             <p className="lp-persona-bio">Creé este proyecto a partir de mi experiencia en la compra y venta de vehículos, donde identifiqué la necesidad de ofrecer soluciones de estética pensadas para las agencias y las necesidades reales del mercado automotor.</p>
             <p className="lp-persona-bio">Hoy, con más de 30 operaciones comerciales y 70 servicios realizados, integro ambas experiencias en cada trabajo.</p>
+            {/* Calificación como vendedor en Marketplace (se muestra el puntaje y la insignia, no la cantidad de reseñas) */}
+            <div className="lp-calif" aria-label="Calificación como vendedor en Marketplace: 4,9 sobre 5">
+              <div className="lp-calif-fila">
+                <EstrellasFila tam={20} />
+                <b>4,9</b>
+                <span className="lp-insignia">Calificación alta</span>
+              </div>
+              <p className="lp-calif-texto">Calificación como vendedor en Marketplace</p>
+            </div>
             <ul className="lp-cifras" aria-label="En números">
               <li><b>+30</b><span>operaciones comerciales</span></li>
               <li><b>+70</b><span>servicios realizados</span></li>

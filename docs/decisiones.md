@@ -55,3 +55,4 @@ Asesoría automotor integral (no solo lavadero ni agencia): simulador de permuta
 - Modo claro con texto negro (--lp-mute casi negro y grises de Tailwind oscurecidos en .lp).
 - Formularios: si faltan datos se avisa cuáles (aviso arriba y en cada campo, con foco en el primero); con todo completo se redirige a WhatsApp con el mensaje armado (y un enlace de respaldo).
 - Fluidez: fondo PixelBlast limitado a 30 cuadros (maxFps) y menor resolución, sin desenfoques de fondo (backdrop-filter) ni máscaras sobre el fondo animado, y paneles del mostrador aislados (contain). Medido en local: unos 97-99 fps al hacer scroll y al mover el mostrador.
+- Bio de Bruno: se suma la calificación como vendedor en Marketplace (4,9 e insignia "Calificación alta") sin cantidad de reseñas ni puntos fuertes. Datos de la captura de Bruno del 2026-11-19; actualizar en src/app/page.tsx si cambian.
