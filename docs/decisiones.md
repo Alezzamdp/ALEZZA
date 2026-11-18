@@ -47,4 +47,4 @@ Asesoría automotor integral (no solo lavadero ni agencia): simulador de permuta
 - Marca y modelo, año y patente son obligatorios en /contacto y /turnos, también para agencias (que además indican unidades). Ya no hay campos opcionales.
 
 ## Foto de la persona del taller (2026-11-19)
-- Bloque "Quién está detrás" en el Inicio (id equipo): foto de Bruno con marco redondo (public/fotos/bruno.webp, recorte cuadrado con el color de la web) y su bio. La bio y las cifras (+30 operaciones comerciales, +70 servicios) las dio Bruno el 2026-11-19; actualizarlas en src/app/page.tsx cuando cambien.
+- Bloque "Quién está detrás" en el Inicio (id equipo): foto de Bruno con marco redondo (public/fotos/bruno-2.webp, recorte cuadrado con el color de la web) y su bio. La bio y las cifras (+30 operaciones comerciales, +70 servicios) las dio Bruno el 2026-11-19; actualizarlas en src/app/page.tsx cuando cambien.
