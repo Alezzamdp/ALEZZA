@@ -45,3 +45,6 @@ Asesoría automotor integral (no solo lavadero ni agencia): simulador de permuta
 - El sitio se diseña primero para celular (la mayoría de las visitas): títulos grandes, botones de 48-50 px, barra fija abajo con "Soy agencia" y "Solicitar turno" (src/components/BarraMovil.tsx) y fondo animado más liviano.
 - Fotos de unidades en 3:2 (1200x800), con el auto entero, más claras y con el mismo color. La foto abierta del mostrador mide siempre 3:2 (GaleriaUnidades.tsx calcula el alto); en celular el mostrador es vertical. Se quitó el detalle trasero del Passat porque no mostraba el auto entero. La camioneta negra es una Suran.
 - Marca y modelo, año y patente son obligatorios en /contacto y /turnos, también para agencias (que además indican unidades). Ya no hay campos opcionales.
+
+## Foto de la persona del taller (2026-11-19)
+- Bloque "Quién está detrás" en el Inicio (id equipo): foto de Bruno con marco redondo (public/fotos/bruno.webp, recorte cuadrado con el color de la web) y su bio. La bio y las cifras (+30 operaciones comerciales, +70 servicios) las dio Bruno el 2026-11-19; actualizarlas en src/app/page.tsx cuando cambien.

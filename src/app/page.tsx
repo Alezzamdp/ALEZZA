@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import CatalogoTrabajos from "@/components/CatalogoTrabajos";
 import GoogleEstrellas from "@/components/GoogleEstrellas";
@@ -116,6 +117,26 @@ export default async function Home() {
         </ol>
         <div className="lp-acciones">
           <Link href={contacto("agencia")} className="lp-btn">Coordinar con mi agencia</Link>
+        </div>
+      </section>
+
+      {/* Quién está detrás del taller: Bruno, fundador */}
+      <section id="equipo" className="lp-wrap lp-seccion">
+        <div className="lp-persona">
+          <Image src="/fotos/bruno.webp" width={800} height={800} sizes="(max-width: 760px) 60vw, 280px" className="lp-persona-foto" alt="Bruno, fundador de ALEZZA, frente al taller" />
+          <div>
+            <p className="lp-kicker">Quién está detrás</p>
+            <h2>Soy Bruno, fundador de ALEZZA</h2>
+            <p className="lp-persona-bio">Creé este proyecto a partir de mi experiencia en la compra y venta de vehículos, donde identifiqué la necesidad de ofrecer soluciones de estética pensadas para las agencias y las necesidades reales del mercado automotor.</p>
+            <p className="lp-persona-bio">Hoy, con más de 30 operaciones comerciales y 70 servicios realizados, integro ambas experiencias en cada trabajo.</p>
+            <ul className="lp-cifras" aria-label="En números">
+              <li><b>+30</b><span>operaciones comerciales</span></li>
+              <li><b>+70</b><span>servicios realizados</span></li>
+            </ul>
+            <div className="lp-acciones">
+              <Link href={contacto("agencia")} className="lp-btn">Hablar con Bruno</Link>
+            </div>
+          </div>
         </div>
       </section>
 
