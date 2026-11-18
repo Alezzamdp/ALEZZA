@@ -11,9 +11,9 @@ import { externo } from "@/lib/contacto";
 
 const ITEMS = [
   { t: "Inicio", u: "/" },
-  { t: "Servicios", u: "/#servicios" },
-  { t: "Agencias", u: "/#agencias" },
-  { t: "Pedir turno", u: "/turnos" },
+  { t: "Plan Agencias", u: "/#plan" },
+  { t: "Particulares", u: "/#particulares" },
+  { t: "Solicitar turno", u: "/turnos" },
   { t: "Contacto", u: "/contacto" },
 ];
 

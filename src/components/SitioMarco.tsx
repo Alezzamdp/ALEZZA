@@ -8,14 +8,14 @@ import { UBICACION, externo } from "@/lib/contacto";
 // Cabecera, pie y titular de todos los portales públicos. Estilos .lp en globals.css.
 // El contacto (WhatsApp e Instagram) vive solo en /contacto: acá se enlaza, no se repite.
 
-// accion: reemplaza el botón "Pedir turno" (por ejemplo, "¿Dudas?" en la página de un turno).
+// accion: reemplaza el botón "Solicitar turno" (por ejemplo, "¿Dudas?" en la página de un turno).
 export function SitioCabecera({ accion }: { activa?: string; accion?: ReactNode }) {
   return (
     <header className="lp-header">
       <div className="lp-wrap lp-header-in">
         <Link href="/" aria-label="ALEZZA - Inicio" className="lp-logo"><Logo alto={20} /></Link>
         <div className="lp-header-der">
-          {accion ?? <Link href="/turnos" className="lp-btn lp-btn-sm">Pedir turno</Link>}
+          {accion ?? <Link href="/turnos" className="lp-btn lp-btn-sm">Solicitar turno</Link>}
           <SitioMenu />
         </div>
       </div>

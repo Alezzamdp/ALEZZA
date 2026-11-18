@@ -28,3 +28,9 @@ Asesoría automotor integral (no solo lavadero ni agencia): simulador de permuta
 - Los precios destacan la Preparación integral como la mejor opción; el ahorro frente a las tres etapas por separado (barniz, motor, habitáculo) sale de los precios de la configuración (valorSeparado en src/lib/turnos.ts).
 - Google: solo se muestran las cinco estrellas (src/components/GoogleEstrellas.tsx), sin puntaje ni cantidad de reseñas.
 - Fondo de píxeles PixelBlast (React Bits) en todo el sitio público: src/components/PixelBlast.tsx y FondoPixeles.tsx.
+
+## Plan Agencias, turno por WhatsApp y paleta rosa (2026-11-18)
+- Plan Agencias = Preparación integral ($250.000 por unidad, precio de app_settings 'turnos'.puesta). La Preparación base ($60.000) es para particulares.
+- /turnos ya no tiene calendario ni seña online: es un pedido (plan, nombre, vehículo) que abre WhatsApp con el mensaje armado; el día y la hora se coordinan por WhatsApp. Estos pedidos NO se guardan en la base ni aparecen en /admin/turnos. Las rutas /turnos/[token] y /seguimiento/[token] siguen funcionando para los turnos ya creados.
+- Sitio público siempre oscuro: negro, blanco y rosa #ff2e93 (variable --rosa en globals.css). Fondo PixelBlast rosa con opacidad baja y más tenue en el centro, y tarjetas con fondo negro sólido para cuidar la legibilidad.
+- El Inicio tiene cuatro bloques: oferta de agencias, particulares, cómo trabajamos con la agencia y mapa.

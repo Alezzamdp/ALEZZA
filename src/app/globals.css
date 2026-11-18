@@ -202,9 +202,8 @@ body { padding-bottom: env(safe-area-inset-bottom, 0px); -webkit-tap-highlight-c
 }
 /* Fondo de píxeles de todo el sitio (src/components/FondoPixeles.tsx): fijo, detrás del contenido y sin tapar clics. */
 .fondo-pixeles { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: .34; }
-:root[data-tema="claro"] .fondo-pixeles { opacity: .2; }
 @media (max-width: 720px) { .fondo-pixeles { opacity: .24; } }
-:root[data-tema="oscuro"] .lp {
+:root .lp {
   --papel: #0a0a0a; --tinta: #f5f5f5; --lp-mute: #a3a3a3; --lp-line: #242424; --lp-soft: #141414; --lp-capa: #3a3a3a;
   --mostaza: #f5f5f5; --m50: #1c1c1c; --m100: #262626; --m200: #333333; --m300: #525252; --m400: #a3a3a3; --m600: #d4d4d4; --m700: #a3a3a3; --m800: #f0f0f0; --m900: #f5f5f5;
   --color-white: #141414; --color-gray-50: #141414; --color-gray-100: #1c1c1c; --color-gray-200: #262626; --color-gray-300: #333333;
@@ -219,7 +218,7 @@ body { padding-bottom: env(safe-area-inset-bottom, 0px); -webkit-tap-highlight-c
 }
 /* Fondo liso (sin la cuadrícula de BRUNO OS) y el mismo color detrás de la página. */
 main.lp { background-image: none; }
-html:has(main.lp) body { background: #ffffff; }
+html:has(main.lp) body { background: #0a0a0a; }
 html[data-tema="oscuro"]:has(main.lp) body { background: #0a0a0a; }
 
 /* Tipografía: los títulos usan la letra ancha del logo; el texto, DM Sans. */
@@ -328,76 +327,6 @@ a.lp-fila:hover { background: var(--lp-soft); }
 .lp-planes-col > .lp-ir { margin-top: 6px; }
 .lp-elegilo { font-size: 14px; line-height: 1.5; }
 .lp-elegilo b { font-weight: 650; }
-
-/* Inicio (ALEZZA DETAIL): estrellas de Google, planes con la integral destacada, valor, agencias y proceso. */
-.lp-estrellas { display: inline-flex; align-items: center; gap: 10px; margin-top: 22px; font-size: 13px; color: var(--lp-mute); transition: color .2s; }
-.lp-estrellas:hover { color: var(--tinta); }
-.lp-estrellas-fila { display: inline-flex; gap: 2px; color: #fbbc04; }
-.lp-intro { margin: -14px 0 28px; max-width: 40rem; font-size: 16px; line-height: 1.55; color: var(--lp-mute); }
-.lp-seccion .lp-acciones { margin-top: 28px; }
-
-.lp-cards { display: grid; gap: 16px; }
-@media (min-width: 960px) { .lp-cards { grid-template-columns: minmax(0, 1fr) minmax(0, 1.18fr) minmax(0, 1fr); align-items: stretch; } }
-@media (max-width: 959px) { .lp-card-top { order: -1; } }
-.lp-card { position: relative; display: flex; flex-direction: column; gap: 14px; padding: 26px 24px; border: 1px solid var(--lp-line); border-radius: 18px; }
-.lp-card h3 { font-size: 21px; font-weight: 650; }
-.lp-card ul { display: grid; gap: 4px; font-size: 14px; line-height: 1.5; }
-.lp-card li::before { content: "✓  "; color: var(--lp-mute); }
-.lp-card b { display: block; margin-bottom: 2px; font-family: var(--f-mono), monospace; font-size: 10.5px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; opacity: .6; }
-.lp-card-problema, .lp-card-res { font-size: 14px; line-height: 1.5; }
-.lp-card-pie { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; margin-top: auto; padding-top: 16px; border-top: 1px solid var(--lp-line); }
-.lp-card-nota { font-size: 13px; color: var(--lp-mute); }
-.lp-card-top { background: var(--tinta); color: var(--papel); border-color: var(--tinta); padding-top: 34px; box-shadow: 0 20px 60px -24px color-mix(in srgb, var(--tinta) 55%, transparent); }
-.lp-card-top li::before, .lp-card-top .lp-num { color: color-mix(in srgb, var(--papel) 60%, transparent); }
-.lp-card-top .lp-card-pie { border-color: color-mix(in srgb, var(--papel) 22%, transparent); }
-.lp-card-top .lp-btn { background: var(--papel); color: var(--tinta); border-color: var(--papel); }
-.lp-card-top h3 { font-size: 26px; }
-.lp-chip { position: absolute; top: -13px; left: 24px; padding: 5px 12px; border-radius: 999px; background: var(--papel); color: var(--tinta); border: 1px solid var(--tinta); font-size: 12px; font-weight: 700; white-space: nowrap; }
-.lp-precio-top { display: block; font-size: 34px; letter-spacing: -0.02em; line-height: 1.1; }
-.lp-tachado { display: block; margin-top: 2px; font-size: 13px; text-decoration: line-through; opacity: .7; }
-.lp-card-ahorro { padding: 10px 12px; border-radius: 10px; background: color-mix(in srgb, var(--papel) 14%, transparent); font-size: 13.5px; font-weight: 600; }
-
-.lp-valor { display: grid; gap: 20px; margin-top: 20px; padding: 24px; border: 1px solid var(--lp-line); border-radius: 18px; }
-@media (min-width: 860px) { .lp-valor { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); align-items: center; gap: 48px; padding: 28px 32px; } }
-.lp-valor h3 { margin: 8px 0; font-size: 20px; font-weight: 650; line-height: 1.25; }
-.lp-valor > div > p:last-child { font-size: 14.5px; line-height: 1.55; color: var(--lp-mute); }
-.lp-valor table { width: 100%; border-collapse: collapse; font-size: 15px; }
-.lp-valor th { padding: 10px 0; font-weight: 400; text-align: left; }
-.lp-valor td { padding: 10px 0; text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; }
-.lp-valor tr { border-bottom: 1px solid var(--lp-line); }
-.lp-valor-suma th, .lp-valor-suma td { text-decoration: line-through; opacity: .65; }
-.lp-valor-top { border-bottom: 0 !important; }
-.lp-valor-top th, .lp-valor-top td { padding-top: 14px; font-size: 18px; font-weight: 700; }
-
-.lp-incluido { margin-left: 10px; padding: 2px 8px; border: 1px solid var(--lp-line); border-radius: 999px; font-size: 11px; font-style: normal; font-weight: 600; color: var(--lp-mute); vertical-align: middle; white-space: nowrap; }
-.lp-fila-precio p b { font-weight: 650; color: var(--tinta); }
-
-.lp-agencia { display: grid; gap: 16px; }
-@media (min-width: 900px) { .lp-agencia { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px; } }
-.lp-agencia-col { display: grid; align-content: start; gap: 8px; padding: 26px 24px; border: 1px solid var(--lp-line); border-radius: 18px; font-size: 15px; line-height: 1.55; }
-.lp-agencia-col .lp-kicker { margin-top: 12px; }
-.lp-agencia-col .lp-kicker:first-child { margin-top: 0; }
-.lp-agencia-col ul { display: grid; gap: 4px; }
-.lp-agencia-col li::before { content: "✓  "; color: var(--lp-mute); }
-.lp-agencia-pasos { display: grid; align-content: start; border: 1px solid var(--lp-line); border-radius: 18px; }
-.lp-agencia-pasos li { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 12px; padding: 18px 24px; border-bottom: 1px solid var(--lp-line); }
-.lp-agencia-pasos li:last-child { border-bottom: 0; }
-.lp-agencia-pasos li > span:last-child { display: grid; gap: 2px; }
-.lp-agencia-pasos b { font-size: 16px; font-weight: 650; }
-.lp-agencia-pasos li > span:last-child > span { font-size: 14px; line-height: 1.5; color: var(--lp-mute); }
-.lp-agencia, .lp-agencia-pasos { background: transparent; }
-.lp-agencia-pasos, .lp-agencia-col { background: color-mix(in srgb, var(--papel) 82%, transparent); }
-
-.lp-proceso { display: grid; gap: 12px; }
-@media (min-width: 860px) { .lp-proceso { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
-.lp-proceso li { display: grid; align-content: start; gap: 6px; padding: 20px; border: 1px solid var(--lp-line); border-radius: 16px; background: color-mix(in srgb, var(--papel) 82%, transparent); }
-.lp-proceso b { font-size: 16px; font-weight: 650; }
-.lp-proceso li > span:last-child { font-size: 14px; line-height: 1.5; color: var(--lp-mute); }
-
-.lp-cierre { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px 32px; margin-top: 32px; padding: 24px; border: 1px solid var(--lp-line); border-radius: 18px; background: color-mix(in srgb, var(--papel) 82%, transparent); }
-.lp-cierre h3 { font-size: 20px; font-weight: 650; }
-.lp-cierre .lp-acciones { margin-top: 0; }
-.lp-cierre .lp-estrellas { margin-top: 8px; }
 
 /* Contacto: único apartado, con WhatsApp e Instagram. */
 .lp-contacto { max-width: 760px; }
@@ -515,3 +444,76 @@ a.lp-fila:hover { background: var(--lp-soft); }
 .lp-valor-ahorro th, .lp-valor-ahorro td { padding: 12px 14px; background: var(--tinta); color: var(--papel); font-size: 16px; font-weight: 700; }
 .lp-valor-ahorro th { border-radius: 10px 0 0 10px; }
 .lp-valor-ahorro td { border-radius: 0 10px 10px 0; }
+
+/* ===== Paleta del sitio público: negro, blanco y rosa chillón en detalles mínimos (siempre oscuro) ===== */
+:root .lp { --rosa: #ff2e93; --lp-mute: #c4c4c4; --lp-line: #2e2e2e; }
+.lp { font-size: 16px; line-height: 1.6; }
+:root .lp a:focus-visible, :root .lp button:focus-visible { outline-color: var(--rosa); }
+
+/* Fondo rosa: tenue y más apagado en el centro, donde está el texto. Además cada tarjeta lleva fondo negro sólido. */
+.fondo-pixeles { opacity: .4; -webkit-mask-image: radial-gradient(ellipse 75% 65% at 50% 45%, rgb(0 0 0 / .3), #000 100%); mask-image: radial-gradient(ellipse 75% 65% at 50% 45%, rgb(0 0 0 / .3), #000 100%); }
+@media (max-width: 720px) { .fondo-pixeles { opacity: .28; } }
+.lp :is(h1, h2, h3, p, li, summary, small) { text-shadow: 0 0 10px var(--papel), 0 0 2px var(--papel); }
+.lp-plan, .lp-ficha, .lp-detalle, .lp-canal, .lp-card, .lp-part, .lp-proceso li, .tu-op, .lp-sugerencia { background: var(--papel); text-shadow: none; }
+
+/* Botones: el principal en rosa con letra negra; el secundario, con línea blanca. */
+:root .lp .lp-btn { background: var(--rosa); border-color: var(--rosa); color: #0a0a0a; }
+:root .lp .lp-btn-linea { background: transparent; color: var(--tinta); border-color: color-mix(in srgb, var(--tinta) 35%, transparent); }
+:root .lp .lp-btn-linea:hover { background: var(--lp-soft); }
+.lp-kicker { font-size: 12px; color: var(--lp-mute); }
+.lp-num { color: var(--rosa); }
+.lp-lead { font-size: 18px; color: #dcdcdc; }
+.lp-ir:hover { color: var(--rosa); }
+
+/* Estrellas de Google en rosa, sin puntaje ni cantidad. */
+.lp-estrellas { display: inline-flex; align-items: center; gap: 10px; margin-top: 22px; font-size: 14px; color: var(--lp-mute); transition: color .2s; }
+.lp-estrellas:hover { color: var(--tinta); }
+.lp-estrellas-fila { display: inline-flex; gap: 2px; color: var(--rosa); }
+
+/* Inicio: tarjeta del Plan Agencias, particulares y pasos. */
+.lp-intro { margin: -14px 0 28px; max-width: 40rem; font-size: 17px; line-height: 1.6; color: var(--lp-mute); }
+.lp-seccion .lp-acciones { margin-top: 28px; }
+.lp-card { display: flex; flex-direction: column; gap: 16px; padding: 28px 26px; border: 1px solid var(--lp-line); border-radius: 20px; }
+.lp-card h2 { font-size: 28px; font-weight: 700; line-height: 1.15; }
+.lp-card-top { border: 1.5px solid var(--rosa); }
+.lp-chip { align-self: flex-start; padding: 4px 12px; border-radius: 999px; background: var(--rosa); color: #0a0a0a; font-size: 13px; font-weight: 700; }
+.lp-resuelve { font-size: 15.5px; line-height: 1.55; color: var(--lp-mute); }
+.lp-resuelve b { margin-right: 6px; color: var(--tinta); font-weight: 650; }
+.lp-card ul, .lp-checks { display: grid; gap: 6px; font-size: 16px; line-height: 1.45; }
+.lp-card li::before, .lp-checks li::before { content: "✓  "; color: var(--rosa); font-weight: 700; }
+.lp-precio-fila { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 12px; }
+.lp-precio-top { font-family: var(--f-body), system-ui, sans-serif; font-size: 40px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.lp-card-top .lp-precio-top { color: var(--rosa); }
+.lp-por { font-size: 15px; color: var(--lp-mute); }
+.lp-ahorro { align-self: flex-start; padding: 7px 12px; border-radius: 10px; background: color-mix(in srgb, var(--rosa) 16%, transparent); color: var(--rosa); font-size: 14.5px; font-weight: 700; text-shadow: none; }
+.lp-det summary { cursor: pointer; font-size: 14.5px; text-decoration: underline; text-underline-offset: 4px; color: var(--lp-mute); }
+.lp-det[open] summary { margin-bottom: 8px; }
+.lp-det table { width: 100%; border-collapse: collapse; font-size: 15px; }
+.lp-det th { padding: 9px 0; font-weight: 400; text-align: left; }
+.lp-det td { padding: 9px 0; text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; }
+.lp-det tr { border-bottom: 1px solid var(--lp-line); }
+.lp-det-suma th, .lp-det-suma td { text-decoration: line-through; color: var(--lp-mute); }
+.lp-det-top { border-bottom: 0 !important; }
+.lp-det-top th, .lp-det-top td { padding-top: 12px; font-size: 17px; font-weight: 700; }
+.lp-card > .lp-btn { align-self: stretch; margin-top: 4px; }
+
+.lp-part { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 24px; padding: 28px 26px; border: 1px solid var(--lp-line); border-radius: 20px; }
+.lp-part h2 { margin: 6px 0 10px; font-size: 26px; font-weight: 700; }
+.lp-part .lp-resuelve { margin-bottom: 12px; max-width: 34rem; }
+.lp-part-der { display: grid; justify-items: start; gap: 12px; }
+.lp-seccion .lp-part { border-top: 1px solid var(--lp-line); }
+
+.lp-proceso { display: grid; gap: 12px; }
+@media (min-width: 860px) { .lp-proceso { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.lp-proceso li { display: grid; align-content: start; gap: 6px; padding: 20px; border: 1px solid var(--lp-line); border-radius: 16px; }
+.lp-proceso b { font-size: 17px; font-weight: 650; }
+.lp-proceso li > span:last-child { font-size: 15px; line-height: 1.5; color: var(--lp-mute); }
+
+/* Contacto en rosa */
+:root .lp .lp-canal-principal { background: var(--rosa); border-color: var(--rosa); color: rgb(10 10 10 / .8); }
+:root .lp .lp-canal-principal strong, :root .lp .lp-canal-principal .lp-ir, :root .lp .lp-canal-principal .lp-num { color: #0a0a0a; }
+.lp-tema[aria-current] { background: var(--rosa); border-color: var(--rosa); color: #0a0a0a; }
+
+/* Solicitud de turno: opción elegida con borde rosa. */
+.tu-op[aria-pressed="true"] { border-color: var(--rosa); box-shadow: inset 0 0 0 1px var(--rosa); background: var(--papel); }
+.tu-op[aria-pressed="true"] .tu-marca { background: var(--rosa); border-color: var(--rosa); color: #0a0a0a; }
