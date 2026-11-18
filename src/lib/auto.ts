@@ -4,9 +4,8 @@ import { normalizarPatente } from "@/lib/turnos";
 export type DatosAuto = { modelo: string; anio: string; patente: string };
 export const AUTO_VACIO: DatosAuto = { modelo: "", anio: "", patente: "" };
 
-// Devuelve el texto del error, o "" si está bien. Con obligatorio=false, vacío es válido (pero si se completa algo, se completa todo).
-export function errorAuto(d: DatosAuto, obligatorio: boolean): string {
-  if (!obligatorio && !d.modelo.trim() && !d.anio.trim() && !d.patente.trim()) return "";
+// Marca y modelo, año y patente son obligatorios (también para agencias). Devuelve el texto del error, o "" si está bien.
+export function errorAuto(d: DatosAuto): string {
   if (d.modelo.trim().length < 2) return "Escribí la marca y el modelo del auto.";
   const anio = Number(d.anio);
   if (!/^\d{4}$/.test(d.anio.trim()) || anio < 1960 || anio > new Date().getFullYear() + 1) return "Revisá el año: 4 números, por ejemplo 2018.";

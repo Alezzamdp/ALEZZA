@@ -9,7 +9,7 @@ import { INSTAGRAM, TEMAS, waMensaje, type Tema } from "@/lib/contacto";
 const ELEGIBLES: Tema[] = ["estetica", "agencia", "turno", "consulta"];
 
 // Contacto: antes de abrir WhatsApp se cargan los datos del auto (modelo, año y patente) y el mensaje sale armado con ellos.
-// Para agencias se pide nombre y unidades por mes, y el auto es opcional.
+// Todos los datos son obligatorios. Para agencias se pide además nombre de la agencia, unidades por mes y los datos de una unidad.
 export default function ContactoForm({ temaInicial, refInicial }: { temaInicial: Tema; refInicial?: string }) {
   const [tema, setTema] = useState<Tema>(temaInicial);
   const [nombre, setNombre] = useState("");
@@ -19,12 +19,14 @@ export default function ContactoForm({ temaInicial, refInicial }: { temaInicial:
   const agencia = tema === "agencia";
 
   function enviar() {
-    const falla = nombre.trim().length < 2 ? (agencia ? "Escribí el nombre de la agencia." : "Escribí tu nombre.") : errorAuto(auto, !agencia);
+    const falla = nombre.trim().length < 2 ? (agencia ? "Escribí el nombre de la agencia." : "Escribí tu nombre.")
+      : agencia && !/^[1-9]\d{0,3}$/.test(unidades.trim()) ? "Escribí cuántas unidades por mes (un número)."
+      : errorAuto(auto);
     if (falla) { setError(falla); return; }
     setError("");
     const filas: [string, string | null][] = [
       [agencia ? "Agencia" : "Nombre", nombre.trim()],
-      ...(agencia ? ([["Unidades por mes", unidades.trim() || null]] as [string, string | null][]) : []),
+      ...(agencia ? ([["Unidades por mes", unidades.trim()]] as [string, string | null][]) : []),
       ...filasAuto(auto),
     ];
     window.open(waMensaje(tema, filas, refInicial), "_blank", "noopener,noreferrer");
@@ -44,16 +46,16 @@ export default function ContactoForm({ temaInicial, refInicial }: { temaInicial:
         <div className="lp-form-campos">
           <div className="lp-campo-caja lp-campo-ancho">
             <label htmlFor="contacto-nombre">{agencia ? "Nombre de la agencia" : "Tu nombre"}</label>
-            <input id="contacto-nombre" className="lp-campo" maxLength={120} autoComplete="name" value={nombre} onChange={(e) => setNombre(e.target.value)} />
+            <input id="contacto-nombre" className="lp-campo" required maxLength={120} autoComplete="name" value={nombre} onChange={(e) => setNombre(e.target.value)} />
           </div>
           {agencia && (
             <div className="lp-campo-caja lp-campo-ancho">
               <label htmlFor="contacto-unidades">Unidades por mes (aproximado)</label>
-              <input id="contacto-unidades" className="lp-campo" inputMode="numeric" maxLength={4} placeholder="Ej.: 10" value={unidades} onChange={(e) => setUnidades(e.target.value.replace(/\D/g, ""))} />
+              <input id="contacto-unidades" className="lp-campo" required inputMode="numeric" maxLength={4} placeholder="Ej.: 10" value={unidades} onChange={(e) => setUnidades(e.target.value.replace(/\D/g, ""))} />
             </div>
           )}
-          <p className="lp-form-sub lp-campo-ancho">{agencia ? "Si querés, sumá los datos de una unidad de ejemplo:" : "Datos del auto:"}</p>
-          <CamposAuto valor={auto} onCambio={setAuto} opcional={agencia} />
+          <p className="lp-form-sub lp-campo-ancho">{agencia ? "Datos de una unidad de ejemplo:" : "Datos del auto:"}</p>
+          <CamposAuto valor={auto} onCambio={setAuto} />
         </div>
 
         {error && <p role="alert" className="lp-error">{error}</p>}

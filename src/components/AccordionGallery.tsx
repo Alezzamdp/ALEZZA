@@ -34,6 +34,7 @@ const AccordionGallery = ({
   trigger = 'hover',
   showLabels = true,
   grayscale = true,
+  dim = 0.35,
   ariaLabel = 'Image accordion gallery',
   className = ''
 }) => {
@@ -92,7 +93,7 @@ const AccordionGallery = ({
               x: vertical ? 0 : isActive ? 0 : shift,
               y: vertical ? (isActive ? 0 : shift) : 0,
               '--ag-gray': gray,
-              '--ag-dim': isActive ? 0 : 0.35,
+              '--ag-dim': isActive ? 0 : dim,
               duration: dur,
               ease
             },
@@ -121,6 +122,7 @@ const AccordionGallery = ({
       tilt,
       parallax,
       grayscale,
+      dim,
       showLabels,
       stagger,
       prefersReduced
@@ -135,7 +137,8 @@ const AccordionGallery = ({
       const rect = el.getBoundingClientRect();
       const total = vertical ? rect.height : rect.width;
       const usable = Math.max(total - gap * (count - 1), 120);
-      const size = Math.max(140, usable * Math.min(Math.max(expandRatio, 0.2), 0.9) * 1.22);
+      // Cambio sobre el original: el factor 1.22 pasa a 1 para que la imagen ocupe justo el panel abierto (y se vea el auto entero)
+      const size = Math.max(140, usable * Math.min(Math.max(expandRatio, 0.2), 0.9));
       mediaSizeRef.current = size;
       el.style.setProperty('--ag-media-size', `${size}px`);
       applyLayout(!firstRunRef.current);
@@ -254,6 +257,7 @@ export type AccordionGalleryProps = {
   trigger?: 'hover' | 'click';
   showLabels?: boolean;
   grayscale?: boolean;
+  dim?: number;
   ariaLabel?: string;
   className?: string;
 };

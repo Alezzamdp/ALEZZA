@@ -18,7 +18,7 @@ const OPCIONES: { k: Opcion; t: string; d: string }[] = [
 ];
 
 // Solicitud de turno sin calendario: elegís qué necesitás, cargás tus datos y los del auto (modelo, año y patente) y se abre
-// WhatsApp con todo armado. El día y la hora se coordinan por WhatsApp. Para el plan de agencias los datos del auto son opcionales.
+// WhatsApp con todo armado. El día y la hora se coordinan por WhatsApp. Todos los datos son obligatorios (para agencias, los de una unidad).
 export default function SolicitarTurno() {
   const [config, setConfig] = useState<TurnosConfig>(CONFIG_INICIAL);
   const [opcion, setOpcion] = useState<Opcion>("puesta");
@@ -45,12 +45,14 @@ export default function SolicitarTurno() {
   const elegida = OPCIONES.find((o) => o.k === opcion)!;
 
   function enviar() {
-    const falla = nombre.trim().length < 2 ? (agencia ? "Escribí tu nombre o el de la agencia." : "Escribí tu nombre.") : errorAuto(auto, !agencia);
+    const falla = nombre.trim().length < 2 ? (agencia ? "Escribí tu nombre o el de la agencia." : "Escribí tu nombre.")
+      : agencia && !/^[1-9]\d{0,3}$/.test(unidades.trim()) ? "Escribí cuántas unidades son (un número)."
+      : errorAuto(auto);
     if (falla) { setError(falla); return; }
     setError("");
     const url = waAlezza(mensajeAlezza("Quiero solicitar un turno en el taller.", [
       ["Servicio", elegida.t],
-      ["Unidades", agencia ? unidades.trim() || null : null],
+      ["Unidades", agencia ? unidades.trim() : null],
       [agencia ? "Agencia" : "Nombre", nombre.trim()],
       ...filasAuto(auto),
     ]));
@@ -85,17 +87,17 @@ export default function SolicitarTurno() {
             <div className="lp-form-campos">
               <div className="lp-campo-caja lp-campo-ancho">
                 <label htmlFor="turno-nombre">{agencia ? "Tu nombre o el de la agencia" : "Tu nombre"}</label>
-                <input id="turno-nombre" className="lp-campo" maxLength={120} autoComplete="name" value={nombre} onChange={(e) => setNombre(e.target.value)} />
+                <input id="turno-nombre" className="lp-campo" required maxLength={120} autoComplete="name" value={nombre} onChange={(e) => setNombre(e.target.value)} />
               </div>
               {agencia && (
                 <div className="lp-campo-caja lp-campo-ancho">
-                  <label htmlFor="turno-unidades">¿Cuántas unidades? (opcional)</label>
-                  <input id="turno-unidades" className="lp-campo" inputMode="numeric" maxLength={4} placeholder="1" value={unidades} onChange={(e) => setUnidades(e.target.value.replace(/\D/g, ""))} />
+                  <label htmlFor="turno-unidades">¿Cuántas unidades?</label>
+                  <input id="turno-unidades" className="lp-campo" required inputMode="numeric" maxLength={4} placeholder="1" value={unidades} onChange={(e) => setUnidades(e.target.value.replace(/\D/g, ""))} />
                 </div>
               )}
-              <CamposAuto valor={auto} onCambio={setAuto} opcional={agencia} />
+              <CamposAuto valor={auto} onCambio={setAuto} />
             </div>
-            {agencia && <p className="lp-form-nota">Para agencias, los datos del auto son opcionales: podés cargar los de una unidad de ejemplo.</p>}
+            {agencia && <p className="lp-form-nota">Cargá los datos de una unidad; el resto lo coordinamos por WhatsApp.</p>}
           </fieldset>
 
           {error && <p role="alert" className="lp-error">{error}</p>}

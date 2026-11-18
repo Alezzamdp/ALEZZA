@@ -2,7 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import PixelBlast from "@/components/PixelBlast";
-import { useOscuro } from "@/lib/useTema";
+import { useChico, useOscuro } from "@/lib/useTema";
 
 // Fondo animado y minimalista de todo el sitio público (PixelBlast de React Bits): píxeles rosas que se mueven despacio y se
 // encienden cerca del cursor. Sigue el modo claro/oscuro que elige quien visita. Va detrás del contenido y sin tapar clics;
@@ -11,13 +11,14 @@ import { useOscuro } from "@/lib/useTema";
 export default function FondoPixeles() {
   const ruta = usePathname();
   const oscuro = useOscuro();
+  const chico = useChico();
   if (oscuro === null || ruta.startsWith("/admin") || ruta.startsWith("/os")) return null;
 
   return (
     <div className="fondo-pixeles" aria-hidden>
       <PixelBlast
         variant="square"
-        pixelSize={4}
+        pixelSize={chico ? 5 : 4}
         color="#ff2e93"
         lightMode={!oscuro}
         patternScale={2.2}
@@ -31,7 +32,7 @@ export default function FondoPixeles() {
         hoverRadius={110}
         enableRipples={false}
         edgeFade={0.2}
-        dpr={1.5}
+        dpr={chico ? 1 : 1.5}
       />
     </div>
   );

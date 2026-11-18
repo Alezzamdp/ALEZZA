@@ -9,6 +9,14 @@ const suscribir = (aviso: () => void) => {
   return () => o.disconnect();
 };
 
+// Pantalla chica (celular): se usa para aligerar el fondo animado.
+const suscribirChico = (aviso: () => void) => {
+  const m = window.matchMedia("(max-width: 720px)");
+  m.addEventListener("change", aviso);
+  return () => m.removeEventListener("change", aviso);
+};
+export const useChico = (): boolean => useSyncExternalStore(suscribirChico, () => window.matchMedia("(max-width: 720px)").matches, () => false);
+
 export function useOscuro(): boolean | null {
   return useSyncExternalStore<boolean | null>(
     suscribir,

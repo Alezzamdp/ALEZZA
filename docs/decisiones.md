@@ -40,3 +40,8 @@ Asesoría automotor integral (no solo lavadero ni agencia): simulador de permuta
 - El visitante elige modo claro u oscuro con el botón de la cabecera (se guarda en su navegador; por defecto sigue al sistema). El fondo PixelBlast rosa sigue ese modo (src/components/FondoPixeles.tsx).
 - Antes de abrir WhatsApp (en /contacto y /turnos) se piden marca y modelo, año y patente, y el mensaje sale con esos datos (src/lib/auto.ts). Para agencias son opcionales.
 - Estrellas de Google en amarillo, sin puntaje ni cantidad.
+
+## Celular primero, fotos claras y datos obligatorios (2026-11-19)
+- El sitio se diseña primero para celular (la mayoría de las visitas): títulos grandes, botones de 48-50 px, barra fija abajo con "Soy agencia" y "Solicitar turno" (src/components/BarraMovil.tsx) y fondo animado más liviano.
+- Fotos de unidades en 3:2 (1200x800), con el auto entero, más claras y con el mismo color. La foto abierta del mostrador mide siempre 3:2 (GaleriaUnidades.tsx calcula el alto); en celular el mostrador es vertical. Se quitó el detalle trasero del Passat porque no mostraba el auto entero. La camioneta negra es una Suran.
+- Marca y modelo, año y patente son obligatorios en /contacto y /turnos, también para agencias (que además indican unidades). Ya no hay campos opcionales.

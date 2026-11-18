@@ -1,6 +1,7 @@
 import Link from "next/link";
 import CatalogoTrabajos from "@/components/CatalogoTrabajos";
 import GoogleEstrellas from "@/components/GoogleEstrellas";
+import BarraMovil from "@/components/BarraMovil";
 import GaleriaUnidades from "@/components/GaleriaUnidades";
 import MapaDiferido from "@/components/MapaDiferido";
 import { SitioCabecera, SitioPie, Titular } from "@/components/SitioMarco";
@@ -28,7 +29,7 @@ export default async function Home() {
   const ahorro = ahorroIntegral(config);
 
   return (
-    <main className="lp">
+    <main className="lp lp-con-barra">
       <div className="lp-pantalla">
         <SitioCabecera />
 
@@ -136,6 +137,7 @@ export default async function Home() {
       </section>
 
       <SitioPie ubicacion={perfil.location} horario={perfil.business_hours} />
+      <BarraMovil />
     </main>
   );
 }

@@ -530,12 +530,11 @@ html { scroll-behavior: smooth; }
 .tema-btn:hover { border-color: var(--rosa); background: var(--lp-soft); }
 .lp-header-der { gap: 12px; }
 
-/* Galería de unidades y mapa: reservan su alto para que la página no salte al cargar. */
-.lp-galeria { min-height: 520px; }
+/* Galería de unidades: el alto sale de la cuenta del 3:2 en GaleriaUnidades.tsx. En celular se anulan las reglas del componente
+   que le sacaban el alto fijo, para que el acordeón vertical funcione y la foto abierta muestre el auto entero. */
 @media (max-width: 520px) {
-  .lp-galeria { min-height: 0; }
-  .lp-galeria .ag-panel { min-height: 84px; transition: min-height .45s cubic-bezier(.3, 0, .2, 1); }
-  .lp-galeria .ag-panel--active { min-height: 380px; }
+  .lp-galeria .accordion-gallery { height: var(--galeria-alto) !important; }
+  .lp-galeria .ag-panel { min-height: 0; }
 }
 .lp-mapa { border-radius: 18px; overflow: hidden; }
 
@@ -571,3 +570,32 @@ html { scroll-behavior: smooth; }
 .lp-tema { cursor: pointer; background: var(--papel); }
 .lp-tema[aria-pressed="true"] { background: var(--rosa); border-color: var(--rosa); color: #0a0a0a; }
 .lp .tu-op small, .lp .tu-op b { text-shadow: none; }
+
+/* ===== Pensado primero para celular (la mayoría de las visitas): títulos grandes, botones cómodos y barra de acciones fija ===== */
+.lp-titular { font-size: clamp(2.15rem, 1rem + 5vw, 3.4rem); line-height: 1.08; }
+.lp-lead { font-size: 18px; line-height: 1.55; }
+.lp-seccion { padding-top: 44px; padding-bottom: 44px; }
+.lp-seccion > h2 { font-size: clamp(1.6rem, 1.1rem + 2vw, 2.2rem); }
+.lp-btn { min-height: 50px; }
+.lp-btn-sm { min-height: 42px; padding: 0 16px; }
+.sm-toggle { height: 44px; }
+.tema-btn { width: 42px; height: 42px; }
+.lp-tema { padding: 10px 16px; font-size: 14px; }
+.lp-det summary { display: block; padding: 8px 0; }
+.lp-card, .lp-part { padding: 22px 20px; }
+.lp-acciones .lp-btn { flex: 1 1 100%; }
+@media (min-width: 720px) {
+  .lp-seccion { padding-top: 64px; padding-bottom: 64px; }
+  .lp-card, .lp-part { padding: 28px 26px; }
+  .lp-acciones .lp-btn { flex: 0 0 auto; }
+  .lp-btn { min-height: 48px; }
+  .lp-btn-sm { min-height: 38px; }
+}
+.lp-barra { display: none; }
+@media (max-width: 719px) {
+  .lp-barra { position: fixed; left: 0; right: 0; bottom: 0; z-index: 40; display: grid; grid-template-columns: 1.15fr 1fr; gap: 10px; padding: 10px 16px calc(10px + env(safe-area-inset-bottom)); background: color-mix(in srgb, var(--papel) 92%, transparent); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); border-top: 1px solid var(--lp-line); }
+  .lp-barra .lp-btn { min-height: 48px; padding: 0 10px; font-size: 15px; flex: none; }
+  .lp-con-barra .lp-footer { padding-bottom: calc(88px + env(safe-area-inset-bottom)); }
+  .lp-header-in { height: 64px; }
+}
+@media (max-width: 719px) { .lp-con-barra .lp-header-der > .lp-btn { display: none; } } /* en celular el botón ya está en la barra de abajo */
