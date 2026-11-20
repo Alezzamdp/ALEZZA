@@ -4,7 +4,7 @@ import Logo from "@/components/Logo";
 import SitioMenu from "@/components/SitioMenu";
 import TemaBoton from "@/components/TemaBoton";
 import { TALLER } from "@/lib/turnos";
-import { UBICACION, externo } from "@/lib/contacto";
+import { GRUPO_COLEGAS, UBICACION, externo } from "@/lib/contacto";
 
 // Cabecera, pie y titular de todos los portales públicos. Estilos .lp en globals.css.
 // El contacto (WhatsApp e Instagram) vive solo en /contacto: acá se enlaza, no se repite.
@@ -49,6 +49,7 @@ export function SitioPie({ ubicacion, horario }: { ubicacion?: string; horario?:
         <nav aria-label="Contacto y ubicación">
           <Link href="/contacto">Contacto</Link>
           <a href={TALLER.maps} {...externo}>Cómo llegar</a>
+          <a href={GRUPO_COLEGAS} {...externo} title="Grupo de compraventa entre colegas. Las solicitudes se aprueban manualmente.">Red de colegas</a>
         </nav>
         <p>© {new Date().getFullYear()} ALEZZA</p>
       </div>
