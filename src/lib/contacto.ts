@@ -8,7 +8,7 @@ export const UBICACION = "Mar del Plata, Argentina";
 export const INSTAGRAM = "https://instagram.com/alezzamdp";
 // Grupo de WhatsApp de compraventa entre colegas (ingreso con aprobación manual de los admins).
 export const GRUPO_COLEGAS = "https://chat.whatsapp.com/DSUp82uDzCmGEh1G3wSFxM";
-export const externo ={ target: "_blank", rel: "noopener noreferrer" } as const;
+export const externo = { target: "_blank", rel: "noopener noreferrer" } as const;
 
 // Tema de la consulta: título que se muestra en /contacto, pedido y datos que conviene completar en el mensaje.
 export const TEMAS = {
